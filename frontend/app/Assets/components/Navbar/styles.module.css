@@ -21,18 +21,23 @@
 }
 
 .nav_button {
-    background-color: transparent;
+    background-color: transparent; 
     border: none;
     color: white;
     display: flex;
     align-items: center; 
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease; 
+    border-radius: 10px; 
 }
 
 .nav_button:hover {
-    color: #FFD700; 
+    color: #292929; 
+    background-color: #575757; 
+    border-radius: 10px; 
 }
+
+
 
 .icon {
     width: 1.058vw; 
