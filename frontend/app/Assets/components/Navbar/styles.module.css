@@ -1,12 +1,10 @@
 .navbar_container {
-   padding-left: 0.463vw;
-   padding-top: 6.415vh;
+    padding-top: 6.415vh;
 }
 
 .navbar {
     display: flex;
     flex-direction: column;
-
 }
 
 .nav_list {
@@ -18,10 +16,11 @@
 
 .nav_item {
     margin: 0 0.331vw;
+    padding-left: 2.646vw;
 }
 
 .nav_button {
-    background-color: transparent; 
+    background-color: transparent;
     color: white;
     display: flex;
     align-items: center;
@@ -39,7 +38,12 @@
     background-color: #292929;
     border-radius: 100vh;
     border: 0.102vh solid #575757;
+}
 
+.active {
+    background-color: #292929;
+    border-radius: 100vh;
+    border: 0.102vh solid #575757;
 }
 
 .icon {
