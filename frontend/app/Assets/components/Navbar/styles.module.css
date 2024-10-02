@@ -5,7 +5,7 @@
 .navbar {
     display: flex;
     flex-direction: column;
-    
+
 }
 
 .nav_list {
@@ -20,14 +20,14 @@
 }
 
 .nav_button {
-    background-color: transparent; 
-    
+    background-color: transparent;
+
     color: white;
     display: flex;
-    align-items: center; 
+    align-items: center;
     cursor: pointer;
-    transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease; 
-    border-radius: 10px; 
+    transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease;
+    border-radius: 10px;
     border: 0.102vh solid transparent;
     padding-right: 1.124vw;
     padding-left: 1.124vw;
@@ -36,22 +36,22 @@
 }
 
 .nav_button:hover {
-    background-color: #292929; 
+    background-color: #292929;
     border-radius: 100vh;
     border: 0.102vh solid #575757;
 
 }
 
 .icon {
-    width: 1.058vw; 
-    height: 1.629vh; 
+    width: 1.058vw;
+    height: 1.629vh;
     color: #4B5C51;
 }
 
 .nav_text {
     color: #B8B8B8;
     margin-left: 0.5vw;
-    font-size: 1.058vw; 
+    font-size: 1.058vw;
 }
 
 .icon_dollar {
@@ -60,19 +60,19 @@
 }
 
 .icon_people {
-    margin-left: 5.225vw; 
+    margin-left: 5.225vw;
     margin-top: 1.629vh;
 }
 
 .icon_report {
-    margin-left: 6.151vw; 
+    margin-left: 6.151vw;
     margin-top: 1.629vh;
 }
 
 .line {
-    width: 100vw;             
-    height: 0.051vh;              
-    background-color: #828282;       
+    width: 100vw;
+    height: 0.051vh;
+    background-color: #828282;
     margin-top: 1.018vh;
-    
+
 }
