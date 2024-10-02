@@ -1,0 +1,112 @@
+.billing_title {
+    font-size: 1.323vw;
+    color: #DADADA;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 2.342vh;
+    margin-top: 4.684vh;
+}
+
+.billing_subnav_items {
+    font-size: 0.86vw;
+    color: #828282;
+    font-weight: 500;
+    display: flex;
+}
+
+.billing_subnav_items p {
+    position: relative;
+    padding-bottom: 1.018vh;
+    margin-bottom: 0;
+    width: 5vw;
+    text-align: center;
+}
+
+.billing_subnav_items p:hover {
+    cursor: pointer;
+    color: #DADADA;
+}
+
+.billing_subnav_item_active {
+    color: #DADADA;
+    font-weight: 500;
+    border-bottom: 0.204vh solid #E29C23;
+    padding-bottom: 1.018vh;
+    margin-bottom: 0;
+}
+
+.separator_line {
+    margin: 0;
+    position: relative;
+    border: none;
+    border-top: 0.102vh solid #828282;
+    margin-bottom: 1.629vh;
+}
+
+.filter_options {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.filter_options>*:last-child {
+    margin-left: auto;
+    /* Push the last element to the rightmost */
+}
+
+.date_picker_place_holder_left {
+    background: #292929;
+    border: 0.051vh solid #696969;
+    height: 2.24vh;
+    width: 6.283vw;
+    border-top-left-radius: 0.265vw;
+    border-bottom-left-radius: 0.265vw;
+}
+
+.date_picker_place_holder_right {
+    background: #292929;
+    border: 0.051vh solid #696969;
+    height: 2.24vh;
+    width: 9.524vw;
+    border-top-right-radius: 0.265vw;
+    border-bottom-right-radius: 0.265vw;
+}
+
+.compared_to_text {
+    font-size: 0.794vw;
+    color: white;
+    margin-left: 0.463vw;
+    margin-right: 0.661vw;
+}
+
+.compared_to_dropdown_period {
+    background: #292929;
+    border: 0.051vh solid #696969;
+    height: 2.24vh;
+    width: 7.606vw;
+    border-radius: 0.265vw;
+    padding-left: 0.661vw;
+    padding-right: 0.661vw;
+}
+
+.export_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #292929;
+    border: 0.051vh solid #696969;
+    height: 2.24vh;
+    width: 4.365vw;
+    border-radius: 0.265vw;
+    padding-left: 0.661vw;
+    padding-right: 0.661vw;
+    font-size: 0.794vw;
+    color: #DADADA;
+}
+
+.export_button:hover {
+    cursor: pointer;
+    color: white;
+    border-color: white;
+}
