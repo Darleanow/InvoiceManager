@@ -2,10 +2,6 @@
 
 [![CI](https://github.com/Darleanow/InvoiceManager/actions/workflows/main.yml/badge.svg)](https://github.com/Darleanow/InvoiceManager/actions/workflows/main.yml)
 
-📄 SPÉCIFICATIONS DE L'APPLICATION DE GÉNÉRATION DE FACTURES
-
----
-
 ## 1️⃣ FONCTIONNALITÉS PRINCIPALES
 
 ### Génération de factures personnalisées
