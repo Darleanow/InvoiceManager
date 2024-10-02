@@ -21,22 +21,26 @@
 
 .nav_button {
     background-color: transparent; 
-    border: none;
+    
     color: white;
     display: flex;
     align-items: center; 
     cursor: pointer;
     transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease; 
     border-radius: 10px; 
+    border: 0.102vh solid transparent;
+    padding-right: 1.124vw;
+    padding-left: 1.124vw;
+    padding-top: 0.407vh;
+    padding-bottom: 0.713vh;
 }
 
 .nav_button:hover {
-    color: #292929; 
-    background-color: #575757; 
-    border-radius: 10px; 
+    background-color: #292929; 
+    border-radius: 100vh;
+    border: 0.102vh solid #575757;
+
 }
-
-
 
 .icon {
     width: 1.058vw; 
@@ -67,7 +71,7 @@
 
 .line {
     width: 100vw;             
-    height: 0.102vh;              
+    height: 0.051vh;              
     background-color: #828282;       
     margin-top: 1.018vh;
     
