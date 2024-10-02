@@ -28,6 +28,7 @@ export default function Navbar() {
                         </button>
                     </li>
                 </ul>
+                <div className={styles.fullWidthLine}></div> 
             </nav>
         </div>
     );

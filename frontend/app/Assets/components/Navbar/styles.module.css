@@ -60,3 +60,11 @@
     margin-left: 6.151vw; 
     margin-top: 1.629vh;
 }
+
+.fullWidthLine {
+    width: 100vw;             
+    height: 2px;              
+    background-color: #4B5C51; 
+    position: relative;       
+    margin-top: 1vh;
+}
