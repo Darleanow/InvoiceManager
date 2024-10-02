@@ -29,6 +29,27 @@ describe('Customers Controller', () => {
         expect(res.json).toHaveBeenCalledWith({ id: 1, message: "Customer created successfully" });
     });
 
+    test('createCustomer should return 500 on database error', async () => {
+        const req = {
+            body: {
+                customer_name: 'Jane Doe',
+                customer_email: 'jane@example.com',
+                postal_address: '456 Park Ave'
+            }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        pool.execute.mockRejectedValue(new Error('Database error'));
+
+        await customersController.createCustomer(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
+    });
+
     test('getCustomers should return customers', async () => {
         const req = {};
         const res = {
@@ -117,6 +138,21 @@ describe('Customers Controller', () => {
         expect(res.json).toHaveBeenCalledWith({ message: 'Customer not found' });
     });
 
+    test('getCustomerById should return 500 on database error', async () => {
+        const req = { params: { id: 1 } };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        pool.query.mockRejectedValue(new Error('Database error'));
+
+        await customersController.getCustomerById(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
+    });
+
     test('updateCustomer should return 200 on success', async () => {
         const req = {
             params: { id: 1 },
@@ -161,6 +197,28 @@ describe('Customers Controller', () => {
         expect(res.json).toHaveBeenCalledWith({ message: 'Customer not found' });
     });
 
+    test('updateCustomer should return 500 on database error', async () => {
+        const req = {
+            params: { id: 1 },
+            body: {
+                customer_name: 'Updated Name',
+                customer_email: 'updated@example.com',
+                postal_address: '789 New St'
+            }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        pool.execute.mockRejectedValue(new Error('Database error'));
+
+        await customersController.updateCustomer(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
+    });
+
     test('deleteCustomer should return 200 on success', async () => {
         const req = { params: { id: 1 } };
         const res = {
@@ -189,5 +247,20 @@ describe('Customers Controller', () => {
 
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({ message: 'Customer not found' });
+    });
+
+    test('deleteCustomer should return 500 on database error', async () => {
+        const req = { params: { id: 1 } };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        pool.execute.mockRejectedValue(new Error('Database error'));
+
+        await customersController.deleteCustomer(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
     });
 });

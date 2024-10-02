@@ -29,6 +29,27 @@ describe('Benefits Controller', () => {
         expect(res.json).toHaveBeenCalledWith({ id: 1, message: "Benefit created successfully" });
     });
 
+    test('createBenefit should return 500 on database error', async () => {
+        const req = {
+            body: {
+                object: 'Health Insurance',
+                unit: 12,
+                price_per_unit: 100
+            }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        pool.execute.mockRejectedValue(new Error('Database error'));
+
+        await benefitsController.createBenefit(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
+    });
+
     test('getBenefitByInvoiceId should return benefits', async () => {
         const req = { params: { invoiceId: 1 } };
         const res = {
@@ -58,6 +79,21 @@ describe('Benefits Controller', () => {
         expect(res.json).toHaveBeenCalledWith({ message: 'No benefits found for this invoice' });
     });
 
+    test('getBenefitByInvoiceId should return 500 on database error', async () => {
+        const req = { params: { invoiceId: 1 } };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        pool.query.mockRejectedValue(new Error('Database error'));
+
+        await benefitsController.getBenefitByInvoiceId(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
+    });
+
     test('updateBenefit should return 200 on success', async () => {
         const req = {
             params: { id: 1 },
@@ -72,12 +108,9 @@ describe('Benefits Controller', () => {
             json: jest.fn()
         };
 
-
         pool.execute.mockResolvedValue([{ affectedRows: 1 }]);
 
         await benefitsController.updateBenefit(req, res);
-
-        console.log('Response after update:', res);
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({ message: 'Benefit updated successfully' });
@@ -98,6 +131,28 @@ describe('Benefits Controller', () => {
         expect(res.json).toHaveBeenCalledWith({ message: 'Benefit not found' });
     });
 
+    test('updateBenefit should return 500 on database error', async () => {
+        const req = {
+            params: { id: 1 },
+            body: {
+                object: 'Updated Benefit',
+                unit: 15,
+                price_per_unit: 200
+            }
+        };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        pool.execute.mockRejectedValue(new Error('Database error'));
+
+        await benefitsController.updateBenefit(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
+    });
+
     test('deleteBenefit should return 200 on success', async () => {
         const req = { params: { id: 1 } };
         const res = {
@@ -105,12 +160,9 @@ describe('Benefits Controller', () => {
             json: jest.fn()
         };
 
-
         pool.execute.mockResolvedValue([{ affectedRows: 1 }]);
 
         await benefitsController.deleteBenefit(req, res);
-
-        console.log('Response after delete:', res);
 
         expect(res.status).toHaveBeenCalledWith(200);
         expect(res.json).toHaveBeenCalledWith({ message: 'Benefit deleted successfully' });
@@ -129,5 +181,20 @@ describe('Benefits Controller', () => {
 
         expect(res.status).toHaveBeenCalledWith(404);
         expect(res.json).toHaveBeenCalledWith({ message: 'Benefit not found' });
+    });
+
+    test('deleteBenefit should return 500 on database error', async () => {
+        const req = { params: { id: 1 } };
+        const res = {
+            status: jest.fn().mockReturnThis(),
+            json: jest.fn()
+        };
+
+        pool.execute.mockRejectedValue(new Error('Database error'));
+
+        await benefitsController.deleteBenefit(req, res);
+
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal server error' });
     });
 });
