@@ -6,6 +6,7 @@
     padding: 0;
     margin-bottom: 2.342vh;
     margin-top: 4.684vh;
+    margin-left: 1.587vw;
 }
 
 .billing_subnav_items {
@@ -13,6 +14,7 @@
     color: #828282;
     font-weight: 500;
     display: flex;
+    margin-left: 1.587vw;
 }
 
 .billing_subnav_items p {
@@ -42,12 +44,15 @@
     border: none;
     border-top: 0.102vh solid #828282;
     margin-bottom: 1.629vh;
+    margin-right: 1.587vw;
+    margin-left: 1.587vw;
 }
 
 .filter_options {
     display: flex;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 1.918vw);
+    margin-left: 1.918vw;
 }
 
 .filter_options>*:last-child {
@@ -103,6 +108,7 @@
     padding-right: 0.661vw;
     font-size: 0.794vw;
     color: #DADADA;
+    margin-right: 1.587vw;
 }
 
 .export_button:hover {
