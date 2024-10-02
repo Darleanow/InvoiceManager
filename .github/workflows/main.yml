@@ -3,10 +3,10 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - develop
   pull_request:
     branches:
-      - main
+      - develop
 
 jobs:
   # Frontend tests job
@@ -40,6 +40,7 @@ jobs:
         with:
           name: frontend-coverage
           path: ./coverage
+
 
   # Backend tests job
   backend:
