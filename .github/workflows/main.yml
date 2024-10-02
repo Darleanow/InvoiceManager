@@ -33,7 +33,7 @@ jobs:
         run: npm test
 
       - name: Run Cucumber
-        run: npm cucumber
+        run: npm run cucumber
 
   # Backend tests job
   backend:
