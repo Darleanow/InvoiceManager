@@ -6,29 +6,29 @@ import { BiSolidReport } from "react-icons/bi";
 
 export default function Navbar() {
     return (
-        <div className={styles.navbarContainer}>
+        <div className={styles.navbar_container}>
             <nav className={styles.navbar}>
-                <ul className={styles.navList}>
-                    <li className={styles.navItem}>
-                        <button className={styles.navButton}>
+                <ul className={styles.nav_list}>
+                    <li className={styles.nav_item}>
+                        <button className={styles.nav_button}>
                             <AiFillDollarCircle className={styles.icon}/>
-                            <span className={styles.navText}>Billing</span>
+                            <span className={styles.nav_text}>Billing</span>
                         </button>
                     </li>
-                    <li className={styles.navItem}>
-                        <button className={styles.navButton}>
+                    <li className={styles.nav_item}>
+                        <button className={styles.nav_button}>
                             <IoIosPeople className={styles.icon}/>
-                            <span className={styles.navText}>Clients</span>
+                            <span className={styles.nav_text}>Clients</span>
                         </button>
                     </li>
-                    <li className={styles.navItem}>
-                        <button className={styles.navButton}>
+                    <li className={styles.nav_item}>
+                        <button className={styles.nav_button}>
                             <BiSolidReport className={styles.icon}/>
-                            <span className={styles.navText}>Reporting</span>
+                            <span className={styles.nav_text}>Reporting</span>
                         </button>
                     </li>
                 </ul>
-                <div className={styles.fullWidthLine}></div> 
+                <div className={styles.line}></div> 
             </nav>
         </div>
     );
