@@ -29,11 +29,17 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
+      - name: Run tests and collect coverage
+        run: npm test -- --coverage
 
       - name: Run Cucumber
-        run: npm cucumber
+        run: npm run cucumber
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-coverage
+          path: ./coverage
 
   # Backend tests job
   backend:
@@ -55,5 +61,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test
+      - name: Run tests and collect coverage
+        run: npm test -- --coverage
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-coverage
+          path: ./coverage
+
