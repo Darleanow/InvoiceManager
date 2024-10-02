@@ -3,6 +3,35 @@ const invoicesController = require('./invoices');
 
 jest.mock('../../config/database');
 
+// Helper function to set up mock response
+const mockResponse = () => {
+    return {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn()
+    };
+};
+
+// Helper function to set up mock connection
+const mockConnection = () => {
+    return {
+        beginTransaction: jest.fn(),
+        commit: jest.fn(),
+        rollback: jest.fn(),
+        release: jest.fn(),
+        query: jest.fn()
+    };
+};
+
+// Helper function to mock getConnection and set up query mock
+const mockGetConnection = (mockQueryResults = []) => {
+    const connection = mockConnection();
+    mockQueryResults.forEach(result => {
+        connection.query.mockResolvedValueOnce(result);
+    });
+    pool.getConnection.mockResolvedValue(connection);
+    return connection;
+};
+
 describe('Invoices Controller', () => {
     afterEach(() => {
         jest.clearAllMocks();
@@ -17,23 +46,8 @@ describe('Invoices Controller', () => {
                 benefit_ids: [1, 2]
             }
         };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
-
-        pool.getConnection.mockResolvedValue({
-            beginTransaction: jest.fn(),
-            commit: jest.fn(),
-            rollback: jest.fn(),
-            release: jest.fn(),
-            query: jest.fn()
-        });
-
-        const connection = await pool.getConnection();
-        connection.query.mockResolvedValueOnce([{ insertId: 1 }]);
-        connection.query.mockResolvedValueOnce([{ insertId: 1 }]);
-        connection.query.mockResolvedValueOnce([{}]);
+        const res = mockResponse();
+        const connection = mockGetConnection([[{ insertId: 1 }], [{ insertId: 1 }], [{}]]);
 
         await invoicesController.createInvoice(req, res);
 
@@ -50,10 +64,7 @@ describe('Invoices Controller', () => {
                 benefit_ids: []
             }
         };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
+        const res = mockResponse();
 
         await invoicesController.createInvoice(req, res);
 
@@ -63,12 +74,7 @@ describe('Invoices Controller', () => {
 
     test('getInvoices should return invoices', async () => {
         const req = {};
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
-
-
+        const res = mockResponse();
         pool.query.mockResolvedValue([
             [
                 {
@@ -111,10 +117,7 @@ describe('Invoices Controller', () => {
 
     test('getInvoices should return 404 if no invoices found', async () => {
         const req = {};
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
+        const res = mockResponse();
 
         pool.query.mockResolvedValue([[]]);
 
@@ -126,11 +129,7 @@ describe('Invoices Controller', () => {
 
     test('getInvoiceById should return invoice details', async () => {
         const req = { params: { id: 1 } };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
-
+        const res = mockResponse();
 
         pool.query.mockResolvedValue([
             [
@@ -172,13 +171,9 @@ describe('Invoices Controller', () => {
         }));
     });
 
-
     test('getInvoiceById should return 404 if invoice not found', async () => {
         const req = { params: { id: 999 } };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
+        const res = mockResponse();
 
         pool.query.mockResolvedValue([[]]);
 
@@ -198,24 +193,8 @@ describe('Invoices Controller', () => {
                 benefit_ids: [2]
             }
         };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
-
-        pool.getConnection.mockResolvedValue({
-            beginTransaction: jest.fn(),
-            commit: jest.fn(),
-            rollback: jest.fn(),
-            release: jest.fn(),
-            query: jest.fn()
-        });
-
-        const connection = await pool.getConnection();
-        connection.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
-        connection.query.mockResolvedValueOnce([{}]);
-        connection.query.mockResolvedValueOnce([{}]);
-        connection.query.mockResolvedValueOnce([{}]);
+        const res = mockResponse();
+        const connection = mockGetConnection([[{ affectedRows: 1 }], [{}], [{}], [{}]]);
 
         await invoicesController.updateInvoice(req, res);
 
@@ -233,21 +212,8 @@ describe('Invoices Controller', () => {
                 benefit_ids: [2]
             }
         };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
-
-        pool.getConnection.mockResolvedValue({
-            beginTransaction: jest.fn(),
-            commit: jest.fn(),
-            rollback: jest.fn(),
-            release: jest.fn(),
-            query: jest.fn()
-        });
-
-        const connection = await pool.getConnection();
-        connection.query.mockResolvedValueOnce([{ affectedRows: 0 }]);
+        const res = mockResponse();
+        const connection = mockGetConnection([[{ affectedRows: 0 }]]);
 
         await invoicesController.updateInvoice(req, res);
 
@@ -257,23 +223,8 @@ describe('Invoices Controller', () => {
 
     test('deleteInvoice should return 200 on success', async () => {
         const req = { params: { id: 1 } };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
-
-        pool.getConnection.mockResolvedValue({
-            beginTransaction: jest.fn(),
-            commit: jest.fn(),
-            rollback: jest.fn(),
-            release: jest.fn(),
-            query: jest.fn()
-        });
-
-        const connection = await pool.getConnection();
-        connection.query.mockResolvedValueOnce([{}]);
-        connection.query.mockResolvedValueOnce([{}]);
-        connection.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
+        const res = mockResponse();
+        const connection = mockGetConnection([[{}], [{}], [{ affectedRows: 1 }]]);
 
         await invoicesController.deleteInvoice(req, res);
 
@@ -283,23 +234,8 @@ describe('Invoices Controller', () => {
 
     test('deleteInvoice should return 404 if invoice not found', async () => {
         const req = { params: { id: 999 } };
-        const res = {
-            status: jest.fn().mockReturnThis(),
-            json: jest.fn()
-        };
-
-        pool.getConnection.mockResolvedValue({
-            beginTransaction: jest.fn(),
-            commit: jest.fn(),
-            rollback: jest.fn(),
-            release: jest.fn(),
-            query: jest.fn()
-        });
-
-        const connection = await pool.getConnection();
-        connection.query.mockResolvedValueOnce([{}]);
-        connection.query.mockResolvedValueOnce([{}]);
-        connection.query.mockResolvedValueOnce([{ affectedRows: 0 }]);
+        const res = mockResponse();
+        const connection = mockGetConnection([[{}], [{}], [{ affectedRows: 0 }]]);
 
         await invoicesController.deleteInvoice(req, res);
 
