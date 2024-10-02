@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './style.css';
+import styles from './styles.module.css';
 import { AiFillDollarCircle } from "react-icons/ai";
 import { IoIosPeople } from "react-icons/io";
 import { BiSolidReport } from "react-icons/bi";
@@ -9,17 +9,17 @@ export default function Navbar() {
         <div>
             <nav>
                 <ul>
-                    <div>
-                        <AiFillDollarCircle />
-                        <li>Billing</li>
+                    <div classname={styles.icon_dollar}>
+                        <AiFillDollarCircle classname={styles.icon}/>
+                        <li classname={styles.navtext}>Billing</li>
                     </div>
-                    <div>
-                        <IoIosPeople />
-                        <li>Clients</li>
+                    <div classname={styles.icon_people}>
+                        <IoIosPeople classname={styles.icon}/>
+                        <li classname={styles.navtext}>Clients</li>
                     </div>
-                    <div>
-                        <BiSolidReport />
-                        <li>Reporting</li>
+                    <div classname={styles.icon_report}>
+                        <BiSolidReport classname={styles.icon}/>
+                        <li classname={styles.navtext}>Reporting</li>
                     </div>
                 </ul>
             </nav>

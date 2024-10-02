@@ -1,1 +1,25 @@
 /*styles.module.css*/
+
+.icon {
+    width: 1.058vw;
+    height: 1.629vh;
+    color:#4B5C51;
+}
+
+.navtext {
+    color:#B8B8B8;
+    width: 5.952vw;
+    height: 6.823vh;
+}
+
+.icon_dollar{
+    position: relative;
+    top: 6.314vh;
+    left: 2.579vw
+}
+
+.icon_people {
+    position: relative;
+    top: 6.314vh;
+    left: 2.579vw
+}
