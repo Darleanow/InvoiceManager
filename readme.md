@@ -1,6 +1,56 @@
 # Invoice Manager
 
-[![CI](https://github.com/Darleanow/InvoiceManager/actions/workflows/main.yml/badge.svg)](https://github.com/Darleanow/InvoiceManager/actions/workflows/main.yml)
+---
+
+## CI/CD & Quality Status
+
+<div align="center">
+  <!-- Group the CI and Quality badges in a styled box -->
+  <table>
+    <tr>
+      <td><img src="https://github.com/Darleanow/InvoiceManager/actions/workflows/main.yml/badge.svg" alt="CI"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=alert_status" alt="Quality Gate Status"></td>
+    </tr>
+  </table>
+</div>
+
+---
+
+## Project Metrics
+
+<div align="center">
+  <!-- Group the metric-related badges -->
+  <table>
+    <tr>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=bugs" alt="Bugs"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=code_smells" alt="Code Smells"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=coverage" alt="Coverage"></td>
+    </tr>
+    <tr>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=duplicated_lines_density" alt="Duplicated Lines (%)"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=ncloc" alt="Lines of Code"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=reliability_rating" alt="Reliability Rating"></td>
+    </tr>
+  </table>
+</div>
+
+---
+
+## Security & Maintainability
+
+<div align="center">
+  <!-- Group the security and maintainability badges -->
+  <table>
+    <tr>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=security_rating" alt="Security Rating"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=sqale_index" alt="Technical Debt"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=sqale_rating" alt="Maintainability Rating"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=vulnerabilities" alt="Vulnerabilities"></td>
+    </tr>
+  </table>
+</div>
+
+---
 
 📄 SPÉCIFICATIONS DE L'APPLICATION DE GÉNÉRATION DE FACTURES
 
