@@ -6,25 +6,25 @@ import { BiSolidReport } from "react-icons/bi";
 
 export default function Navbar() {
     return (
-        <div>
-            <nav>
-                <ul>
+        <div className={styles.navbarContainer}>
+            <nav className={styles.navbar}>
+                <ul className={styles.navList}>
                     <li className={styles.navItem}>
-                        <button className={styles.icon_dollar}>
+                        <button className={styles.navButton}>
                             <AiFillDollarCircle className={styles.icon}/>
-                            <span className={styles.navtext}>Billing</span>
+                            <span className={styles.navText}>Billing</span>
                         </button>
                     </li>
                     <li className={styles.navItem}>
-                        <button className={styles.icon_people}>
+                        <button className={styles.navButton}>
                             <IoIosPeople className={styles.icon}/>
-                            <span className={styles.navtext}>Clients</span>
+                            <span className={styles.navText}>Clients</span>
                         </button>
                     </li>
                     <li className={styles.navItem}>
-                        <button className={styles.icon_report}>
+                        <button className={styles.navButton}>
                             <BiSolidReport className={styles.icon}/>
-                            <span className={styles.navtext}>Reporting</span>
+                            <span className={styles.navText}>Reporting</span>
                         </button>
                     </li>
                 </ul>

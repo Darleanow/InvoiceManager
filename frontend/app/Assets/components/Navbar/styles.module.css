@@ -1,18 +1,50 @@
+.navbarContainer {
+    background-color: #333; 
+    padding: 1rem;
+}
+
+.navbar {
+    display: flex;
+    justify-content: flex-start; 
+    align-items: center;
+}
+
+.navList {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navItem {
+    margin: 0 2.5vw; 
+}
+
+.navButton {
+    background-color: transparent;
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center; 
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.navButton:hover {
+    color: #FFD700; 
+}
+
 .icon {
-    width: 1.058vw;
-    height: 1.629vh;
+    width: 1.058vw; 
+    height: 1.629vh; 
     color: #4B5C51;
 }
 
-
-
-.navButton:hover {
-    background-color: #E29C23;
-}
-
-.navtext {
+.navText {
     color: #B8B8B8;
-    margin-left: 1vw; }
+    margin-left: 0.5vw;
+    font-size: 1rem; 
+}
 
 .icon_dollar {
     margin-left: 2.579vw;
@@ -20,11 +52,11 @@
 }
 
 .icon_people {
-    margin-left: 8.664vw;
+    margin-left: 8.664vw; 
     margin-top: 6.823vh;
 }
 
 .icon_report {
-    margin-left: 14.286vw;
+    margin-left: 14.286vw; 
     margin-top: 6.823vh;
 }
