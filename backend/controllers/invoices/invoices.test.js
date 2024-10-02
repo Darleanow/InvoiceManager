@@ -3,7 +3,6 @@ const invoicesController = require('./invoices');
 
 jest.mock('../../config/database');
 
-// Helper function to set up mock response
 const mockResponse = () => {
     return {
         status: jest.fn().mockReturnThis(),
@@ -11,7 +10,6 @@ const mockResponse = () => {
     };
 };
 
-// Helper function to set up mock connection
 const mockConnection = () => {
     return {
         beginTransaction: jest.fn(),
@@ -22,7 +20,6 @@ const mockConnection = () => {
     };
 };
 
-// Helper function to mock getConnection and set up query mock
 const mockGetConnection = (mockQueryResults = []) => {
     const connection = mockConnection();
     mockQueryResults.forEach(result => {
