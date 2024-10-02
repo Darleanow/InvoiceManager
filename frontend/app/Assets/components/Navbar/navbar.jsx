@@ -9,20 +9,26 @@ export default function Navbar() {
         <div>
             <nav>
                 <ul>
-                    <div classname={styles.icon_dollar}>
-                        <AiFillDollarCircle classname={styles.icon}/>
-                        <li classname={styles.navtext}>Billing</li>
-                    </div>
-                    <div classname={styles.icon_people}>
-                        <IoIosPeople classname={styles.icon}/>
-                        <li classname={styles.navtext}>Clients</li>
-                    </div>
-                    <div classname={styles.icon_report}>
-                        <BiSolidReport classname={styles.icon}/>
-                        <li classname={styles.navtext}>Reporting</li>
-                    </div>
+                    <li className={styles.navItem}>
+                        <button className={styles.icon_dollar}>
+                            <AiFillDollarCircle className={styles.icon}/>
+                            <span className={styles.navtext}>Billing</span>
+                        </button>
+                    </li>
+                    <li className={styles.navItem}>
+                        <button className={styles.icon_people}>
+                            <IoIosPeople className={styles.icon}/>
+                            <span className={styles.navtext}>Clients</span>
+                        </button>
+                    </li>
+                    <li className={styles.navItem}>
+                        <button className={styles.icon_report}>
+                            <BiSolidReport className={styles.icon}/>
+                            <span className={styles.navtext}>Reporting</span>
+                        </button>
+                    </li>
                 </ul>
             </nav>
         </div>
-    )
+    );
 }

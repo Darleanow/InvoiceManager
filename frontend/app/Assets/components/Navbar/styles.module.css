@@ -1,25 +1,30 @@
-/*styles.module.css*/
-
 .icon {
     width: 1.058vw;
     height: 1.629vh;
-    color:#4B5C51;
+    color: #4B5C51;
+}
+
+
+
+.navButton:hover {
+    background-color: #E29C23;
 }
 
 .navtext {
-    color:#B8B8B8;
-    width: 5.952vw;
-    height: 6.823vh;
-}
+    color: #B8B8B8;
+    margin-left: 1vw; }
 
-.icon_dollar{
-    position: relative;
-    top: 6.314vh;
-    left: 2.579vw
+.icon_dollar {
+    margin-left: 2.579vw;
+    margin-top: 6.314vh;
 }
 
 .icon_people {
-    position: relative;
-    top: 6.314vh;
-    left: 2.579vw
+    margin-left: 8.664vw;
+    margin-top: 6.823vh;
+}
+
+.icon_report {
+    margin-left: 14.286vw;
+    margin-top: 6.823vh;
 }
