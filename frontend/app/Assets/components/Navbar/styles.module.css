@@ -12,11 +12,12 @@
     list-style: none;
     padding: 0;
     margin: 2.579vh 2.579vw 0 0;
+    padding-left: 2.646vw;
 }
 
 .nav_item {
     margin: 0 0.331vw;
-    padding-left: 2.646vw;
+    gap: 0.265vw;
 }
 
 .nav_button {
@@ -47,8 +48,7 @@
 }
 
 .icon {
-    width: 1.058vw;
-    height: 1.629vh;
+    height: 1.833vw;
     color: #4B5C51;
 }
 
