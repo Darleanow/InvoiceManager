@@ -52,10 +52,6 @@
 
 ---
 
-📄 SPÉCIFICATIONS DE L'APPLICATION DE GÉNÉRATION DE FACTURES
-
----
-
 ## 1️⃣ FONCTIONNALITÉS PRINCIPALES
 
 ### Génération de factures personnalisées
