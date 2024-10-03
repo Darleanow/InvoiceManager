@@ -45,7 +45,7 @@ describe('Invoices Controller', () => {
             }
         };
         const res = mockResponse();
-        const connection = mockGetConnection([[{ insertId: 1 }], [{ insertId: 1 }], [{}]]);
+        mockGetConnection([[{ insertId: 1 }], [{ insertId: 1 }], [{}]]);
 
         await invoicesController.createInvoice(req, res);
 
@@ -237,7 +237,7 @@ describe('Invoices Controller', () => {
             }
         };
         const res = mockResponse();
-        const connection = mockGetConnection([[{ affectedRows: 1 }], [{}], [{}], [{}]]);
+        mockGetConnection([[{ affectedRows: 1 }], [{}], [{}], [{}]]);
 
         await invoicesController.updateInvoice(req, res);
 
@@ -348,7 +348,7 @@ describe('Invoices Controller', () => {
             }
         };
         const res = mockResponse();
-        const connection = mockGetConnection([[{ affectedRows: 0 }]]);
+        mockGetConnection([[{ affectedRows: 0 }]]);
 
         await invoicesController.updateInvoice(req, res);
 
@@ -381,7 +381,7 @@ describe('Invoices Controller', () => {
     test('deleteInvoice should return 200 on success', async () => {
         const req = { params: { id: 1 } };
         const res = mockResponse();
-        const connection = mockGetConnection([[{}], [{}], [{ affectedRows: 1 }]]);
+        mockGetConnection([[{}], [{}], [{ affectedRows: 1 }]]);
 
         await invoicesController.deleteInvoice(req, res);
 
@@ -392,7 +392,7 @@ describe('Invoices Controller', () => {
     test('deleteInvoice should return 404 if invoice not found', async () => {
         const req = { params: { id: 999 } };
         const res = mockResponse();
-        const connection = mockGetConnection([[{}], [{}], [{ affectedRows: 0 }]]);
+        mockGetConnection([[{}], [{}], [{ affectedRows: 0 }]]);
 
         await invoicesController.deleteInvoice(req, res);
 
