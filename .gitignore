@@ -41,3 +41,5 @@
 
 # editor settings
 **/settings.json
+
+.vscode
