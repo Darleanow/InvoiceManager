@@ -46,29 +46,14 @@
 }
 
 .icon {
-    height: 1.833vw;
     color: #4B5C51;
+    height: 100%;
+    font-size: 1.833vh;
 }
 
 .nav_text {
     color: #B8B8B8;
     margin-left: 0.5vw;
-    font-size: 1.058vw;
-}
-
-.icon_dollar {
-    margin-left: 5.225vw;
-    margin-top: 2.749vh;
-}
-
-.icon_people {
-    margin-left: 5.225vw;
-    margin-top: 1.629vh;
-}
-
-.icon_report {
-    margin-left: 6.151vw;
-    margin-top: 1.629vh;
 }
 
 .line {
@@ -76,5 +61,4 @@
     height: 0.051vh;
     background-color: #828282;
     margin-top: 1.018vh;
-
 }
