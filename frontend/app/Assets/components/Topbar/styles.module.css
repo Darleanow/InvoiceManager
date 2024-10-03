@@ -1,0 +1,17 @@
+/*styles.module.css*/
+
+.topbar_left_pannel {
+    padding-left: 2.648vw;
+    padding-top: 1.629vh;
+    
+}
+
+.topbar_middle_pannel {
+    padding-left: 39.55vw;
+    padding-top: 1.426vh;
+}
+
+.topbar_right_pannel {
+    padding-left: 87.235vw;
+    padding-top: 1.426vh;
+}
