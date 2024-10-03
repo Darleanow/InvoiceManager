@@ -3,6 +3,7 @@
     justify-content: space-between; 
     align-items: center;
     padding: 1.5vh 2vw;
+    padding-bottom: 2.749vh;
 }
 
 .topbar_left_pannel, .topbar_middle_pannel, .topbar_right_pannel {
@@ -11,19 +12,29 @@
 }
 
 .topbar_left_pannel {
-    gap: 1vw;
+    gap: 1.257vw;
+}
+
+.topbar_right_pannel {
+    gap: 1.124vw;
 }
 
 .topbar_text {
+    width: 4.365vw;
+    height:  2.342vh;
     font-weight: bold;
-    font-size: 2.444vh;
-    background: -webkit-linear-gradient(#69C06C, #E29C23);
+    font-family: 'SF Pro Display', sans-serif;
+    font-size: 1.587vw; 
+    font-size: 2.443vh;
+    background: -webkit-linear-gradient(45deg,#69C06C 0%, #E29C23 95%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .topbar_user {
     color: #9F9F9F;
+    margin-top: 2.342vh;
+
 }
 
 .topbar_arrow {
@@ -42,6 +53,7 @@
     display: flex;
     align-items: center;
     background-color: #292929;
+    border: solid #828282 0.066vw;
     border-radius: 0.265vw;
     padding: 0.5vw;
 }
