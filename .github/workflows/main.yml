@@ -32,6 +32,9 @@ jobs:
       - name: Run frontend tests and collect coverage
         run: npm run test:ci
 
+      - name: List coverage directory contents
+        run: ls -la ./coverage
+
       - name: Upload frontend coverage to Coveralls
         run: cat ./coverage/lcov.info | npx coveralls
         env:
@@ -60,6 +63,9 @@ jobs:
 
       - name: Run backend tests and collect coverage
         run: npm run test:ci
+      
+      - name: List coverage directory contents
+        run: ls -la ./coverage
 
       - name: Upload backend coverage to Coveralls
         run: cat ./coverage/lcov.info | npx coveralls
