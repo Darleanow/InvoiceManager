@@ -1,25 +1,99 @@
-/*styles.module.css*/
+.topbar_container {
+    display: flex;
+    justify-content: space-between; /* Assure que les panneaux sont bien répartis */
+    align-items: center;
+    padding: 1.5vh 2vw;
+}
+
+.topbar_left_pannel, .topbar_middle_pannel, .topbar_right_pannel {
+    display: flex;
+    align-items: center; /* Centrer verticalement les éléments */
+}
 
 .topbar_left_pannel {
-    padding-left: 2.648vw;
-    padding-top: 1.629vh;
-    
-}
-
-.topbar_middle_pannel {
-    padding-left: 39.55vw;
-    padding-top: 1.426vh;
-}
-
-.topbar_right_pannel {
-    padding-left: 87.235vw;
-    padding-top: 1.426vh;
+    gap: 1vw;
 }
 
 .topbar_text {
-    padding-left: 4.365vw;
-    padding-top: 2.342vh;
     font-weight: bold;
     font-size: 2.444vh;
-    background-color: linear-gradient(69C06C,E29C23);
+    background-color: linear-gradient(69C06C, E29C23);
+}
+
+.topbar_user {
+    color: #9F9F9F;
+}
+
+.topbar_arrow {
+    size: 0.926vw;
+    color: #9F9F9F;
+    margin-left: 0.5vw;
+}
+
+.topbar_middle_pannel {
+    flex: 1; /* Prend toute la place entre les panneaux gauche et droit */
+    display: flex;
+    justify-content: center; /* Centrer la barre de recherche */
+}
+
+.topbar_search_container {
+    display: flex;
+    align-items: center;
+    background-color: #292929;
+    border-radius: 0.265vw;
+    padding: 0.5vw;
+}
+
+.topbar_search_icon {
+    size: 0.926vw;
+    color: #828282;
+    margin-right: 0.5vw;
+}
+
+.topbar_search {
+    font-size: 2.444vh;
+    color: #828282;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    width: 100%; /* Remplit l'espace disponible */
+}
+
+.topbar_right_pannel {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Aligner à droite */
+    gap: 1vw; /* Espacement entre les éléments */
+}
+
+.topbar_notification, .topbar_settings {
+    size: 1.222vw;
+    color: #828282;
+}
+
+.topbar_button {
+    background-color: #E29C23;
+    color: #000000;
+    border-radius: 50px;
+    padding: 0.5vw 1.5vw;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.topbar_button:hover {
+    background-color: #D18F1A;
+}
+
+.topbar_vertical_line {
+    width: 1px;
+    height: 3.5vh;         
+    background-color: #828282;  
+    margin: 0 1vw;          
+}
+
+.topbar_vertical_line_left {
+    width: 1px;
+    height: 2.5vh;  
+    background-color: #828282;
+    margin: 0 1vw;
 }
