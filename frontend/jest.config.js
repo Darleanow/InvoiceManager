@@ -1,4 +1,5 @@
 module.exports = {
+  testPathIgnorePatterns: ["/node_modules/", "/end_to_end/"],
   collectCoverage: true,
   coverageReporters: ["lcov", "text"],
   collectCoverageFrom: [
@@ -9,5 +10,4 @@ module.exports = {
     "!**/*.config.js",
     "!**/.*",
   ],
-  testPathIgnorePatterns: ["/node_modules/", "/dist/"],
 };
