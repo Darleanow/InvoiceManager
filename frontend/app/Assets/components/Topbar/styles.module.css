@@ -19,6 +19,10 @@
 
 .topbar_right_pannel {
   padding-left: 1.124vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1vw;
 }
 
 .topbar_text {
@@ -51,7 +55,6 @@
 
 .topbar_search_container {
   width: 20.833vw;
-  padding: 0.611vh 0;
   display: flex;
   align-items: center;
   background-color: #292929;
@@ -81,13 +84,6 @@
 
 .topbar_search ::placeholder {
   color: #828282;
-}
-
-.topbar_right_pannel {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 1vw;
 }
 
 .topbar_notification,
