@@ -3,7 +3,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest --coverage",
-    "test:ci": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "test:ci": "jest --coverage"
   },
   "dependencies": {
     "cors": "^2.8.5",

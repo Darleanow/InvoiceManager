@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "test:ci": "jest --coverage && cat ./coverage/lcov.info | coveralls",
+    "test:ci": "jest --coverage",
     "cucumber": "cucumber-js",
     "end_to_end": "playwright test",
     "end_to_end:headed": "playwright test --headed",
