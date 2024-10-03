@@ -1,125 +1,125 @@
 .topbar_container {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;
-    padding: 1.5vh 2vw;
-    padding-bottom: 2.749vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5vh 2vw;
+  padding-bottom: 2.749vh;
 }
 
-.topbar_left_pannel, .topbar_middle_pannel, .topbar_right_pannel {
-    display: flex;
-    align-items: center; 
+.topbar_left_pannel,
+.topbar_middle_pannel,
+.topbar_right_pannel {
+  display: flex;
+  align-items: center;
 }
 
 .topbar_left_pannel {
-    padding-left: 1.257vw;
+  padding-left: 1.257vw;
 }
 
 .topbar_right_pannel {
-    padding-left: 1.124vw;
+  padding-left: 1.124vw;
 }
 
 .topbar_text {
-    width: 4.365vw;
-    height:  2.342vh;
-    font-weight: bold;
-    font-family: 'SF Pro Display';
-    font-size: 1.587vw; 
-    font-size: 2.443vh;
-    background: -webkit-linear-gradient(45deg,#69C06C 0%, #E29C23 95%);
+  width: 4.365vw;
+  height: 2.342vh;
+  font-weight: bold;
+  font-size: 1.587vw;
+  font-size: 2.443vh;
+  background: -webkit-linear-gradient(45deg, #69c06c 0%, #e29c23 95%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .topbar_user {
-    color: #9F9F9F;
-    margin-top: 2.342vh;
-
+  color: #9f9f9f;
+  margin-top: 2.342vh;
 }
 
 .topbar_arrow {
-    size: 0.926vw;
-    color: #9F9F9F;
-    margin-left: 0.5vw;
+  size: 0.926vw;
+  color: #9f9f9f;
+  margin-left: 0.5vw;
 }
 
 .topbar_middle_pannel {
-    flex: 1; 
-    display: flex;
-    justify-content: center; 
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
 .topbar_search_container {
-    padding-top: 1.426vh;
-    padding-bottom: 2.546vh;
-    width: 20.833vw;
-    height: 2.444vh;
-    display: flex;
-    align-items: center;
-    background-color: #292929;
-    border: solid #828282 0.066vw;
-    border-radius: 0.661vw;
-    padding: 0.5vw;
-    
+  width: 20.833vw;
+  padding: 0.611vh 0;
+  display: flex;
+  align-items: center;
+  background-color: #292929;
+  border: 0.066vw solid #828282;
+  border-radius: 0.661vw;
+  padding: 0.5vw;
 }
 
 .topbar_search_container:hover {
-    border-color: #E29C23;
+  border-color: #e29c23;
 }
 
-
 .topbar_search_icon {
-    size: 0.926vw;
-    color: #828282;
-    margin-right: 0.5vw;
+  size: 0.926vw;
+  color: #828282;
+  margin-right: 0.5vw;
 }
 
 .topbar_search {
-    color: #828282;
-    background-color: #292929;
-    font-family: 'SF Pro Display';
-    font-size: 0.792vw;
-    font-size: 1.222vh;
-    outline: none;
-    
+  color: #d9d9d9;
+  background-color: #292929;
+  font-size: 0.792vw;
+  font-size: 1.222vh;
+  outline: none;
+  border: none;
 }
 
+.topbar_search ::placeholder {
+  color: #828282;
+}
 
 .topbar_right_pannel {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end; 
-    gap: 1vw; 
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1vw;
 }
 
-.topbar_notification, .topbar_settings {
-    size: 1.222vw;
-    color: #828282;
+.topbar_notification,
+.topbar_settings {
+  size: 1.222vw;
+  color: #828282;
 }
 
 .topbar_button {
-    background-color: #E29C23;
-    color: #000000;
-    border-color: #684811;
-    width: 6.614vw;
-    height: 2.444vh;
-    border-radius: 100vh;
+  background-color: #e29c23;
+  color: #000000;
+  border: 0.066vw solid #684811;
+  width: 6.614vw;
+  height: 2.444vh;
+  border-radius: 100vh;
+  outline: none;
 }
 
 .topbar_button:hover {
-    background-color: #D18F1A;
+  background-color: #d18f1a;
 }
 
 .topbar_vertical_line {
-    width: 0.066vw;
-    height: 2.138vh;         
-    background-color: #6F6F6F;  
-    margin: 0 1vw;          
+  width: 0.066vw;
+  height: 2.138vh;
+  background-color: #6f6f6f;
+  margin: 0 1vw;
 }
 
 .topbar_vertical_line_left {
-    width: 0.066vw;
-    height: 2.138vh;  
-    background-color: #6F6F6F;
-    margin: 0 1vw;
+  width: 0.066vw;
+  height: 2.138vh;
+  background-color: #6f6f6f;
+  margin: 0 1vw;
 }
