@@ -8,6 +8,7 @@ module.exports = {
     "!**/dist/**",
     "!**/*.config.js",
     "!**/.*",
+    "!server.js", // main entry of the program, all it does is calling a sql connection, hence unrelevant for the coverage
   ],
   testPathIgnorePatterns: ["/node_modules/", "/dist/"],
 };
