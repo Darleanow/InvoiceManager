@@ -50,11 +50,15 @@
 }
 
 .topbar_search_container {
+    padding-top: 1.426vh;
+    padding-bottom: 2.546vh;
+    width: 20.833vw;
+    height: 2.444vh;
     display: flex;
     align-items: center;
     background-color: #292929;
     border: solid #828282 0.066vw;
-    border-radius: 0.265vw;
+    border-radius: 0.661vw;
     padding: 0.5vw;
 }
 
@@ -69,6 +73,12 @@
     color: #828282;
     background-color: #292929;
     height: 2.444vh;
+    outline: none;
+}
+
+.topbar_search:focus {
+    border-color: #E29C23; 
+    
 }
 
 .topbar_right_pannel {
@@ -86,6 +96,7 @@
 .topbar_button {
     background-color: #E29C23;
     color: #000000;
+    border-color: #684811;
     width: 6.614vw;
     height: 2.444vh;
     border-radius: 100vh;
