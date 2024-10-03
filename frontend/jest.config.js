@@ -12,5 +12,14 @@ module.exports = {
     "!**/dist/**",
     "!**/*.config.js",
     "!**/.*",
+    "!cucumber.js", // Config file, unrelevant for the coverage
   ],
+  coverageThreshold: {
+    global: {
+      branches: 0,
+      functions: 0,
+      lines: 0,
+      statements: 0,
+    },
+  },
 };
