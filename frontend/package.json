@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
-    "cucumber": "cucumber-js"
+    "cucumber": "cucumber-js",
+    "end_to_end": "playwright test",
+    "end_to_end:headed": "playwright test --headed",
+    "end_to_end:report": "playwright show-report"
   },
   "dependencies": {
     "chart.js": "^4.4.4",
@@ -21,6 +24,7 @@
   },
   "devDependencies": {
     "@cucumber/cucumber": "^11.0.1",
+    "@playwright/test": "^1.47.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
     "jest": "^29.7.0",
