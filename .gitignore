@@ -42,3 +42,7 @@
 **/settings.json
 
 .vscode
+
+# playwright
+**/playwright-report/
+**/test-results/
