@@ -11,6 +11,7 @@
       <td><img src="https://github.com/Darleanow/InvoiceManager/actions/workflows/main.yml/badge.svg" alt="Unit Tests"></td>
       <td><img src="https://github.com/Darleanow/InvoiceManager/actions/workflows/playwright.yml/badge.svg" alt="End to End tests"/></td>
       <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=alert_status" alt="Quality Gate Status"></td>
+      <td><img src="https://coveralls.io/repos/github/Darleanow/InvoiceManager/badge.svg?branch=develop"/></td>
     </tr>
   </table>
 </div>
