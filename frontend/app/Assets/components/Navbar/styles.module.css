@@ -27,7 +27,7 @@
     align-items: center;
     cursor: pointer;
     transition: color 0.3s ease, background-color 0.3s ease, border-radius 0.3s ease;
-    border-radius: 10px;
+    border-radius: 100vh;
     border: 0.102vh solid transparent;
     padding-right: 1.124vw;
     padding-left: 1.124vw;
