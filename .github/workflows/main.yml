@@ -36,6 +36,7 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
 
   # Backend tests job
   backend:
@@ -64,3 +65,15 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+
+  # Finalize Coveralls build
+  finish:
+    needs: [frontend, backend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Finalize Coveralls build
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true
