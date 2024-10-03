@@ -10,6 +10,7 @@
     <tr>
       <td><img src="https://github.com/Darleanow/InvoiceManager/actions/workflows/main.yml/badge.svg" alt="CI"></td>
       <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=alert_status" alt="Quality Gate Status"></td>
+      <td><img src="https://coveralls.io/repos/github/Darleanow/InvoiceManager/badge.svg?branch=develop"/></td>
     </tr>
   </table>
 </div>

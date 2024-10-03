@@ -29,18 +29,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests and collect coverage
-        run: npm test -- --coverage
+      - name: Run frontend tests and collect coverage
+        run: npm run test:ci
 
-      - name: Run Cucumber
-        run: npm run cucumber
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend-coverage
-          path: ./coverage
-
+      - name: Upload frontend coverage to Coveralls
+        run: cat ./coverage/lcov.info | npx coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
   # Backend tests job
   backend:
@@ -62,12 +57,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests and collect coverage
-        run: npm test -- --coverage
+      - name: Run backend tests and collect coverage
+        run: npm run test:ci
 
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: backend-coverage
-          path: ./coverage
-
+      - name: Upload backend coverage to Coveralls
+        run: cat ./coverage/lcov.info | npx coveralls
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
