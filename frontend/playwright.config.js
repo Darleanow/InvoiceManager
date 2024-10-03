@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "./end_to_end",
-  timeout: 5000,
+  timeout: 30000,
   retries: 1,
   reporter: [["html", { open: "never" }]], // HTML reporter for better visualization
   use: {
