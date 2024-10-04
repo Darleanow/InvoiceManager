@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
-import Navbar from "./Navbar.jsx";
+import Navbar from "./Navbar";
 import "@testing-library/jest-dom";
+import punycode from 'punycode';
 
 describe("Navbar Component", () => {
   test("renders navbar items", () => {
