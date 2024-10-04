@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "./styles.module.css";
 
 import { AiFillDollarCircle } from "react-icons/ai";
@@ -9,48 +9,59 @@ import { BiSolidReport } from "react-icons/bi";
 
 export default function Navbar() {
   const [active, setActive] = useState("billing");
+  const billingRef = useRef(null);
+  const clientsRef = useRef(null);
+  const reportingRef = useRef(null);
 
-  const handleSetActive = (navItem) => {
-    setActive(navItem);
+  const tabs = [
+    { id: "billing", label: "Billing", icon: AiFillDollarCircle, ref: billingRef },
+    { id: "clients", label: "Clients", icon: IoIosPeople, ref: clientsRef },
+    { id: "reporting", label: "Reporting", icon: BiSolidReport, ref: reportingRef },
+  ];
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+      e.preventDefault();
+      let newIndex;
+      if (e.key === "ArrowRight") {
+        newIndex = (index + 1) % tabs.length;
+      } else {
+        newIndex = (index - 1 + tabs.length) % tabs.length;
+      }
+      tabs[newIndex].ref.current.focus();
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      setActive(tabs[index].id);
+    }
   };
 
   return (
-    <div className={styles.navbar_container}>
+    <div className={styles.navbar_container} data-testid="navbar">
       <nav className={styles.navbar}>
-        <ul className={styles.nav_list}>
-          <li className={styles.nav_item}>
-            <button
-              className={`${styles.nav_button} ${
-                active === "billing" ? styles.active : ""
-              }`} // Apply active class
-              onClick={() => handleSetActive("billing")}
-            >
-              <AiFillDollarCircle className={styles.icon} />
-              <span className={styles.nav_text}>Billing</span>
-            </button>
-          </li>
-          <li className={styles.nav_item}>
-            <button
-              className={`${styles.nav_button} ${
-                active === "clients" ? styles.active : ""
-              }`} // Apply active class
-              onClick={() => handleSetActive("clients")}
-            >
-              <IoIosPeople className={styles.icon} />
-              <span className={styles.nav_text}>Clients</span>
-            </button>
-          </li>
-          <li className={styles.nav_item}>
-            <button
-              className={`${styles.nav_button} ${
-                active === "reporting" ? styles.active : ""
-              }`} // Apply active class
-              onClick={() => handleSetActive("reporting")}
-            >
-              <BiSolidReport className={styles.icon} />
-              <span className={styles.nav_text}>Reporting</span>
-            </button>
-          </li>
+        <ul className={styles.nav_list} role="tablist" data-testid="nav_list">
+          {tabs.map((tab, index) => (
+            <li key={tab.id} className={styles.nav_item}>
+              <button
+                data-testid={`${tab.id}_button`}
+                test-data-active={active === tab.id ? "true" : "false"}
+                className={`${styles.nav_button} ${active === tab.id ? styles.active : ""}`}
+                onClick={() => setActive(tab.id)}
+                role="tab"
+                aria-selected={active === tab.id ? "true" : "false"}
+                tabIndex={active === tab.id ? "0" : "-1"}
+                ref={tab.ref}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+              >
+                <tab.icon
+                  className={styles.icon}
+                  data-testid={`${tab.id}_icon`}
+                />
+                <span className={styles.nav_text} data-testid={`${tab.id}_text`}>
+                  {tab.label}
+                </span>
+              </button>
+            </li>
+          ))}
         </ul>
         <div className={styles.line}></div>
       </nav>
