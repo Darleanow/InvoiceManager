@@ -24,8 +24,8 @@ jobs:
           node-version: '20'
 
       # Install root dependencies (for nyc)
-      - name: Install root dependencies
-        run: npm ci
+      - name: Install nyc at root
+        run: npm install nyc --no-save
 
       # Frontend Unit Tests
       - name: Install dependencies for frontend
@@ -45,17 +45,20 @@ jobs:
         run: npm run test:ci:unit
         working-directory: ./backend
 
+      # Copy coverage data to .nyc_output
+      - name: Copy coverage data to .nyc_output
+        run: |
+          mkdir -p .nyc_output
+          cp frontend/coverage/coverage-final.json .nyc_output/frontend.json
+          cp backend/coverage/coverage-final.json .nyc_output/backend.json
+
       # Merge coverage reports
       - name: Merge unit test coverage reports
-        run: |
-          npx nyc merge coverage/unit/frontend coverage/unit/backend coverage/coverage-unit.json
+        run: npx nyc merge .nyc_output coverage/coverage-unit.json
 
       # Generate combined coverage report
       - name: Generate merged unit test coverage report
-        run: |
-          npx nyc report --reporter=html --report-dir=coverage/unit --temp-directory=coverage --reporter=text
-          # Apply dark theme
-          wget https://raw.githubusercontent.com/darkreader/darkreader/master/darkreader.min.css -O coverage/unit/static/base.css
+        run: npx nyc report --reporter=html --report-dir=coverage/unit --temp-dir=.nyc_output
 
       # Upload coverage report
       - name: Upload unit test coverage report
@@ -82,9 +85,9 @@ jobs:
         with:
           node-version: '20'
 
-      # Install root dependencies (for nyc)
-      - name: Install root dependencies
-        run: npm ci
+      # Install nyc at root
+      - name: Install nyc at root
+        run: npm install nyc --no-save
 
       # Frontend Integration Tests
       - name: Install dependencies for frontend
@@ -104,17 +107,20 @@ jobs:
         run: npm run test:ci:integration
         working-directory: ./backend
 
+      # Copy coverage data to .nyc_output
+      - name: Copy coverage data to .nyc_output
+        run: |
+          mkdir -p .nyc_output
+          cp frontend/coverage/coverage-final.json .nyc_output/frontend.json
+          cp backend/coverage/coverage-final.json .nyc_output/backend.json
+
       # Merge coverage reports
       - name: Merge integration test coverage reports
-        run: |
-          npx nyc merge coverage/integration/frontend coverage/integration/backend coverage/coverage-integration.json
+        run: npx nyc merge .nyc_output coverage/coverage-integration.json
 
       # Generate combined coverage report
       - name: Generate merged integration test coverage report
-        run: |
-          npx nyc report --reporter=html --report-dir=coverage/integration --temp-directory=coverage --reporter=text
-          # Apply dark theme
-          wget https://raw.githubusercontent.com/darkreader/darkreader/master/darkreader.min.css -O coverage/integration/static/base.css
+        run: npx nyc report --reporter=html --report-dir=coverage/integration --temp-dir=.nyc_output
 
       # Upload coverage report
       - name: Upload integration test coverage report
