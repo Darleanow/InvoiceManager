@@ -1,4 +1,4 @@
-name: CI
+name: CI Pipeline
 
 on:
   push:
@@ -9,67 +9,92 @@ on:
       - develop
 
 jobs:
-  # Frontend tests job
-  frontend:
+  # Unit Tests
+  unit-tests:
+    name: Run Unit Tests
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./frontend
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      # Frontend Unit Tests
+      - name: Install dependencies for frontend
         run: npm ci
+        working-directory: ./frontend
 
-      - name: Run frontend tests and collect coverage
-        run: npm run test:ci
+      - name: Run frontend unit tests and collect coverage
+        run: npm run test:ci:unit
+        working-directory: ./frontend
 
-      - name: Upload frontend coverage to Coveralls
+      # Backend Unit Tests
+      - name: Install dependencies for backend
+        run: npm ci
+        working-directory: ./backend
+
+      - name: Run backend unit tests and collect coverage
+        run: npm run test:ci:unit
+        working-directory: ./backend
+
+      # Upload coverage to Coveralls
+      - name: Upload unit test coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel: true
 
-  # Backend tests job
-  backend:
+  # Integration Tests
+  integration-tests:
+    name: Run Integration Tests
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./backend
+    services:
+      docker:
+        image: docker:20.10.7
+        options: --privileged
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      # Frontend Integration Tests
+      - name: Install dependencies for frontend
         run: npm ci
+        working-directory: ./frontend
 
-      - name: Run backend tests and collect coverage
-        run: npm run test:ci
+      - name: Run frontend integration tests and collect coverage
+        run: npm run test:ci:integration
+        working-directory: ./frontend
 
-      - name: Upload backend coverage to Coveralls
+      # Backend Integration Tests
+      - name: Install dependencies for backend
+        run: npm ci
+        working-directory: ./backend
+
+      - name: Run backend integration tests and collect coverage
+        run: npm run test:ci:integration
+        working-directory: ./backend
+
+      # Upload coverage to Coveralls
+      - name: Upload integration test coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel: true
 
   # Finalize Coveralls build
-  finish:
-    needs: [frontend, backend]
+  finalize-coveralls:
+    name: Finalize Coveralls Coverage
+    needs: [unit-tests, integration-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Finalize Coveralls build
