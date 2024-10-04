@@ -17,12 +17,15 @@
     margin-left: 1.587vw;
 }
 
-.billing_subnav_items p {
+.billing_subnav_items button {
     position: relative;
     padding-bottom: 1.018vh;
     margin-bottom: 0;
     width: 5vw;
     text-align: center;
+    color: white;
+    background-color: transparent;
+    border: none;
 }
 
 .billing_subnav_items p:hover {
@@ -33,7 +36,7 @@
 .billing_subnav_item_active {
     color: #DADADA;
     font-weight: 500;
-    border-bottom: 0.204vh solid #E29C23;
+    border-bottom: 0.204vh solid #E29C23!important;
     padding-bottom: 1.018vh;
     margin-bottom: 0;
 }
@@ -120,4 +123,8 @@
 .export_icon {
     color: #828282;
     gap: 0.595vw;
+    align-items: center;
+    display: flex;
+    height: 100%;
+    font-size: 1.833vh;
 }
