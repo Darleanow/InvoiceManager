@@ -1,5 +1,3 @@
-// Topbar.test.js
-
 import { render, screen } from "@testing-library/react";
 import Topbar from "./Topbar";
 import "@testing-library/jest-dom/extend-expect";

@@ -1,5 +1,3 @@
-// Navbar.test.js
-
 import { render, screen, fireEvent } from "@testing-library/react";
 import Navbar from "./Navbar";
 import "@testing-library/jest-dom/extend-expect";

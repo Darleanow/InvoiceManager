@@ -1,5 +1,3 @@
-// SubNavigationBilling.test.js
-
 import { render, screen, fireEvent } from "@testing-library/react";
 import SubNavigationBilling from "./SubNavigationBilling";
 import "@testing-library/jest-dom/extend-expect";
