@@ -51,7 +51,7 @@ export default function SubNavigationBilling() {
           </button>
         </div>
         <hr className={styles.separator_line} />
-        {/* TODO: Add filters here */}
+        {}
         <div className={styles.filter_options}>
           <div className={styles.date_picker_place_holder_left} />
           <div className={styles.date_picker_place_holder_right} />
