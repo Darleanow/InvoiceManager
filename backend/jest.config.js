@@ -1,6 +1,6 @@
 module.exports = {
   collectCoverage: true,
-  coverageReporters: ["lcov", "text"],
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
   collectCoverageFrom: [
     "**/*.{js,jsx,ts,tsx}",
     "!**/node_modules/**",

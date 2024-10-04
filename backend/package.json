@@ -3,8 +3,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "jest --coverage --testPathIgnorePatterns=__tests__",
-    "test:ci:unit": "jest --coverage --coverageDirectory=../coverage/unit/backend --coverageReporters=json-summary --testPathIgnorePatterns=__tests__",
-    "test:ci:integration": "jest --coverage --coverageDirectory=../coverage/integration/backend --coverageReporters=json-summary --testPathPattern=__tests__ --passWithNoTests"
+    "test:ci:unit": "jest --coverage --coverageReporters=lcov,json --testPathIgnorePatterns=__tests__",
+    "test:ci:integration": "jest --coverage --coverageReporters=lcov,json --testPathPattern=__tests__ --passWithNoTests"
   },
   "dependencies": {
     "cors": "^2.8.5",
