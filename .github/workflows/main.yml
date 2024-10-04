@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: frontend-unit-test-report
-          path: ./frontend/coverage
+          path: ./frontend/coverage/**
 
       # Backend Unit Tests
       - name: Install dependencies for backend
@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-unit-test-report
-          path: ./backend/coverage
+          path: ./backend/coverage/**
 
   # Integration Tests
   integration-tests:
@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: frontend-integration-test-report
-          path: ./frontend/coverage
+          path: ./frontend/coverage/**
 
       # Backend Integration Tests
       - name: Install dependencies for backend
@@ -103,14 +103,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-integration-test-report
-          path: ./backend/coverage
+          path: ./backend/coverage/**
 
   # Deploy Test Reports to GitHub Pages
   deploy-reports:
     name: Deploy Test Reports
     needs: [unit-tests, integration-tests]
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
 
     steps:
       - name: Checkout gh-pages branch
@@ -147,19 +147,6 @@ jobs:
         with:
           name: backend-integration-test-report
           path: integration-tests/backend
-
-      # Debug steps to verify files
-      - name: List files in unit-tests/frontend
-        run: ls -lR unit-tests/frontend
-
-      - name: List files in unit-tests/backend
-        run: ls -lR unit-tests/backend
-
-      - name: List files in integration-tests/frontend
-        run: ls -lR integration-tests/frontend
-
-      - name: List files in integration-tests/backend
-        run: ls -lR integration-tests/backend
 
       - name: Commit and push changes
         run: |
