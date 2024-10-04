@@ -12,9 +12,13 @@ export default function Topbar() {
   return (
     <div className={styles.topbar_container}>
       <div className={styles.topbar_left_pannel}>
-        <p className={styles.topbar_text}>InMa</p>
+        <p className={styles.topbar_text} data-testid="logo_text">
+          InMa
+        </p>
         <div className={styles.topbar_vertical_line}></div>
-        <p className={styles.topbar_user}>Username</p>
+        <p className={styles.topbar_user} data-testid="username_text">
+          Username
+        </p>
         <IoIosArrowDown className={styles.topbar_arrow} />
       </div>
       <div className={styles.topbar_middle_pannel}>
@@ -24,14 +28,26 @@ export default function Topbar() {
             type="text"
             placeholder="Search"
             className={styles.topbar_search}
+            data-testid="search_input"
           />
         </div>
       </div>
       <div className={styles.topbar_right_pannel}>
-        <IoIosNotifications className={styles.topbar_notification} />
-        <IoIosSettings className={styles.topbar_settings} />
+        <IoIosNotifications
+          className={styles.topbar_notification}
+          data-testid="notifications_icon"
+        />
+        <IoIosSettings
+          className={styles.topbar_settings}
+          data-testid="settings_icon"
+        />
         <div className={styles.topbar_vertical_line}></div>
-        <button className={styles.topbar_button}>Create Invoice</button>
+        <button
+          className={styles.topbar_button}
+          data-testid="create_invoice_button"
+        >
+          Create Invoice
+        </button>
       </div>
     </div>
   );
