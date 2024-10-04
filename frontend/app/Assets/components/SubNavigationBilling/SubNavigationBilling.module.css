@@ -116,3 +116,8 @@
     color: white;
     border-color: white;
 }
+
+.export_icon {
+    color: #828282;
+    gap: 0.595vw;
+}

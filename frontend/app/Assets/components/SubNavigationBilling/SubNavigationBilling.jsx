@@ -3,6 +3,8 @@
 import { useState } from "react";
 import styles from "./SubNavigationBilling.module.css";
 
+import { IoIosDownload } from "react-icons/io";
+
 export default function SubNavigationBilling() {
   const [currentSubNav, setCurrentSubNav] = useState("overview");
   const [range, setRange] = useState("month"); // Dynamically control range
@@ -61,6 +63,7 @@ export default function SubNavigationBilling() {
               alert("T'exporte rien");
             }}
           >
+            <IoIosDownload className={styles.export_icon} />
             Export
           </div>
         </div>
