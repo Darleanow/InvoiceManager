@@ -1,162 +1,60 @@
-name: CI Pipeline
+deploy-reports:
+  name: Deploy Test Reports
+  needs: [unit-tests, integration-tests]
+  runs-on: ubuntu-latest
+  if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/develop' }}
 
-on:
-  push:
-    branches:
-      - develop
-  pull_request:
-    branches:
-      - develop
+  steps:
+    - name: Checkout gh-pages branch
+      uses: actions/checkout@v3
+      with:
+        ref: gh-pages
 
-jobs:
-  # Unit Tests
-  unit-tests:
-    name: Run Unit Tests
-    runs-on: ubuntu-latest
+    - name: Configure Git
+      run: |
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    # Download artifacts
+    - name: Download frontend unit test report
+      uses: actions/download-artifact@v3
+      with:
+        name: frontend-unit-test-report
+        path: unit-tests/frontend
 
-      - name: Set up Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
+    - name: Download backend unit test report
+      uses: actions/download-artifact@v3
+      with:
+        name: backend-unit-test-report
+        path: unit-tests/backend
 
-      # Frontend Unit Tests
-      - name: Install dependencies for frontend
-        run: npm ci
-        working-directory: ./frontend
+    - name: Download frontend integration test report
+      uses: actions/download-artifact@v3
+      with:
+        name: frontend-integration-test-report
+        path: integration-tests/frontend
 
-      - name: Run frontend unit tests and collect coverage
-        run: npm run test:ci:unit
-        working-directory: ./frontend
+    - name: Download backend integration test report
+      uses: actions/download-artifact@v3
+      with:
+        name: backend-integration-test-report
+        path: integration-tests/backend
 
-      # Save frontend unit test report
-      - name: Upload frontend unit test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend-unit-test-report
-          path: ./frontend/coverage
+    # Debug steps to verify files
+    - name: List files in unit-tests/frontend
+      run: ls -lR unit-tests/frontend
 
-      # Backend Unit Tests
-      - name: Install dependencies for backend
-        run: npm ci
-        working-directory: ./backend
+    - name: List files in unit-tests/backend
+      run: ls -lR unit-tests/backend
 
-      - name: Run backend unit tests and collect coverage
-        run: npm run test:ci:unit
-        working-directory: ./backend
+    - name: List files in integration-tests/frontend
+      run: ls -lR integration-tests/frontend
 
-      # Save backend unit test report
-      - name: Upload backend unit test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: backend-unit-test-report
-          path: ./backend/coverage
+    - name: List files in integration-tests/backend
+      run: ls -lR integration-tests/backend
 
-  # Integration Tests
-  integration-tests:
-    name: Run Integration Tests
-    runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:20.10.7
-        options: --privileged
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js environment
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-
-      # Frontend Integration Tests
-      - name: Install dependencies for frontend
-        run: npm ci
-        working-directory: ./frontend
-
-      - name: Run frontend integration tests and collect coverage
-        run: npm run test:ci:integration -- --passWithNoTests
-        working-directory: ./frontend
-
-      # Save frontend integration test report
-      - name: Upload frontend integration test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend-integration-test-report
-          path: ./frontend/coverage
-
-      # Backend Integration Tests
-      - name: Install dependencies for backend
-        run: npm ci
-        working-directory: ./backend
-
-      - name: Run backend integration tests and collect coverage
-        run: npm run test:ci:integration
-        working-directory: ./backend
-
-      # Save backend integration test report
-      - name: Upload backend integration test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: backend-integration-test-report
-          path: ./backend/coverage
-
-  # Deploy Test Reports to GitHub Pages
-  deploy-reports:
-    name: Deploy Test Reports
-    needs: [unit-tests, integration-tests]
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v3
-        with:
-          ref: gh-pages
-
-      - name: Configure Git
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-
-      - name: Create directories for reports
-        run: |
-          mkdir -p unit-tests/frontend
-          mkdir -p unit-tests/backend
-          mkdir -p integration-tests/frontend
-          mkdir -p integration-tests/backend
-
-      # Download artifacts
-      - name: Download frontend unit test report
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend-unit-test-report
-          path: unit-tests/frontend
-
-      - name: Download backend unit test report
-        uses: actions/download-artifact@v3
-        with:
-          name: backend-unit-test-report
-          path: unit-tests/backend
-
-      - name: Download frontend integration test report
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend-integration-test-report
-          path: integration-tests/frontend
-
-      - name: Download backend integration test report
-        uses: actions/download-artifact@v3
-        with:
-          name: backend-integration-test-report
-          path: integration-tests/backend
-
-      - name: Commit and push changes
-        run: |
-          git add unit-tests/* integration-tests/*
-          git commit -m "Update test reports [skip ci]"
-          git push origin gh-pages
-
+    - name: Commit and push changes
+      run: |
+        git add unit-tests integration-tests
+        git commit -m "Update test reports [skip ci]"
+        git push origin gh-pages
