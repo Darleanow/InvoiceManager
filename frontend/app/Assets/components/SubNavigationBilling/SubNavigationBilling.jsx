@@ -57,7 +57,7 @@ export default function SubNavigationBilling() {
           <div className={styles.date_picker_place_holder_right} />
           <p className={styles.compared_to_text}>compared to</p>
           <div className={styles.compared_to_dropdown_period}></div>
-          <div
+          <button
             className={styles.export_button}
             onClick={() => {
               alert("T'exporte rien");
@@ -65,7 +65,7 @@ export default function SubNavigationBilling() {
           >
             <IoIosDownload className={styles.export_icon} />
             Export
-          </div>
+          </button>
         </div>
       </div>
       <div className={styles.billing_subnav_content}>
