@@ -5,12 +5,12 @@ import "@testing-library/jest-dom";
 describe("Navbar Component", () => {
   test("renders navbar items", () => {
     render(<Navbar />);
-    const billingItem = screen.getByText(/billing/i);
+    const billingItem = screen.getByText(/billing/i); 
     const clientsItem = screen.getByText(/clients/i);
     const reportingItem = screen.getByText(/reporting/i);
 
-    expect(billingItem).toBeInTheDocument();
-    expect(clientsItem).toBeInTheDocument();
-    expect(reportingItem).toBeInTheDocument();
+    expect(billingItem).toBeInTheDocument(); // Check if the billing item is in the DOM
+    expect(clientsItem).toBeInTheDocument(); // Check if the clients item is in the DOM
+    expect(reportingItem).toBeInTheDocument(); // Check if the reporting item is in the DOM
   });
 });
