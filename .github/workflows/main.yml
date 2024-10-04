@@ -146,6 +146,7 @@ jobs:
 
 
 
+
   # Deploy Test Reports to GitHub Pages
   deploy-reports:
     name: Deploy Test Reports
@@ -171,7 +172,8 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: playwright-report
-          path: frontend # e2e-tests
+          path: ./e2e-tests/playwright-report/
+
 
       - name: Download frontend unit test report
         uses: actions/download-artifact@v3
