@@ -1,8 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import Topbar from "./Topbar";
 import "@testing-library/jest-dom";
-import punycode from 'punycode';
-
 
 describe("Topbar Component", () => {
   beforeEach(() => {
