@@ -18,8 +18,10 @@
 
 ---
 
-## E2E Test Reports
+## Test Reports
 
+- **[View Unit Test Report](https://darleanow.github.io/InvoiceManager/unit-tests/index.html)**
+- **[View Integration Test Report](https://darleanow.github.io/InvoiceManager/integration-tests/index.html)**
 - **[View E2E Test Report](https://darleanow.github.io/InvoiceManager/index.html)**
 
 ---
@@ -107,13 +109,14 @@ Les informations sur les factures et les règles de gestion sont stockées en BD
 
 #### Tables
 
-factures (informations de chaque facture)
-regles_gestion (règles spécifiques à chaque client).
+- **factures** (informations de chaque facture)
+- **regles_gestion** (règles spécifiques à chaque client)
+
 Traçabilité des factures et gestion souple des règles.
 
 #### Modèle de document
 
-Le modèle de facture contient des balises dynamiques ({{client_nom}}, {{numero_facture}}, etc.).
+Le modèle de facture contient des balises dynamiques (`{{client_nom}}`, `{{numero_facture}}`, etc.).
 Remplacement automatique des balises par les données du formulaire.
 
 #### Incrémentation automatique des numéros de facture
