@@ -162,6 +162,12 @@ jobs:
           git config user.email "actions@github.com"
 
       # Download artifacts
+      - name: Download Playwright report
+        uses: actions/download-artifact@v3
+        with:
+          name: ./frontend/playwright-report
+          path: e2e-tests
+
       - name: Download frontend unit test report
         uses: actions/download-artifact@v3
         with:
@@ -185,12 +191,6 @@ jobs:
         with:
           name: backend-integration-test-report
           path: integration-tests/backend
-
-      - name: Download Playwright report
-        uses: actions/download-artifact@v3
-        with:
-          name: playwright-report
-          path: e2e-tests
 
       # Commit and push changes
       - name: Commit and push changes
