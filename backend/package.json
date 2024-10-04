@@ -2,7 +2,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node server.js",
-    "test": "jest --coverage",
+    "test": "jest --coverage --testPathIgnorePatterns=__tests__",
     "test:ci:unit": "jest --coverage --testPathIgnorePatterns=__tests__",
     "test:ci:integration": "jest --coverage --testPathPatterns=__tests__"
   },
