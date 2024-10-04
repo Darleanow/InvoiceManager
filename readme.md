@@ -2,19 +2,25 @@
 
 ---
 
-## CI/CD & Quality Status
+## CI/CD & Test Status
 
 <div align="center">
   <!-- Group the CI and Quality badges in a styled box -->
   <table>
     <tr>
       <td><img src="https://github.com/Darleanow/InvoiceManager/actions/workflows/main.yml/badge.svg" alt="Unit Tests"></td>
-      <td><img src="https://github.com/Darleanow/InvoiceManager/actions/workflows/playwright.yml/badge.svg" alt="End to End tests"/></td>
+      <td><img src="https://github.com/Darleanow/InvoiceManager/actions/workflows/playwright.yml/badge.svg" alt="End to End Tests"></td>
+      <td><img src="https://coveralls.io/repos/github/Darleanow/InvoiceManager/badge.svg?branch=develop" alt="Coverage Status"></td>
       <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=alert_status" alt="Quality Gate Status"></td>
-      <td><img src="https://coveralls.io/repos/github/Darleanow/InvoiceManager/badge.svg?branch=develop"/></td>
     </tr>
   </table>
 </div>
+
+---
+
+## E2E Test Reports
+
+- **[View E2E Test Report](https://darleanow.github.io/InvoiceManager/index.html)**
 
 ---
 
@@ -26,9 +32,9 @@
     <tr>
       <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=bugs" alt="Bugs"></td>
       <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=code_smells" alt="Code Smells"></td>
+      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=duplicated_lines_density" alt="Duplicated Lines (%)"></td>
     </tr>
     <tr>
-      <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=duplicated_lines_density" alt="Duplicated Lines (%)"></td>
       <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=ncloc" alt="Lines of Code"></td>
       <td><img src="https://sonarcloud.io/api/project_badges/measure?project=Darleanow_InvoiceManager&metric=reliability_rating" alt="Reliability Rating"></td>
     </tr>
