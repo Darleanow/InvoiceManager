@@ -23,6 +23,10 @@ jobs:
         with:
           node-version: '20'
 
+      # Install root dependencies (for nyc)
+      - name: Install nyc at root
+        run: npm install nyc --no-save
+
       # Frontend Unit Tests
       - name: Install dependencies for frontend
         run: npm ci
@@ -31,13 +35,6 @@ jobs:
       - name: Run frontend unit tests and collect coverage
         run: npm run test:ci:unit
         working-directory: ./frontend
-
-      # Save frontend unit test report
-      - name: Upload frontend unit test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend-unit-test-report
-          path: ./frontend/coverage
 
       # Backend Unit Tests
       - name: Install dependencies for backend
@@ -48,12 +45,27 @@ jobs:
         run: npm run test:ci:unit
         working-directory: ./backend
 
-      # Save backend unit test report
-      - name: Upload backend unit test report
+      # Copy coverage data to .nyc_output
+      - name: Copy coverage data to .nyc_output
+        run: |
+          mkdir -p .nyc_output
+          cp frontend/coverage/coverage-final.json .nyc_output/frontend.json
+          cp backend/coverage/coverage-final.json .nyc_output/backend.json
+
+      # Merge coverage reports
+      - name: Merge unit test coverage reports
+        run: npx nyc merge .nyc_output coverage/coverage-unit.json
+
+      # Generate combined coverage report
+      - name: Generate merged unit test coverage report
+        run: npx nyc report --reporter=html --report-dir=coverage/unit --temp-dir=.nyc_output
+
+      # Upload coverage report
+      - name: Upload unit test coverage report
         uses: actions/upload-artifact@v3
         with:
-          name: backend-unit-test-report
-          path: ./backend/coverage
+          name: unit-test-report
+          path: coverage/unit
 
   # Integration Tests
   integration-tests:
@@ -73,21 +85,18 @@ jobs:
         with:
           node-version: '20'
 
+      # Install nyc at root
+      - name: Install nyc at root
+        run: npm install nyc --no-save
+
       # Frontend Integration Tests
       - name: Install dependencies for frontend
         run: npm ci
         working-directory: ./frontend
 
       - name: Run frontend integration tests and collect coverage
-        run: npm run test:ci:integration -- --passWithNoTests
+        run: npm run test:ci:integration
         working-directory: ./frontend
-
-      # Save frontend integration test report
-      - name: Upload frontend integration test report
-        uses: actions/upload-artifact@v3
-        with:
-          name: frontend-integration-test-report
-          path: ./frontend/coverage
 
       # Backend Integration Tests
       - name: Install dependencies for backend
@@ -98,12 +107,27 @@ jobs:
         run: npm run test:ci:integration
         working-directory: ./backend
 
-      # Save backend integration test report
-      - name: Upload backend integration test report
+      # Copy coverage data to .nyc_output
+      - name: Copy coverage data to .nyc_output
+        run: |
+          mkdir -p .nyc_output
+          cp frontend/coverage/coverage-final.json .nyc_output/frontend.json
+          cp backend/coverage/coverage-final.json .nyc_output/backend.json
+
+      # Merge coverage reports
+      - name: Merge integration test coverage reports
+        run: npx nyc merge .nyc_output coverage/coverage-integration.json
+
+      # Generate combined coverage report
+      - name: Generate merged integration test coverage report
+        run: npx nyc report --reporter=html --report-dir=coverage/integration --temp-dir=.nyc_output
+
+      # Upload coverage report
+      - name: Upload integration test coverage report
         uses: actions/upload-artifact@v3
         with:
-          name: backend-integration-test-report
-          path: ./backend/coverage
+          name: integration-test-report
+          path: coverage/integration
 
   # Deploy Test Reports to GitHub Pages
   deploy-reports:
@@ -122,41 +146,33 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
+      # Create directories for reports
       - name: Create directories for reports
         run: |
-          mkdir -p unit-tests/frontend
-          mkdir -p unit-tests/backend
-          mkdir -p integration-tests/frontend
-          mkdir -p integration-tests/backend
+          mkdir -p reports/unit
+          mkdir -p reports/integration
 
       # Download artifacts
-      - name: Download frontend unit test report
+      - name: Download unit test coverage report
         uses: actions/download-artifact@v3
         with:
-          name: frontend-unit-test-report
-          path: unit-tests/frontend
+          name: unit-test-report
+          path: reports/unit
 
-      - name: Download backend unit test report
+      - name: Download integration test coverage report
         uses: actions/download-artifact@v3
         with:
-          name: backend-unit-test-report
-          path: unit-tests/backend
+          name: integration-test-report
+          path: reports/integration
 
-      - name: Download frontend integration test report
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend-integration-test-report
-          path: integration-tests/frontend
+      # Create index.html for navigation
+      - name: Create index.html
+        run: |
+          echo '<html><body><h1>Test Coverage Reports</h1><ul><li><a href="reports/unit/index.html">Unit Test Coverage Report</a></li><li><a href="reports/integration/index.html">Integration Test Coverage Report</a></li></ul></body></html>' > index.html
 
-      - name: Download backend integration test report
-        uses: actions/download-artifact@v3
-        with:
-          name: backend-integration-test-report
-          path: integration-tests/backend
-
+      # Commit and push changes
       - name: Commit and push changes
         run: |
-          git add unit-tests/* integration-tests/*
-          git commit -m "Update test reports [skip ci]"
+          git add reports/* index.html
+          git commit -m "Update test reports [skip ci]" || echo "No changes to commit"
           git push origin gh-pages
-
