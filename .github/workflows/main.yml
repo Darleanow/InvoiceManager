@@ -1,4 +1,4 @@
-name: CI
+name: CI Pipeline
 
 on:
   push:
@@ -9,8 +9,9 @@ on:
       - develop
 
 jobs:
-  # Frontend tests job
-  frontend:
+  # Frontend Unit Tests
+  frontend-unit-tests:
+    name: Run Frontend Unit Tests
     runs-on: ubuntu-latest
 
     defaults:
@@ -21,25 +22,56 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up Node.js environment
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install dependencies for frontend
         run: npm ci
 
-      - name: Run frontend tests and collect coverage
-        run: npm run test:ci
+      - name: Run frontend unit tests (ignoring integration tests) and collect coverage
+        run: npm run test:ci:unit
 
-      - name: Upload frontend coverage to Coveralls
+      - name: Upload frontend unit test coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel: true
 
-  # Backend tests job
-  backend:
+  # Frontend Integration Tests
+  frontend-integration-tests:
+    name: Run Frontend Integration Tests
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies for frontend
+        run: npm ci
+
+      - name: Run frontend integration tests and collect coverage
+        run: npm run test:ci:integration
+
+      - name: Upload frontend integration test coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+
+  # Backend Unit Tests
+  backend-unit-tests:
+    name: Run Backend Unit Tests
     runs-on: ubuntu-latest
 
     defaults:
@@ -50,26 +82,69 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      - name: Set up Node.js environment for backend
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
+      - name: Install dependencies for backend
         run: npm ci
 
-      - name: Run backend tests and collect coverage
-        run: npm run test:ci
+      - name: Run backend unit tests (ignoring integration tests) and collect coverage
+        run: npm run test:ci:unit
 
-      - name: Upload backend coverage to Coveralls
+      - name: Upload backend unit test coverage to Coveralls
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel: true
+
+  # Backend Integration Tests with Docker
+  backend-integration-tests:
+    name: Run Backend Integration Tests
+    runs-on: ubuntu-latest
+    services:
+      docker:
+        image: docker:20.10.7
+        options: --privileged
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js environment for backend
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies for backend
+        run: npm ci
+
+      - name: Start Docker containers for Testcontainers-based tests
+        run: |
+          docker-compose up -d
+          sleep 10 # Wait for containers to be ready
+
+      - name: Run backend integration tests and collect coverage
+        run: npm run test:ci:integration
+
+      - name: Stop and clean up Docker containers
+        run: docker-compose down
+
+      - name: Upload backend integration test coverage to Coveralls
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel: true
 
   # Finalize Coveralls build
-  finish:
-    needs: [frontend, backend]
+  finalize-coveralls:
+    name: Finalize Coveralls Coverage
+    needs: [frontend-unit-tests, frontend-integration-tests, backend-unit-tests, backend-integration-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Finalize Coveralls build
