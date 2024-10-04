@@ -20,8 +20,8 @@
 
 ## Test Reports
 
-- **[View Unit Test Coverage Report](https://darleanow.github.io/InvoiceManager/reports/unit/index.html)**
-- **[View Integration Test Coverage Report](https://darleanow.github.io/InvoiceManager/reports/integration/index.html)**
+- **[View Unit Test Report](https://darleanow.github.io/InvoiceManager/unit-tests/index.html)**
+- **[View Integration Test Report](https://darleanow.github.io/InvoiceManager/integration-tests/index.html)**
 - **[View E2E Test Report](https://darleanow.github.io/InvoiceManager/index.html)**
 
 ---

@@ -4,7 +4,7 @@
     "start": "node server.js",
     "test": "jest --coverage --testPathIgnorePatterns=__tests__",
     "test:ci:unit": "jest --coverage --testPathIgnorePatterns=__tests__",
-    "test:ci:integration": "jest --coverage --testPathPattern=__tests__ --passWithNoTests"
+    "test:ci:integration": "jest --coverage --testPathPattern=__tests__"
   },
   "dependencies": {
     "cors": "^2.8.5",

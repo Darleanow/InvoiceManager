@@ -1,7 +1,7 @@
 module.exports = {
   testPathIgnorePatterns: ["/end_to_end/"],
   collectCoverage: true,
-  coverageReporters: ['json', 'lcov', 'text', 'clover'],
+  coverageReporters: ["lcov", "text"],
   collectCoverageFrom: ["app/**/*.{js,jsx,ts,tsx}", "!**/__tests__/**"],
   coverageThreshold: {
     global: {
