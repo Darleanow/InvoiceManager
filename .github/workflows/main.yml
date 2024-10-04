@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: frontend-unit-test-report
-          path: ./frontend/coverage
+          path: ./frontend/coverage/**
 
       # Backend Unit Tests
       - name: Install dependencies for backend
@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-unit-test-report
-          path: ./backend/coverage
+          path: ./backend/coverage/**
 
   # Integration Tests
   integration-tests:
@@ -87,7 +87,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: frontend-integration-test-report
-          path: ./frontend/coverage
+          path: ./frontend/coverage/**
 
       # Backend Integration Tests
       - name: Install dependencies for backend
@@ -103,13 +103,14 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-integration-test-report
-          path: ./backend/coverage
+          path: ./backend/coverage/**
 
   # Deploy Test Reports to GitHub Pages
   deploy-reports:
     name: Deploy Test Reports
     needs: [unit-tests, integration-tests]
     runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
 
     steps:
       - name: Checkout gh-pages branch
@@ -121,13 +122,6 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-
-      - name: Create directories for reports
-        run: |
-          mkdir -p unit-tests/frontend
-          mkdir -p unit-tests/backend
-          mkdir -p integration-tests/frontend
-          mkdir -p integration-tests/backend
 
       # Download artifacts
       - name: Download frontend unit test report
@@ -156,7 +150,6 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add unit-tests/* integration-tests/*
+          git add unit-tests integration-tests
           git commit -m "Update test reports [skip ci]"
           git push origin gh-pages
-
