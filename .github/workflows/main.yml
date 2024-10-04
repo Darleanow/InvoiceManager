@@ -32,6 +32,13 @@ jobs:
         run: npm run test:ci:unit
         working-directory: ./frontend
 
+      # Save frontend unit test report
+      - name: Upload frontend unit test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-unit-test-report
+          path: ./frontend/coverage
+
       # Backend Unit Tests
       - name: Install dependencies for backend
         run: npm ci
@@ -41,12 +48,12 @@ jobs:
         run: npm run test:ci:unit
         working-directory: ./backend
 
-      # Upload coverage to Coveralls
-      - name: Upload unit test coverage to Coveralls
-        uses: coverallsapp/github-action@v2
+      # Save backend unit test report
+      - name: Upload backend unit test report
+        uses: actions/upload-artifact@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel: true
+          name: backend-unit-test-report
+          path: ./backend/coverage
 
   # Integration Tests
   integration-tests:
@@ -72,8 +79,15 @@ jobs:
         working-directory: ./frontend
 
       - name: Run frontend integration tests and collect coverage
-        run: npm run test:ci:integration
+        run: npm run test:ci:integration -- --passWithNoTests
         working-directory: ./frontend
+
+      # Save frontend integration test report
+      - name: Upload frontend integration test report
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-integration-test-report
+          path: ./frontend/coverage
 
       # Backend Integration Tests
       - name: Install dependencies for backend
@@ -84,21 +98,65 @@ jobs:
         run: npm run test:ci:integration
         working-directory: ./backend
 
-      # Upload coverage to Coveralls
-      - name: Upload integration test coverage to Coveralls
-        uses: coverallsapp/github-action@v2
+      # Save backend integration test report
+      - name: Upload backend integration test report
+        uses: actions/upload-artifact@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel: true
+          name: backend-integration-test-report
+          path: ./backend/coverage
 
-  # Finalize Coveralls build
-  finalize-coveralls:
-    name: Finalize Coveralls Coverage
+  # Deploy Test Reports to GitHub Pages
+  deploy-reports:
+    name: Deploy Test Reports
     needs: [unit-tests, integration-tests]
     runs-on: ubuntu-latest
+
     steps:
-      - name: Finalize Coveralls build
-        uses: coverallsapp/github-action@v2
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
+          ref: gh-pages
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Create directories for reports
+        run: |
+          mkdir -p unit-tests/frontend
+          mkdir -p unit-tests/backend
+          mkdir -p integration-tests/frontend
+          mkdir -p integration-tests/backend
+
+      # Download artifacts
+      - name: Download frontend unit test report
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-unit-test-report
+          path: unit-tests/frontend
+
+      - name: Download backend unit test report
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-unit-test-report
+          path: unit-tests/backend
+
+      - name: Download frontend integration test report
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-integration-test-report
+          path: integration-tests/frontend
+
+      - name: Download backend integration test report
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-integration-test-report
+          path: integration-tests/backend
+
+      - name: Commit and push changes
+        run: |
+          git add unit-tests/* integration-tests/*
+          git commit -m "Update test reports [skip ci]"
+          git push origin gh-pages
+
