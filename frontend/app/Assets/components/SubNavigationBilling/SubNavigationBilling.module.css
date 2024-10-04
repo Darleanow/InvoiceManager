@@ -60,7 +60,6 @@
 
 .filter_options>*:last-child {
     margin-left: auto;
-    /* Push the last element to the rightmost */
 }
 
 .date_picker_place_holder_left {
