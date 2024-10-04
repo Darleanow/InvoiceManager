@@ -1,6 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import SubNavigationBilling from "./SubNavigationBilling";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
+
+
 
 describe("SubNavigationBilling Component", () => {
   beforeEach(() => {

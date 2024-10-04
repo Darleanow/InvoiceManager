@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import Topbar from "./Topbar";
-import "@testing-library/jest-dom/extend-expect";
+import "@testing-library/jest-dom";
+
 
 describe("Topbar Component", () => {
   beforeEach(() => {
