@@ -7,7 +7,6 @@ import { IoIosDownload } from "react-icons/io";
 
 export default function SubNavigationBilling() {
   const [currentSubNav, setCurrentSubNav] = useState("overview");
-  const [range, setRange] = useState("month"); // Dynamically control range
 
   // Function to handle subnav change
   const handleSubNavChange = (subNav) => {
@@ -19,7 +18,8 @@ export default function SubNavigationBilling() {
       <h1 className={styles.billing_title}>Billing</h1>
       <div className={styles.billing_subnav}>
         <div className={styles.billing_subnav_items}>
-          <p
+          <button
+
             className={
               currentSubNav === "overview"
                 ? `${styles.billing_subnav_item_active}`
@@ -28,8 +28,8 @@ export default function SubNavigationBilling() {
             onClick={() => handleSubNavChange("overview")}
           >
             Overview
-          </p>
-          <p
+          </button>
+          <button
             className={
               currentSubNav === "quotation"
                 ? `${styles.billing_subnav_item_active}`
@@ -38,8 +38,8 @@ export default function SubNavigationBilling() {
             onClick={() => handleSubNavChange("quotation")}
           >
             Quotation
-          </p>
-          <p
+          </button>
+          <button
             className={
               currentSubNav === "invoice"
                 ? `${styles.billing_subnav_item_active}`
@@ -48,7 +48,7 @@ export default function SubNavigationBilling() {
             onClick={() => handleSubNavChange("invoice")}
           >
             Invoice
-          </p>
+          </button>
         </div>
         <hr className={styles.separator_line} />
         {/* TODO: Add filters here */}
