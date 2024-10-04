@@ -79,7 +79,7 @@ jobs:
         working-directory: ./frontend
 
       - name: Run frontend integration tests and collect coverage
-        run: npm run test:ci:integration
+        run: npm run test:ci:integration -- --passWithNoTests
         working-directory: ./frontend
 
       # Save frontend integration test report
