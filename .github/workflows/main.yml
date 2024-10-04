@@ -135,14 +135,15 @@ jobs:
         run: npx playwright test --reporter=html
 
       - name: List Playwright report files
-        run: ls -lR ./playwright-report
+        run: ls -lR playwright-report
 
       # Upload Playwright report as artifact
       - name: Upload Playwright report as artifact
         uses: actions/upload-artifact@v3
         with:
           name: playwright-report
-          path: ./frontend/playwright-report/**
+          path: playwright-report/**
+
 
 
   # Deploy Test Reports to GitHub Pages
@@ -169,7 +170,7 @@ jobs:
       - name: Download Playwright report
         uses: actions/download-artifact@v3
         with:
-          name: ./frontend/playwright-report
+          name: playwright-report
           path: e2e-tests
 
       - name: Download frontend unit test report
@@ -202,3 +203,4 @@ jobs:
           git add unit-tests integration-tests e2e-tests
           git commit -m "Update test reports [skip ci]"
           git push origin gh-pages
+
