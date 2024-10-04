@@ -25,12 +25,12 @@ jobs:
 
       # Frontend Unit Tests
       - name: Install dependencies for frontend
-        run: npm ci
         working-directory: ./frontend
+        run: npm ci
 
       - name: Run frontend unit tests and collect coverage
-        run: npm run test:ci:unit
         working-directory: ./frontend
+        run: npm run test:ci:unit
 
       # Save frontend unit test report
       - name: Upload frontend unit test report
@@ -41,12 +41,12 @@ jobs:
 
       # Backend Unit Tests
       - name: Install dependencies for backend
-        run: npm ci
         working-directory: ./backend
+        run: npm ci
 
       - name: Run backend unit tests and collect coverage
-        run: npm run test:ci:unit
         working-directory: ./backend
+        run: npm run test:ci:unit
 
       # Save backend unit test report
       - name: Upload backend unit test report
@@ -76,12 +76,12 @@ jobs:
 
       # Frontend Integration Tests
       - name: Install dependencies for frontend
-        run: npm ci
         working-directory: ./frontend
+        run: npm ci
 
       - name: Run frontend integration tests and collect coverage
-        run: npm run test:ci:integration -- --passWithNoTests
         working-directory: ./frontend
+        run: npm run test:ci:integration -- --passWithNoTests
 
       # Save frontend integration test report
       - name: Upload frontend integration test report
@@ -92,12 +92,12 @@ jobs:
 
       # Backend Integration Tests
       - name: Install dependencies for backend
-        run: npm ci
         working-directory: ./backend
+        run: npm ci
 
       - name: Run backend integration tests and collect coverage
-        run: npm run test:ci:integration
         working-directory: ./backend
+        run: npm run test:ci:integration
 
       # Save backend integration test report
       - name: Upload backend integration test report
@@ -134,13 +134,12 @@ jobs:
       - name: Run Playwright tests and generate HTML report
         run: npx playwright test --reporter=html
 
-      # Save Playwright report
+      # Upload Playwright report as artifact
       - name: Upload Playwright report as artifact
         uses: actions/upload-artifact@v3
         with:
           name: playwright-report
           path: playwright-report/**
-          retention-days: 30
 
   # Deploy Test Reports to GitHub Pages
   deploy-reports:
