@@ -1,4 +1,4 @@
-import Navbar from "./Assets/components/Navbar/navbar";
+import Navbar from "./Assets/components/Navbar/Navbar";
 import Topbar from "./Assets/components/Topbar/Topbar";
 import SubNavigationBilling from "./Assets/components/SubNavigationBilling/SubNavigationBilling";
 
