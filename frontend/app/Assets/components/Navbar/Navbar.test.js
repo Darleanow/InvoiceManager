@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import Navbar from "./Navbar";
+import Navbar from "./Navbar.jsx";
 import "@testing-library/jest-dom";
 import punycode from 'punycode';
 
