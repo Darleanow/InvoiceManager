@@ -26,19 +26,40 @@
     color: white;
     background-color: transparent;
     border: none;
+    cursor: pointer;
+    transition: color 0.3s ease; 
 }
 
-.billing_subnav_items p:hover {
-    cursor: pointer;
-    color: #DADADA;
+.billing_subnav_items button:hover {
+    color: #DADADA; 
+}
+
+.billing_subnav_items button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0.204vh;
+    background-color: #E29C23;
+    transition: width 0.3s ease; 
+}
+
+.billing_subnav_items button:hover::after {
+    width: 100%; 
 }
 
 .billing_subnav_item_active {
     color: #DADADA;
     font-weight: 500;
-    border-bottom: 0.204vh solid #E29C23!important;
+    border-bottom: 0.204vh solid #E29C23; 
     padding-bottom: 1.018vh;
     margin-bottom: 0;
+    transition: border-bottom 0.3s ease; 
+}
+
+.billing_subnav_items button:not(.billing_subnav_item_active):hover::after {
+    width: 100%; 
 }
 
 .separator_line {
