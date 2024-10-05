@@ -52,10 +52,8 @@
 .billing_subnav_item_active {
     color: #DADADA;
     font-weight: 500;
-    border-bottom: 0.204vh solid #E29C23; 
+    border-bottom: 0.204vh solid #E29C23;
     padding-bottom: 1.018vh;
-    margin-bottom: 0;
-    transition: border-bottom 0.3s ease; 
 }
 
 .billing_subnav_items button:not(.billing_subnav_item_active):hover::after {

@@ -7,11 +7,14 @@ import { IoIosDownload } from "react-icons/io";
 
 export default function SubNavigationBilling() {
   const [currentSubNav, setCurrentSubNav] = useState("overview");
+  const [active, setActive] = useState("overview");
+  const [activeTab, setActiveTab] = useState("overview");
 
-  // Function to handle subNavigation change
   const handleSubNavChange = (subNav) => {
     setCurrentSubNav(subNav);
+    setActive(subNav);
   };
+
 
   return (
     <>
@@ -21,7 +24,7 @@ export default function SubNavigationBilling() {
           <button
 
             className={
-              currentSubNav === "overview"
+              currentSubNav === "overview" || active === "overview" || activeTab === "overview"
                 ? `${styles.billing_subnav_item_active}`
                 : ""
             }
@@ -31,7 +34,7 @@ export default function SubNavigationBilling() {
           </button>
           <button
             className={
-              currentSubNav === "quotation"
+              currentSubNav === "quatation" || active === "quotation" || activeTab === "quotation"
                 ? `${styles.billing_subnav_item_active}`
                 : ""
             }
@@ -41,7 +44,7 @@ export default function SubNavigationBilling() {
           </button>
           <button
             className={
-              currentSubNav === "invoice"
+              currentSubNav === "invoice" || active === "invoice" || activeTab === "invoice"
                 ? `${styles.billing_subnav_item_active}`
                 : ""
             }
