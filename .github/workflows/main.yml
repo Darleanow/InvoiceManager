@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: frontend-unit-test-report
-          path: ./frontend/coverage/**
+          path: ./frontend/coverage/lcov-report/**
 
       # Backend Unit Tests
       - name: Install dependencies for backend
@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-unit-test-report
-          path: ./backend/coverage/**
+          path: ./backend/coverage/lcov-report/**
 
   # Integration Tests
   integration-tests:
@@ -88,7 +88,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: frontend-integration-test-report
-          path: ./frontend/coverage/**
+          path: ./frontend/coverage/lcov-report/**
 
       # Backend Integration Tests
       - name: Install dependencies for backend
@@ -104,7 +104,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-integration-test-report
-          path: ./backend/coverage/**
+          path: ./backend/coverage/lcov-report/**
 
   # E2E Tests
   e2e-tests:
@@ -152,7 +152,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout gh-pages branch
+      - name: Checkout code and gh-pages branch
         uses: actions/checkout@v3
         with:
           ref: gh-pages
@@ -163,6 +163,12 @@ jobs:
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+
+      # Copy navbar.html and custom.css
+      - name: Copy navbar and CSS files
+        run: |
+          git checkout origin/develop -- workflow_templates/navbar.html workflow_templates/custom.css
+          cp templates/navbar.html templates/custom.css ./
 
       # Download artifacts
       - name: Download Playwright report
@@ -212,11 +218,27 @@ jobs:
           mkdir -p reports/e2e-tests
 
           # Move the reports
-          mv unit-tests/frontend/* reports/frontend/unit-tests/
-          mv integration-tests/frontend/* reports/frontend/integration-tests/
-          mv unit-tests/backend/* reports/backend/unit-tests/
-          mv integration-tests/backend/* reports/backend/integration-tests/
+          mv unit-tests/frontend/lcov-report/* reports/frontend/unit-tests/
+          mv integration-tests/frontend/lcov-report/* reports/frontend/integration-tests/
+          mv unit-tests/backend/lcov-report/* reports/backend/unit-tests/
+          mv integration-tests/backend/lcov-report/* reports/backend/integration-tests/
           mv e2e-tests/playwright-report/* reports/e2e-tests/
+
+      # Inject Navbar and Custom CSS
+      - name: Inject Navbar and Custom CSS into Reports
+        run: |
+          # Copy custom.css into the reports directory
+          cp custom.css reports/
+
+          # Inject navbar and custom CSS into all HTML files
+          find reports/ -name '*.html' | while read html_file; do
+            # Insert the custom CSS link after the <head> tag
+            sed -i '/<head>/a <link rel="stylesheet" href="/reports/custom.css">' "$html_file"
+            # Insert the navbar after the <body> tag
+            sed -i '/<body>/a <!-- Navbar Start -->' "$html_file"
+            sed -i '/<!-- Navbar Start -->/r navbar.html' "$html_file"
+            sed -i '/<!-- Navbar Start -->/d' "$html_file"
+          done
 
       # List reports directory to verify
       - name: List reports directory to verify
@@ -225,17 +247,39 @@ jobs:
       # Generate index.html
       - name: Generate index.html
         run: |
-          echo '<html><body><h1>Test Reports</h1><ul>' > index.html
-          echo '<li><a href="reports/frontend/unit-tests/index.html">Frontend Unit Test Report</a></li>' >> index.html
-          echo '<li><a href="reports/frontend/integration-tests/index.html">Frontend Integration Test Report</a></li>' >> index.html
-          echo '<li><a href="reports/backend/unit-tests/index.html">Backend Unit Test Report</a></li>' >> index.html
-          echo '<li><a href="reports/backend/integration-tests/index.html">Backend Integration Test Report</a></li>' >> index.html
-          echo '<li><a href="reports/e2e-tests/index.html">E2E Tests Report</a></li>' >> index.html
-          echo '</ul></body></html>' >> index.html
+          cat <<EOF > index.html
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <title>Test Reports</title>
+            <link rel="stylesheet" href="/reports/custom.css">
+          </head>
+          <body>
+            <!-- Navbar will be inserted here -->
+          </body>
+          </html>
+          EOF
+
+          # Insert the navbar
+          sed -i '/<!-- Navbar will be inserted here -->/r navbar.html' index.html
+          sed -i '/<!-- Navbar will be inserted here -->/d' index.html
+
+          # Add content to index.html
+          cat <<EOF >> index.html
+          <h1>Test Reports</h1>
+          <ul>
+            <li><a href="reports/frontend/unit-tests/index.html">Frontend Unit Test Report</a></li>
+            <li><a href="reports/frontend/integration-tests/index.html">Frontend Integration Test Report</a></li>
+            <li><a href="reports/backend/unit-tests/index.html">Backend Unit Test Report</a></li>
+            <li><a href="reports/backend/integration-tests/index.html">Backend Integration Test Report</a></li>
+            <li><a href="reports/e2e-tests/index.html">E2E Tests Report</a></li>
+          </ul>
+          EOF
 
       # Commit and push changes
       - name: Commit and push changes
-        # if: github.ref == 'refs/heads/develop'
+        if: github.ref == 'refs/heads/develop'
         run: |
           git add .
           git commit -m "Update test reports [skip ci]"
