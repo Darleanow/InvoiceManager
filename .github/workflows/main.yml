@@ -224,6 +224,14 @@ jobs:
       # Organize Test Reports
       - name: Organize Test Reports
         run: |
+          # Remove existing reports directories if they exist
+          rm -rf reports/frontend/unit-tests
+          rm -rf reports/frontend/integration-tests
+          rm -rf reports/backend/unit-tests
+          rm -rf reports/backend/integration-tests
+          rm -rf reports/e2e-tests
+
+          # Create fresh directories
           mkdir -p reports/frontend/unit-tests
           mkdir -p reports/frontend/integration-tests
           mkdir -p reports/backend/unit-tests
