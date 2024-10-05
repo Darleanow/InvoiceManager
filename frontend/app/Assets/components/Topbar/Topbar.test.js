@@ -11,13 +11,13 @@ describe("Topbar Component", () => {
   });
 
   test("renders the logo text", () => {
-    const logoText = screen.getByTestId("logo_text"); // Get the logo text element 
+    const logoText = screen.getByTestId("logo_text"); 
     expect(logoText).toBeInTheDocument(); // Assert that the logo text is in the document
     expect(logoText).toHaveTextContent("InMa"); // Assert that the logo text has the expected content
   });
 
   test("renders the username text", () => {
-    const usernameText = screen.getByTestId("username_text"); // Get the username text element 
+    const usernameText = screen.getByTestId("username_text"); 
     expect(usernameText).toBeInTheDocument(); // Assert that the username text is in the document
     expect(usernameText).toHaveTextContent("Username"); // Assert that the username text has the expected content
   });
@@ -30,7 +30,7 @@ describe("Topbar Component", () => {
 
   
   test("renders the notifications icon", () => {
-    const notificationsIcon = screen.getByTestId("notifications_icon"); // Get the notifications icon
+    const notificationsIcon = screen.getByTestId("notifications_icon"); 
     expect(notificationsIcon).toBeInTheDocument(); // Assert that the notifications icon is in the document
   });
 
@@ -42,7 +42,7 @@ describe("Topbar Component", () => {
 
   
   test("renders the create invoice button", () => {
-    const createInvoiceButton = screen.getByTestId("create_invoice_button"); // Get the create invoice button 
+    const createInvoiceButton = screen.getByTestId("create_invoice_button"); 
     expect(createInvoiceButton).toBeInTheDocument(); // Assert that the create invoice button is in the document
     expect(createInvoiceButton).toHaveTextContent("Create Invoice"); // Assert that the button has the expected text content
   });
