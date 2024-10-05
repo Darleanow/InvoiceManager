@@ -168,7 +168,8 @@ jobs:
       - name: Copy navbar and CSS files
         run: |
           git checkout origin/develop -- workflow_templates/navbar.html workflow_templates/custom.css
-          cp templates/navbar.html templates/custom.css ./
+          cp workflow_templates/navbar.html ./
+          cp workflow_templates/custom.css ./
 
       # Download artifacts
       - name: Download Playwright report
