@@ -1,9 +1,20 @@
-body {
+.body_bg_index {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f7f6;
-    color: #333;
+    background-color: #232327;
+    color: #e2e2e2;
+}
+
+.title_test {
+    color: #ffc559;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-top: 50px;
+}
+
+.title {
+    color:#ffc559;
 }
 
 nav {
@@ -121,4 +132,8 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
+}
+
+.contributor_name {
+    color: #ffc559!important;
 }
