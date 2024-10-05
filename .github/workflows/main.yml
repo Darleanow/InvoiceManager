@@ -168,7 +168,8 @@ jobs:
       - name: Copy navbar and CSS files
         run: |
           git checkout origin/develop -- workflow_templates/navbar.html workflow_templates/custom.css
-          cp templates/navbar.html templates/custom.css ./
+          cp workflow_templates/navbar.html ./
+          cp workflow_templates/custom.css ./
 
       # Download artifacts
       - name: Download Playwright report
@@ -218,10 +219,10 @@ jobs:
           mkdir -p reports/e2e-tests
 
           # Move the reports
-          mv unit-tests/frontend/lcov-report/* reports/frontend/unit-tests/
-          mv integration-tests/frontend/lcov-report/* reports/frontend/integration-tests/
-          mv unit-tests/backend/lcov-report/* reports/backend/unit-tests/
-          mv integration-tests/backend/lcov-report/* reports/backend/integration-tests/
+          mv unit-tests/frontend/* reports/frontend/unit-tests/
+          mv integration-tests/frontend/* reports/frontend/integration-tests/
+          mv unit-tests/backend/* reports/backend/unit-tests/
+          mv integration-tests/backend/* reports/backend/integration-tests/
           mv e2e-tests/playwright-report/* reports/e2e-tests/
 
       # Inject Navbar and Custom CSS
