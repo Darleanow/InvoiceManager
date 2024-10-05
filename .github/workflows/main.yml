@@ -199,7 +199,8 @@ jobs:
       - name: List downloaded artifacts
         run: |
           ls -lR e2e-tests/playwright-report/
-          ls -lR reports/
+          ls -lR unit-tests/
+          ls -lR integration-tests/
 
       # Organize Test Reports
       - name: Organize Test Reports
@@ -216,6 +217,10 @@ jobs:
           mv unit-tests/backend/* reports/backend/unit-tests/
           mv integration-tests/backend/* reports/backend/integration-tests/
           mv e2e-tests/playwright-report/* reports/e2e-tests/
+
+      # List reports directory to verify
+      - name: List reports directory to verify
+        run: ls -lR reports/
 
       # Generate index.html
       - name: Generate index.html
@@ -235,4 +240,3 @@ jobs:
           git add .
           git commit -m "Update test reports [skip ci]"
           git push origin gh-pages
-
