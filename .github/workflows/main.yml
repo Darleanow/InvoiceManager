@@ -167,9 +167,9 @@ jobs:
       # Copy your updated index.html and custom.css from develop branch
       - name: Copy updated index.html and custom.css
         run: |
-          git checkout origin/develop -- index.html custom.css workflow_templates/navbar.html
-          cp index.html ./
-          cp custom.css ./
+          git checkout origin/develop -- workflow_templates/index.html workflow_templates/custom.css workflow_templates/navbar.html
+          cp workflow_templates/index.html ./
+          cp workflow_templates/custom.css ./
           cp workflow_templates/navbar.html ./
 
       # Adjust index.html paths if necessary
