@@ -169,7 +169,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: playwright-report
-          path: ./e2e-tests/playwright-report/
+          path: e2e-tests/playwright-report/
 
       - name: Download frontend unit test report
         uses: actions/download-artifact@v3
@@ -196,13 +196,43 @@ jobs:
           path: integration-tests/backend
 
       # List downloaded artifacts to verify
-      - name: List downloaded Playwright report
-        run: ls -lR ./e2e-tests/playwright-report/
+      - name: List downloaded artifacts
+        run: |
+          ls -lR e2e-tests/playwright-report/
+          ls -lR reports/
+
+      # Organize Test Reports
+      - name: Organize Test Reports
+        run: |
+          mkdir -p reports/frontend/unit-tests
+          mkdir -p reports/frontend/integration-tests
+          mkdir -p reports/backend/unit-tests
+          mkdir -p reports/backend/integration-tests
+          mkdir -p reports/e2e-tests
+
+          # Move the reports
+          mv unit-tests/frontend/* reports/frontend/unit-tests/
+          mv integration-tests/frontend/* reports/frontend/integration-tests/
+          mv unit-tests/backend/* reports/backend/unit-tests/
+          mv integration-tests/backend/* reports/backend/integration-tests/
+          mv e2e-tests/playwright-report/* reports/e2e-tests/
+
+      # Generate index.html
+      - name: Generate index.html
+        run: |
+          echo '<html><body><h1>Test Reports</h1><ul>' > index.html
+          echo '<li><a href="reports/frontend/unit-tests/index.html">Frontend Unit Test Report</a></li>' >> index.html
+          echo '<li><a href="reports/frontend/integration-tests/index.html">Frontend Integration Test Report</a></li>' >> index.html
+          echo '<li><a href="reports/backend/unit-tests/index.html">Backend Unit Test Report</a></li>' >> index.html
+          echo '<li><a href="reports/backend/integration-tests/index.html">Backend Integration Test Report</a></li>' >> index.html
+          echo '<li><a href="reports/e2e-tests/index.html">E2E Tests Report</a></li>' >> index.html
+          echo '</ul></body></html>' >> index.html
 
       # Commit and push changes
       - name: Commit and push changes
         if: github.ref == 'refs/heads/develop'
         run: |
-          git add unit-tests integration-tests e2e-tests
+          git add .
           git commit -m "Update test reports [skip ci]"
           git push origin gh-pages
+
