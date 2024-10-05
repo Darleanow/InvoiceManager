@@ -235,7 +235,7 @@ jobs:
 
       # Commit and push changes
       - name: Commit and push changes
-        if: github.ref == 'refs/heads/develop'
+        # if: github.ref == 'refs/heads/develop'
         run: |
           git add .
           git commit -m "Update test reports [skip ci]"
