@@ -173,6 +173,7 @@ jobs:
 
       # Stop frontend server
       - name: Stop frontend server
+        working-directory: ./frontend
         run: kill $(cat frontend.pid)
 
 
