@@ -8,7 +8,7 @@ import { IoIosDownload } from "react-icons/io";
 export default function SubNavigationBilling() {
   const [currentSubNav, setCurrentSubNav] = useState("overview");
 
-  // Function to handle subnav change
+  // Function to handle subNavigation change
   const handleSubNavChange = (subNav) => {
     setCurrentSubNav(subNav);
   };
