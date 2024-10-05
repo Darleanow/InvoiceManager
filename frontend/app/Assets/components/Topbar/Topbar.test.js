@@ -12,38 +12,50 @@ describe("Topbar Component", () => {
 
   test("renders the logo text", () => {
     const logoText = screen.getByTestId("logo_text"); 
-    expect(logoText).toBeInTheDocument(); // Assert that the logo text is in the document
-    expect(logoText).toHaveTextContent("InMa"); // Assert that the logo text has the expected content
+    // Assert that the logo text is in the document
+    expect(logoText).toBeInTheDocument(); 
+    // Assert that the logo text has the expected content
+    expect(logoText).toHaveTextContent("InMa"); 
   });
 
   test("renders the username text", () => {
     const usernameText = screen.getByTestId("username_text"); 
-    expect(usernameText).toBeInTheDocument(); // Assert that the username text is in the document
-    expect(usernameText).toHaveTextContent("Username"); // Assert that the username text has the expected content
+    // Assert that the username text is in the document
+    expect(usernameText).toBeInTheDocument(); 
+    // Assert that the username text has the expected content
+    expect(usernameText).toHaveTextContent("Username"); 
   });
 
   test("renders the search input", () => {
-    const searchInput = screen.getByTestId("search_input"); // Get the search input element 
-    expect(searchInput).toBeInTheDocument(); // Assert that the search input is in the document
-    expect(searchInput).toHaveAttribute("placeholder", "Search"); // Assert that the search input has the correct placeholder text
+    // Get the search input element
+    const searchInput = screen.getByTestId("search_input"); 
+    // Assert that the search input is in the document 
+    expect(searchInput).toBeInTheDocument(); 
+    // Assert that the search input has the correct placeholder text
+    expect(searchInput).toHaveAttribute("placeholder", "Search"); 
   });
 
   
   test("renders the notifications icon", () => {
     const notificationsIcon = screen.getByTestId("notifications_icon"); 
-    expect(notificationsIcon).toBeInTheDocument(); // Assert that the notifications icon is in the document
+    // Assert that the notifications icon is in the document
+    expect(notificationsIcon).toBeInTheDocument(); 
   });
 
   
   test("renders the settings icon", () => {
-    const settingsIcon = screen.getByTestId("settings_icon"); // Get the settings icon 
-    expect(settingsIcon).toBeInTheDocument(); // Assert that the settings icon is in the document
+    // Get the settings icon 
+    const settingsIcon = screen.getByTestId("settings_icon"); 
+    // Assert that the settings icon is in the document
+    expect(settingsIcon).toBeInTheDocument(); 
   });
 
   
   test("renders the create invoice button", () => {
     const createInvoiceButton = screen.getByTestId("create_invoice_button"); 
-    expect(createInvoiceButton).toBeInTheDocument(); // Assert that the create invoice button is in the document
-    expect(createInvoiceButton).toHaveTextContent("Create Invoice"); // Assert that the button has the expected text content
+    // Assert that the create invoice button is in the document
+    expect(createInvoiceButton).toBeInTheDocument(); 
+    // Assert that the button has the expected text content
+    expect(createInvoiceButton).toHaveTextContent("Create Invoice"); 
   });
 });

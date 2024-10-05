@@ -10,14 +10,16 @@ describe("SubNavigationBilling Component", () => {
   });
 
   test("renders the billing title", () => {
-    const titleElement = screen.getByText(/billing/i); 
-    expect(titleElement).toBeInTheDocument(); // Check that the billing title is in the document
+    const titleElement = screen.getByText(/billing/i);
+    // Check that the billing title is in the document
+    expect(titleElement).toBeInTheDocument(); 
   });
 
   test("renders sub-navigation items", () => {
     const overviewItem = screen.getByText(/overview/i); 
-    const quotationItem = screen.getByText(/quotation/i); 
-    const invoiceItem = screen.getByText(/invoice/i); // Get the sub-navigation item 'Invoice'
+    const quotationItem = screen.getByText(/quotation/i);
+    // Get the sub-navigation item 'Invoice'
+    const invoiceItem = screen.getByText(/invoice/i); 
 
     // Check that each sub-navigation item is in the document
     expect(overviewItem).toBeInTheDocument();
@@ -29,25 +31,30 @@ describe("SubNavigationBilling Component", () => {
   test("changes active sub-navigation on click", () => {
     const overviewItem = screen.getByText(/overview/i); 
     const quotationItem = screen.getByText(/quotation/i); 
-    const invoiceItem = screen.getByText(/invoice/i); // Get the sub-navigation item 'Invoice'
+    // Get the sub-navigation item 'Invoice'
+    const invoiceItem = screen.getByText(/invoice/i); 
 
     fireEvent.click(quotationItem); // Simulate a click on the 'Quotation' item
     expect(quotationItem).toHaveClass("billing_subnav_item_active"); 
     expect(overviewItem).not.toHaveClass("billing_subnav_item_active"); 
-    expect(invoiceItem).not.toHaveClass("billing_subnav_item_active"); // Check that the 'Invoice' item does not have the active class
+    // Check that the 'Invoice' item does not have the active class
+    expect(invoiceItem).not.toHaveClass("billing_subnav_item_active"); 
 
     fireEvent.click(invoiceItem); // Simulate a click on the 'Invoice' item
     expect(invoiceItem).toHaveClass("billing_subnav_item_active"); 
     expect(overviewItem).not.toHaveClass("billing_subnav_item_active"); 
-    expect(quotationItem).not.toHaveClass("billing_subnav_item_active"); // Check that the 'Quotation' item does not have the active class
+    // Check that the 'Quotation' item does not have the active class
+    expect(quotationItem).not.toHaveClass("billing_subnav_item_active"); 
   });
 
   // Test to check if an alert is shown on export button click
   test("alerts on export button click", () => {
     const exportButton = screen.getByText(/export/i); 
-    global.alert = jest.fn(); // Mock the alert function
+    // Mock the alert function
+    global.alert = jest.fn(); 
 
-    fireEvent.click(exportButton); // Simulate a click on the export button
+    // Simulate a click on the export button
+    fireEvent.click(exportButton); 
     
     // Check that the alert function was called with the expected message
     expect(global.alert).toHaveBeenCalledWith("T'exporte rien");
