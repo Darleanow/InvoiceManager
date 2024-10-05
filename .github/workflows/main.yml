@@ -135,7 +135,7 @@ jobs:
       # Start frontend server
       - name: Start frontend server
         working-directory: ./frontend
-        env:
+        #env:
           # In case needed: add env variables here, useless for now
         run: |
           npm start &
