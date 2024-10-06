@@ -1,5 +1,5 @@
 .billing_title {
-    font-size: 1.323vw;
+    font-size: 1.935vh;
     color: #DADADA;
     font-weight: 700;
     margin: 0;
@@ -10,7 +10,7 @@
 }
 
 .billing_subnav_items {
-    font-size: 0.86vw;
+    font-size: 1.018vh;
     color: #828282;
     font-weight: 500;
     display: flex;
@@ -129,9 +129,9 @@
     border-radius: 0.265vw;
     padding-left: 0.661vw;
     padding-right: 0.661vw;
-    font-size: 0.794vw;
     color: #DADADA;
     margin-right: 1.587vw;
+    font-size: 1.12vh;
 }
 
 .export_button:hover {
@@ -142,11 +142,11 @@
 
 .export_icon {
     color: #828282;
-    gap: 0.595vw;
     align-items: center;
     display: flex;
     height: 100%;
-    font-size: 1.833vh;
+    font-size: 1.426vh;
+    gap: 0.661vw;
 }
 
 .rectangle_container {
@@ -154,7 +154,7 @@
     grid-template-columns: repeat(2, 1fr);
     justify-content: center;
     align-items: center;
-    gap: 1.323vw;
+    gap: 1vh;
 }
 
 .rectangle_left_top {
@@ -165,7 +165,7 @@
     border-radius: 1.629vw;
     margin-left: 1.72vw;
     margin-top: 2.444vh;
-    margin-bottom: 3.87vh;
+    margin-bottom: 2vh;
 }
 
 .rectangle_right_top {
@@ -176,7 +176,7 @@
     border-radius: 1.629vw;
     margin-right: 1.72vw;
     margin-top: 2.444vh;
-    margin-bottom: 3.87vh;
+    margin-bottom: 2vh;
 }
 
 .rectangle_left_bottom {
