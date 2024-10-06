@@ -1,76 +1,28 @@
-const { MySqlContainer } = require("@testcontainers/mysql");
 const request = require('supertest');
 const express = require('express');
-const path = require('path');
-const fs = require('fs');
+const { initDatabase, teardownDatabase } = require('../config/testUtils');
 
-let container;
 let pool;
+let container;
 let app;
 let router;
 
 beforeAll(async () => {
-  // Start MySQL container with root user and test user
-  container = await new MySqlContainer()
-    .withRootPassword("rootpass")
-    .withDatabase("invoice_manager")
-    .start();
+  // Initialize the database and get pool and container
+  const dbInit = await initDatabase();
+  pool = dbInit.pool;
+  container = dbInit.container;
 
-  // Set environment variables for MySQL pool connection
-  process.env.DB_HOST = container.getHost();
-  process.env.DB_USER = 'testuser';
-  process.env.DB_PASSWORD = 'testpass';
-  process.env.DB_NAME = container.getDatabase();
-  process.env.DB_PORT = container.getPort();
-
-  // Create a temporary connection as root with multipleStatements: true
-  const mysql = require('mysql2/promise');
-  const tempConnection = await mysql.createConnection({
-    host: container.getHost(),
-    user: 'root',
-    password: 'rootpass',
-    database: 'invoice_manager',
-    port: container.getPort(),
-    multipleStatements: true,
-  });
-
-  // Load schema and populate SQL scripts
-  const schemaPath = path.join(__dirname, '..', 'bin', 'schema.sql');
-  const populatePath = path.join(__dirname, '..', 'bin', 'populate.sql');
-
-  let schemaSql = fs.readFileSync(schemaPath, 'utf8');
-  let populateSql = fs.readFileSync(populatePath, 'utf8');
-
-  // Execute schema and populate scripts
-  await tempConnection.query(schemaSql);
-  await tempConnection.query(populateSql);
-
-  // Grant all privileges to 'testuser' on 'invoice_manager' database
-  await tempConnection.query(`
-    CREATE USER 'testuser'@'%' IDENTIFIED BY 'testpass';
-    GRANT ALL PRIVILEGES ON invoice_manager.* TO 'testuser'@'%';
-    FLUSH PRIVILEGES;
-  `);
-
-  // Close the temporary connection
-  await tempConnection.end();
-
-  // Import the pool and router after setting environment variables
-  pool = require('../config/database');
-  router = require('../routes/index');
+  router = require("../routes/index");
 
   // Initialize Express app for testing
   app = express();
   app.use(express.json());
-  app.use('/', router);
-
+  app.use("/", router);
 }, 60000);
 
 afterAll(async () => {
-  await container.stop();
-  if (pool) {
-    await pool.end();
-  }
+  await teardownDatabase(); // Use teardown function
 });
 
 describe('Customer Controller', () => {
