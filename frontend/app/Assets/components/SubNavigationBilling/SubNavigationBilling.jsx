@@ -14,7 +14,7 @@ export default function SubNavigationBilling() {
 
   return (
     <>
-      <h1 className={styles.billing_title}>Billing</h1>
+      <h3 className={styles.billing_title}>Billing</h3>
       <div className={styles.billing_subnav}>
         <div className={styles.billing_subnav_items}>
           <button

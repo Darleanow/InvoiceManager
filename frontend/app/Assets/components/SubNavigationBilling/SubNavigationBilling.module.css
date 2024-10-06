@@ -130,8 +130,9 @@
     padding-left: 0.661vw;
     padding-right: 0.661vw;
     color: #DADADA;
-    margin-right: 1.587vw;
+    margin-right: 0.661vw;
     font-size: 1.12vh;
+    gap: 0.661vw; 
 }
 
 .export_button:hover {
@@ -144,9 +145,7 @@
     color: #828282;
     align-items: center;
     display: flex;
-    height: 100%;
-    font-size: 1.426vh;
-    gap: 0.661vw;
+    font-size: 1.12vh 1.587vw; 
 }
 
 .rectangle_container {
