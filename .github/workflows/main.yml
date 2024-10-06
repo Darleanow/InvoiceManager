@@ -195,10 +195,34 @@ jobs:
       - name: Checkout develop branch to fetch docs
         run: git checkout develop
 
-      - name: Configure Git
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Install all dependencies (including JSDoc)
+      - name: Install backend dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Install frontend dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      # Install missing JSDoc and templates/plugins globally if required
+      - name: Install JSDoc and necessary templates
+        working-directory: ./backend
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
+          npm install jsdoc
+          npm install minami
+          npm install jsdoc-express-with-swagger
+
+      - name: Install JSDoc and necessary templates
+        working-directory: ./frontend
+        run: |
+          npm install jsdoc
+          npm install minami
+          npm install jsdoc-express-with-swagger
 
       # Generate Backend Documentation
       - name: Generate Backend Documentation
