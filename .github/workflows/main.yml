@@ -307,7 +307,7 @@ jobs:
             sed -i '/<body>/a <!-- Navbar Start -->' "$html_file"
 
             # Adjust the navbar links for the reports
-            sed "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" navbar.html > temp_navbar.html
+            sed "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" ./worflow_templates/navbar.html > temp_navbar.html
 
             # Inject the adjusted navbar
             sed -i '/<!-- Navbar Start -->/r temp_navbar.html' "$html_file"
