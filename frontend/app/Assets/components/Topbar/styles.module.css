@@ -30,8 +30,7 @@
   width: 4.365vw;
   height: 2.342vh;
   font-weight: bold;
-  font-size: 1.587vw;
-  font-size: 2.443vh;
+  font-size: 4.101vw 1.731vh;
   background: -webkit-linear-gradient(45deg, #69c06c 0%, #e29c23 95%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -40,11 +39,11 @@
 .topbar_user {
   color: #9f9f9f;
   margin-top: 2.342vh;
-  font-size: 1.12vh;
+  font-size: 4.034vw 1.12vh;
 }
 
 .topbar_arrow {
-  size: 0.611vh;
+  size: 0.611vh 0.661vw;
   color: #9f9f9f;
   margin-left: 0.5vw;
 }
