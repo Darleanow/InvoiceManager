@@ -78,6 +78,12 @@ export default function SubNavigationBilling() {
         <div className={styles.empty_content}></div>
         <div className={styles.empty_content}></div>
       </div>
+      <div className={styles.rectangle_container}>
+        <div className={styles.rectangle_left_top}></div>
+        <div className={styles.rectangle_right_top}></div>
+        <div className={styles.rectangle_left_bottom}></div>
+        <div className={styles.rectangle_right_bottom}></div>
+      </div>
     </>
   );
 }

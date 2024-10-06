@@ -148,3 +148,18 @@
     height: 100%;
     font-size: 1.833vh;
 }
+
+.rectangle_container {
+    display: flex;
+    align-items: center;
+    gap: 0.595vw;
+}
+
+.rectangle_left_top {
+    background: white;
+    border: 0.051vh solid transparent;
+    height: 33.605vh;
+    width: 47.619vw;
+    border-radius: 1.629vw;
+    margin-left: 1.72vw;
+}
