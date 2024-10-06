@@ -33,21 +33,22 @@ export default function Topbar() {
         <IoIosArrowDown className={styles.topbar_arrow} />
       </div>
       <div className={styles.topbar_middle_pannel}>
-        <div className={styles.topbar_search_container} 
-        onClick={handleInteraction}
-        onKeyDown={handleInteraction} 
-        role="button" 
-        tabIndex={0}     
-        aria-label="Search bar" 
-         >
+        <button
+          className={styles.topbar_search_container} 
+          onClick={handleInteraction}                 
+          aria-label="Search bar"                     
+        >
           <IoIosSearch className={styles.topbar_search_icon} />
           <input
-            type="button"
+            type="text"
             placeholder="Search"
             className={styles.topbar_search}
             data-testid="search_input"
+            aria-label="Search input"                 
           />
-        </div>
+        </button>
+      </div>
+      <div className={styles.topbar_right_pannel}>
       </div>
       <div className={styles.topbar_right_pannel}>
         <IoIosNotifications
