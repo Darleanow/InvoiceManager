@@ -224,6 +224,9 @@ jobs:
           fetch-depth: 0
           clean: false
 
+      - name: Checkout develop branch to fetch docs
+        run: git checkout develop
+
       - name: Configure Git
         run: |
           git config user.name "GitHub Actions"
