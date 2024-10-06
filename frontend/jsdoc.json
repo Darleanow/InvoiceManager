@@ -5,6 +5,8 @@
     "excludePattern": "(node_modules|__tests__)"
   },
   "opts": {
+    "template": "node_modules/minami",
+    "encoding": "utf8",
     "destination": "../docs/api/frontend",
     "recurse": true
   }

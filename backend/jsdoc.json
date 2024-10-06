@@ -4,7 +4,10 @@
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(node_modules|__tests__)"
   },
+  "plugins": ["node_modules/jsdoc-express-with-swagger"],
   "opts": {
+    "template": "node_modules/minami",
+    "encoding": "utf8",
     "destination": "../docs/api/backend",
     "recurse": true
   }

@@ -1,17 +1,8 @@
-/**
- * @file controllers/invoices.test.js
- * @description Unit tests for the Invoices Controller.
- */
-
 const pool = require("../../config/database");
 const invoicesController = require("./invoices");
 
 jest.mock("../../config/database");
 
-/**
- * Mocks the response object for use in tests.
- * @returns {Object} Mocked response object with `status` and `json` functions.
- */
 const mockResponse = () => {
   return {
     status: jest.fn().mockReturnThis(),
@@ -19,10 +10,6 @@ const mockResponse = () => {
   };
 };
 
-/**
- * Mocks the database connection for use in tests.
- * @returns {Object} Mocked connection object with transaction-related functions.
- */
 const mockConnection = () => {
   return {
     beginTransaction: jest.fn(),
@@ -33,12 +20,6 @@ const mockConnection = () => {
   };
 };
 
-/**
- * Mocks the `getConnection` function and provides query results for the tests.
- *
- * @param {Array} mockQueryResults - An array of query results to mock.
- * @returns {Object} Mocked connection object.
- */
 const mockGetConnection = (mockQueryResults = []) => {
   const connection = mockConnection();
   mockQueryResults.forEach((result) => {

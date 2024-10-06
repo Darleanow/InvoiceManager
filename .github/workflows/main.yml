@@ -178,9 +178,9 @@ jobs:
 
 
 
-  # Deploy Test Reports to GitHub Pages
+  # Deploy Test Reports and JSDoc to GitHub Pages
   deploy-reports:
-    name: Deploy Test Reports
+    name: Deploy Test Reports and JSDoc
     needs: [unit-tests, integration-tests, e2e-tests]
     runs-on: ubuntu-latest
 
@@ -201,8 +201,8 @@ jobs:
       - name: Copy updated index.html and custom.css
         run: |
           git checkout origin/develop -- workflow_templates/index.html workflow_templates/custom.css workflow_templates/navbar.html
-          cp workflow_templates/index.html ./
-          cp workflow_templates/custom.css ./
+          cp workflow_templates/index.html ./ 
+          cp workflow_templates/custom.css ./ 
           cp workflow_templates/navbar.html ./
 
       # Adjust index.html paths if necessary
@@ -216,7 +216,17 @@ jobs:
           # Adjust the navbar links in index.html if necessary
           sed -i "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" index.html
 
-      # Download artifacts
+      # Generate Backend Documentation
+      - name: Generate Backend Documentation
+        working-directory: ./backend
+        run: npm run generate-docs
+
+      # Generate Frontend Documentation
+      - name: Generate Frontend Documentation
+        working-directory: ./frontend
+        run: npm run generate-docs
+
+      # Download Playwright report
       - name: Download Playwright report
         uses: actions/download-artifact@v3
         with:
@@ -247,22 +257,26 @@ jobs:
           name: backend-integration-test-report
           path: integration-tests/backend
 
-      # Organize Test Reports
-      - name: Organize Test Reports
+      # Organize Test Reports and Documentation
+      - name: Organize Test Reports and Documentation
         run: |
-          # Remove existing reports directories if they exist
+          # Remove existing reports and docs directories if they exist
           rm -rf reports/frontend/unit-tests
           rm -rf reports/frontend/integration-tests
           rm -rf reports/backend/unit-tests
           rm -rf reports/backend/integration-tests
           rm -rf reports/e2e-tests
+          rm -rf docs/api/frontend
+          rm -rf docs/api/backend
 
-          # Create fresh directories
+          # Create fresh directories for reports and docs
           mkdir -p reports/frontend/unit-tests
           mkdir -p reports/frontend/integration-tests
           mkdir -p reports/backend/unit-tests
           mkdir -p reports/backend/integration-tests
           mkdir -p reports/e2e-tests
+          mkdir -p docs/api/frontend
+          mkdir -p docs/api/backend
 
           # Move the reports
           mv unit-tests/frontend/* reports/frontend/unit-tests/
@@ -270,6 +284,10 @@ jobs:
           mv unit-tests/backend/* reports/backend/unit-tests/
           mv integration-tests/backend/* reports/backend/integration-tests/
           mv e2e-tests/playwright-report/* reports/e2e-tests/
+
+          # Move the generated docs
+          mv backend/docs/* docs/api/backend/
+          mv frontend/docs/* docs/api/frontend/
 
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
@@ -295,14 +313,14 @@ jobs:
             rm temp_navbar.html
           done
 
-      # List reports directory to verify
-      - name: List reports directory to verify
-        run: ls -lR reports/
+      # List reports and docs directories to verify
+      - name: List reports and docs directories to verify
+        run: ls -lR reports/ docs/
 
       # Commit and push changes
       - name: Commit and push changes
         if: github.ref == 'refs/heads/develop'
         run: |
           git add .
-          git commit -m "Update test reports [skip ci]"
+          git commit -m "Update test reports and JSDoc [skip ci]"
           git push origin gh-pages

@@ -1,5 +1,6 @@
 /**
  * @file controllers/customers.js
+ * @module customersController
  * @description Handles customer-related operations such as creating, retrieving, updating, and deleting customers.
  */
 
@@ -9,15 +10,17 @@ const pool = require("../../config/database");
  * Creates a new customer.
  *
  * @async
- * @function
+ * @function createCustomer
+ * @memberof module:customersController
  * @param {Object} req - The request object containing the customer data.
+ * @param {Object} req.body - The request body.
  * @param {string} req.body.customer_name - The name of the customer.
  * @param {string} req.body.customer_email - The email of the customer.
  * @param {string} req.body.postal_address - The postal address of the customer.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response with the created customer ID or an error message.
  */
-exports.createCustomer = async (req, res) => {
+async function createCustomer(req, res) {
   try {
     const { customer_name, customer_email, postal_address } = req.body;
 
@@ -33,18 +36,21 @@ exports.createCustomer = async (req, res) => {
     console.error("Error creating customer:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.createCustomer = createCustomer;
 
 /**
  * Retrieves all customers.
  *
  * @async
- * @function
+ * @function getCustomers
+ * @memberof module:customersController
  * @param {Object} req - The request object.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response with the list of all customers or an error message.
  */
-exports.getCustomers = async (req, res) => {
+async function getCustomers(req, res) {
   try {
     const [rows] = await pool.query("SELECT * FROM invoice_manager.customer");
     res.status(200).json(rows);
@@ -52,19 +58,22 @@ exports.getCustomers = async (req, res) => {
     console.error("Error retrieving customers:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.getCustomers = getCustomers;
 
 /**
  * Retrieves a customer by their ID.
  *
  * @async
- * @function
+ * @function getCustomerById
+ * @memberof module:customersController
  * @param {Object} req - The request object containing the customer ID.
  * @param {string} req.params.id - The ID of the customer to retrieve.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response with the customer details or an error message.
  */
-exports.getCustomerById = async (req, res) => {
+async function getCustomerById(req, res) {
   const { id } = req.params;
   try {
     const [rows] = await pool.query(
@@ -81,13 +90,16 @@ exports.getCustomerById = async (req, res) => {
     console.error("Error retrieving customer:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.getCustomerById = getCustomerById;
 
 /**
  * Updates a customer's details.
  *
  * @async
- * @function
+ * @function updateCustomer
+ * @memberof module:customersController
  * @param {Object} req - The request object containing the updated customer data.
  * @param {string} req.params.id - The ID of the customer to update.
  * @param {string} req.body.customer_name - The updated name of the customer.
@@ -96,7 +108,7 @@ exports.getCustomerById = async (req, res) => {
  * @param {Object} res - The response object.
  * @returns {Object} JSON response indicating success or failure of the update operation.
  */
-exports.updateCustomer = async (req, res) => {
+async function updateCustomer(req, res) {
   const { id } = req.params;
   const { customer_name, customer_email, postal_address } = req.body;
 
@@ -115,19 +127,22 @@ exports.updateCustomer = async (req, res) => {
     console.error("Error updating customer:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.updateCustomer = updateCustomer;
 
 /**
  * Deletes a customer by their ID.
  *
  * @async
- * @function
+ * @function deleteCustomer
+ * @memberof module:customersController
  * @param {Object} req - The request object containing the customer ID.
  * @param {string} req.params.id - The ID of the customer to delete.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response indicating success or failure of the delete operation.
  */
-exports.deleteCustomer = async (req, res) => {
+async function deleteCustomer(req, res) {
   const { id } = req.params;
 
   try {
@@ -145,4 +160,6 @@ exports.deleteCustomer = async (req, res) => {
     console.error("Error deleting customer:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.deleteCustomer = deleteCustomer;

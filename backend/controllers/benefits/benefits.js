@@ -1,5 +1,6 @@
 /**
  * @file controllers/benefits.js
+ * @module benefitsController
  * @description Handles benefit-related operations such as creating, retrieving, updating, and deleting benefits.
  */
 
@@ -9,15 +10,17 @@ const pool = require("../../config/database");
  * Creates a new benefit.
  *
  * @async
- * @function
+ * @function createBenefit
+ * @memberof module:benefitsController
  * @param {Object} req - The request object containing the benefit data.
+ * @param {Object} req.body - The request body.
  * @param {string} req.body.object - The object of the benefit.
  * @param {number} req.body.unit - The unit of the benefit.
  * @param {number} req.body.price_per_unit - The price per unit of the benefit.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response with the created benefit ID or an error message.
  */
-exports.createBenefit = async (req, res) => {
+async function createBenefit(req, res) {
   try {
     const { object, unit, price_per_unit } = req.body;
 
@@ -33,31 +36,34 @@ exports.createBenefit = async (req, res) => {
     console.error("Error creating benefit:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.createBenefit = createBenefit;
 
 /**
  * Retrieves benefits by the invoice ID.
  *
  * @async
- * @function
+ * @function getBenefitByInvoiceId
+ * @memberof module:benefitsController
  * @param {Object} req - The request object containing the invoice ID.
  * @param {string} req.params.invoiceId - The ID of the invoice.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response with the list of benefits or an error message.
  */
-exports.getBenefitByInvoiceId = async (req, res) => {
+async function getBenefitByInvoiceId(req, res) {
   const { invoiceId } = req.params;
   try {
     const [rows] = await pool.query(
       `
-          SELECT 
-              b.id,
-              b.object,
-              b.unit,
-              b.price_per_unit
-          FROM invoice_manager.benefit b
-          JOIN invoice_manager.invoice_benefit ib ON b.id = ib.benefit_id
-          WHERE ib.invoice_id = ?
+        SELECT 
+            b.id,
+            b.object,
+            b.unit,
+            b.price_per_unit
+        FROM invoice_manager.benefit b
+        JOIN invoice_manager.invoice_benefit ib ON b.id = ib.benefit_id
+        WHERE ib.invoice_id = ?
       `,
       [invoiceId]
     );
@@ -73,13 +79,16 @@ exports.getBenefitByInvoiceId = async (req, res) => {
     console.error("Error retrieving benefits for invoice:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.getBenefitByInvoiceId = getBenefitByInvoiceId;
 
 /**
  * Updates a benefit's details.
  *
  * @async
- * @function
+ * @function updateBenefit
+ * @memberof module:benefitsController
  * @param {Object} req - The request object containing the benefit data.
  * @param {string} req.params.id - The ID of the benefit to update.
  * @param {string} req.body.object - The updated object of the benefit.
@@ -88,7 +97,7 @@ exports.getBenefitByInvoiceId = async (req, res) => {
  * @param {Object} res - The response object.
  * @returns {Object} JSON response indicating success or failure of the update operation.
  */
-exports.updateBenefit = async (req, res) => {
+async function updateBenefit(req, res) {
   try {
     const { id } = req.params;
     const { object, unit, price_per_unit } = req.body;
@@ -107,19 +116,22 @@ exports.updateBenefit = async (req, res) => {
     console.error("Error updating benefit:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.updateBenefit = updateBenefit;
 
 /**
  * Deletes a benefit by its ID.
  *
  * @async
- * @function
+ * @function deleteBenefit
+ * @memberof module:benefitsController
  * @param {Object} req - The request object containing the benefit ID.
  * @param {string} req.params.id - The ID of the benefit to delete.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response indicating success or failure of the delete operation.
  */
-exports.deleteBenefit = async (req, res) => {
+async function deleteBenefit(req, res) {
   try {
     const { id } = req.params;
 
@@ -137,4 +149,6 @@ exports.deleteBenefit = async (req, res) => {
     console.error("Error deleting benefit:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
+
+exports.deleteBenefit = deleteBenefit;

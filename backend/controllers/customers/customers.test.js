@@ -1,8 +1,3 @@
-/**
- * @file controllers/customers.test.js
- * @description Unit tests for the Customers Controller.
- */
-
 const pool = require("../../config/database");
 const customersController = require("./customers");
 

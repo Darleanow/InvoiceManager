@@ -1,8 +1,3 @@
-/**
- * @file controllers/benefits.test.js
- * @description Unit tests for the Benefits Controller.
- */
-
 const pool = require("../../config/database");
 const benefitsController = require("./benefits");
 
