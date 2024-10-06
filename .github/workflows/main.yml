@@ -178,135 +178,135 @@ jobs:
 
 
 
-    # Deploy Test Reports and JSDoc to GitHub Pages
-    deploy-reports:
-      name: Deploy Test Reports and JSDoc
-      needs: [unit-tests, integration-tests, e2e-tests]
-      runs-on: ubuntu-latest
+  # Deploy Test Reports and JSDoc to GitHub Pages
+  deploy-reports:
+    name: Deploy Test Reports and JSDoc
+    needs: [unit-tests, integration-tests, e2e-tests]
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout code and gh-pages branch
-          uses: actions/checkout@v3
-          with:
-            ref: gh-pages
-            fetch-depth: 0
-            clean: false
+    steps:
+      - name: Checkout code and gh-pages branch
+        uses: actions/checkout@v3
+        with:
+          ref: gh-pages
+          fetch-depth: 0
+          clean: false
 
-        - name: Checkout develop branch to fetch docs
-          run: git checkout develop
+      - name: Checkout develop branch to fetch docs
+        run: git checkout develop
 
-        - name: Configure Git
-          run: |
-            git config user.name "GitHub Actions"
-            git config user.email "actions@github.com"
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
 
-        - name: Set up Node.js environment
-          uses: actions/setup-node@v3
-          with:
-            node-version: '20'
+      - name: Set up Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
 
-        # Generate Backend Documentation and upload as artifact
-        - name: Generate Backend Documentation
-          working-directory: ./backend
-          run: npm run generate-docs
+      # Generate Backend Documentation and upload as artifact
+      - name: Generate Backend Documentation
+        working-directory: ./backend
+        run: npm run generate-docs
 
-        - name: Upload Backend Documentation
-          uses: actions/upload-artifact@v3
-          with:
-            name: backend-docs
-            path: ./docs/api/backend/**
-            if-no-files-found: error
+      - name: Upload Backend Documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-docs
+          path: ./docs/api/backend/**
+          if-no-files-found: error
 
-        # Generate Frontend Documentation and upload as artifact
-        - name: Generate Frontend Documentation
-          working-directory: ./frontend
-          run: npm run generate-docs
+      # Generate Frontend Documentation and upload as artifact
+      - name: Generate Frontend Documentation
+        working-directory: ./frontend
+        run: npm run generate-docs
 
-        - name: Upload Frontend Documentation
-          uses: actions/upload-artifact@v3
-          with:
-            name: frontend-docs
-            path: ./docs/api/frontend/**
-            if-no-files-found: error
-
-
-        # Download Backend Documentation
-        - name: Download Backend Documentation
-          uses: actions/download-artifact@v3
-          with:
-            name: backend-docs
-            path: ./docs/api/backend
-
-        # Download Frontend Documentation
-        - name: Download Frontend Documentation
-          uses: actions/download-artifact@v3
-          with:
-            name: frontend-docs
-            path: ./docs/api/frontend
-
-        # Organize Test Reports and Documentation
-        - name: Organize Test Reports and Documentation
-          run: |
-            # Remove existing reports and docs directories if they exist
-            rm -rf reports/frontend/unit-tests
-            rm -rf reports/frontend/integration-tests
-            rm -rf reports/backend/unit-tests
-            rm -rf reports/backend/integration-tests
-            rm -rf reports/e2e-tests
-            rm -rf docs/api/frontend
-            rm -rf docs/api/backend
-
-            # Create fresh directories for reports and docs
-            mkdir -p reports/frontend/unit-tests
-            mkdir -p reports/frontend/integration-tests
-            mkdir -p reports/backend/unit-tests
-            mkdir -p reports/backend/integration-tests
-            mkdir -p reports/e2e-tests
-            mkdir -p docs/api/frontend
-            mkdir -p docs/api/backend
-
-            # Move the reports
-            mv unit-tests/frontend/* reports/frontend/unit-tests/
-            mv integration-tests/frontend/* reports/frontend/integration-tests/
-            mv unit-tests/backend/* reports/backend/unit-tests/
-            mv integration-tests/backend/* reports/backend/integration-tests/
-            mv e2e-tests/playwright-report/* reports/e2e-tests/
-
-            ls -lR docs/
+      - name: Upload Frontend Documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: frontend-docs
+          path: ./docs/api/frontend/**
+          if-no-files-found: error
 
 
-        # Inject Navbar and Custom CSS into Reports (Exclude index.html)
-        - name: Inject Navbar and Custom CSS into Reports
-          run: |
-            REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+      # Download Backend Documentation
+      - name: Download Backend Documentation
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-docs
+          path: ./docs/api/backend
 
-            # Inject navbar and custom CSS into all HTML files in reports/
-            find reports/ -name '*.html' | while read html_file; do
-              # Insert the custom CSS link after the <head> tag
-              sed -i "/<head>/a <link rel=\"stylesheet\" href=\"/$REPO_NAME/custom.css\">" "$html_file"
+      # Download Frontend Documentation
+      - name: Download Frontend Documentation
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-docs
+          path: ./docs/api/frontend
 
-              # Insert the navbar after the <body> tag
-              sed -i '/<body>/a <!-- Navbar Start -->' "$html_file"
+      # Organize Test Reports and Documentation
+      - name: Organize Test Reports and Documentation
+        run: |
+          # Remove existing reports and docs directories if they exist
+          rm -rf reports/frontend/unit-tests
+          rm -rf reports/frontend/integration-tests
+          rm -rf reports/backend/unit-tests
+          rm -rf reports/backend/integration-tests
+          rm -rf reports/e2e-tests
+          rm -rf docs/api/frontend
+          rm -rf docs/api/backend
 
-              # Adjust the navbar links for the reports
-              sed "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" workflow_templates/navbar.html > temp_navbar.html
+          # Create fresh directories for reports and docs
+          mkdir -p reports/frontend/unit-tests
+          mkdir -p reports/frontend/integration-tests
+          mkdir -p reports/backend/unit-tests
+          mkdir -p reports/backend/integration-tests
+          mkdir -p reports/e2e-tests
+          mkdir -p docs/api/frontend
+          mkdir -p docs/api/backend
 
-              # Inject the adjusted navbar
-              sed -i '/<!-- Navbar Start -->/r temp_navbar.html' "$html_file"
-              sed -i '/<!-- Navbar Start -->/d' "$html_file"
+          # Move the reports
+          mv unit-tests/frontend/* reports/frontend/unit-tests/
+          mv integration-tests/frontend/* reports/frontend/integration-tests/
+          mv unit-tests/backend/* reports/backend/unit-tests/
+          mv integration-tests/backend/* reports/backend/integration-tests/
+          mv e2e-tests/playwright-report/* reports/e2e-tests/
 
-              # Clean up temporary navbar
-              rm temp_navbar.html
-            done
+          ls -lR docs/
 
-        # List reports and docs directories to verify
-        - name: List reports and docs directories to verify
-          run: ls -lR reports/ docs/
 
-        # Commit and push changes
-        - name: Commit and push changes
-          if: github.ref == 'refs/heads/develop'
-          run: |
-            git add .
-            git commit -m "Update test reports and JSDoc [skip ci]"
-            git push origin gh-pages
+      # Inject Navbar and Custom CSS into Reports (Exclude index.html)
+      - name: Inject Navbar and Custom CSS into Reports
+        run: |
+          REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
+
+          # Inject navbar and custom CSS into all HTML files in reports/
+          find reports/ -name '*.html' | while read html_file; do
+            # Insert the custom CSS link after the <head> tag
+            sed -i "/<head>/a <link rel=\"stylesheet\" href=\"/$REPO_NAME/custom.css\">" "$html_file"
+
+            # Insert the navbar after the <body> tag
+            sed -i '/<body>/a <!-- Navbar Start -->' "$html_file"
+
+            # Adjust the navbar links for the reports
+            sed "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" workflow_templates/navbar.html > temp_navbar.html
+
+            # Inject the adjusted navbar
+            sed -i '/<!-- Navbar Start -->/r temp_navbar.html' "$html_file"
+            sed -i '/<!-- Navbar Start -->/d' "$html_file"
+
+            # Clean up temporary navbar
+            rm temp_navbar.html
+          done
+
+      # List reports and docs directories to verify
+      - name: List reports and docs directories to verify
+        run: ls -lR reports/ docs/
+
+      # Commit and push changes
+      - name: Commit and push changes
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          git add .
+          git commit -m "Update test reports and JSDoc [skip ci]"
+          git push origin gh-pages
