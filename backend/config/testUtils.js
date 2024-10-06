@@ -29,7 +29,7 @@ async function initDatabase() {
   // Create a temporary connection as root with multipleStatements: true
   const tempConnection = await mysql.createConnection({
     host: container.getHost(),
-    user: 'root',
+    user: rootUser,
     password: rootPassword,
     database: databaseName,
     port: container.getPort(),
