@@ -9,9 +9,9 @@ let pool;
 
 async function initDatabase() {
   // Start MySQL container with root user and test user, using .env.test variables
-  const rootUser = process.env.DB_ROOT_USER || 'root';
-  const rootPassword = process.env.DB_ROOT_PASSWORD || 'rootpass';
-  const databaseName = process.env.DB_NAME || 'invoice_manager';
+  const rootUser = process.env.DB_ROOT_USER;
+  const rootPassword = process.env.DB_ROOT_PASSWORD;
+  const databaseName = process.env.DB_NAME;
 
   container = await new MySqlContainer()
     .withRootPassword(rootPassword)
