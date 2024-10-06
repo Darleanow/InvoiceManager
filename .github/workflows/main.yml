@@ -239,7 +239,7 @@ jobs:
         working-directory: ./frontend
         run: |
           npm run generate-docs
-          ls -l ../docs/
+          ls -l ../docs/api/frontend
 
       # Download Playwright report
       - name: Download Playwright report
@@ -301,7 +301,6 @@ jobs:
           mv e2e-tests/playwright-report/* reports/e2e-tests/
 
           ls -lR docs/
-          ls -lR /
 
           mv docs/frontend/* docs/frontend/
           mv docs/backend/* docs/backend/
