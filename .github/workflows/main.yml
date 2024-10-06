@@ -216,7 +216,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-docs
-          path: ./docs/api/backend/**
+          path: ./backend/docs/api/backend/**
           if-no-files-found: error
 
       # Generate Frontend Documentation and upload as artifact
@@ -230,9 +230,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: frontend-docs
-          path: ./docs/api/frontend/**
+          path: ./frontend/docs/api/frontend/**
           if-no-files-found: error
-
 
       # Download Backend Documentation
       - name: Download Backend Documentation
@@ -265,37 +264,6 @@ jobs:
           # Adjust the navbar links in index.html if necessary
           sed -i "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" index.html
 
-      # Download artifacts
-      - name: Download Playwright report
-        uses: actions/download-artifact@v3
-        with:
-          name: playwright-report
-          path: e2e-tests/playwright-report/
-
-      - name: Download frontend unit test report
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend-unit-test-report
-          path: unit-tests/frontend
-
-      - name: Download backend unit test report
-        uses: actions/download-artifact@v3
-        with:
-          name: backend-unit-test-report
-          path: unit-tests/backend
-
-      - name: Download frontend integration test report
-        uses: actions/download-artifact@v3
-        with:
-          name: frontend-integration-test-report
-          path: integration-tests/frontend
-
-      - name: Download backend integration test report
-        uses: actions/download-artifact@v3
-        with:
-          name: backend-integration-test-report
-          path: integration-tests/backend
-
       # Organize Test Reports and Documentation
       - name: Organize Test Reports and Documentation
         run: |
@@ -321,6 +289,23 @@ jobs:
           mv unit-tests/backend/* reports/backend/unit-tests/
           mv integration-tests/backend/* reports/backend/integration-tests/
           mv e2e-tests/playwright-report/* reports/e2e-tests/
+
+      # Verify if documentation exists and move it to the correct directory
+      - name: Verify Documentation and Move
+        run: |
+          if [ -d "./docs/api/frontend" ]; then
+            echo "Frontend documentation found"
+          else
+            echo "Frontend documentation missing!"
+            exit 1
+          fi
+
+          if [ -d "./docs/api/backend" ]; then
+            echo "Backend documentation found"
+          else
+            echo "Backend documentation missing!"
+            exit 1
+          fi
 
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
