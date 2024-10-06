@@ -208,7 +208,9 @@ jobs:
       # Generate Backend Documentation and upload as artifact
       - name: Generate Backend Documentation
         working-directory: ./backend
-        run: npm run generate-docs
+        run: |
+          npm ci
+          npm run generate-docs
 
       - name: Upload Backend Documentation
         uses: actions/upload-artifact@v3
@@ -220,7 +222,9 @@ jobs:
       # Generate Frontend Documentation and upload as artifact
       - name: Generate Frontend Documentation
         working-directory: ./frontend
-        run: npm run generate-docs
+        run: |
+          npm ci
+          npm run generate-docs
 
       - name: Upload Frontend Documentation
         uses: actions/upload-artifact@v3
