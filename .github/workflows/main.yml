@@ -296,7 +296,6 @@ jobs:
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
         run: |
-          ls -lrt
           REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
 
           # Inject navbar and custom CSS into all HTML files in reports/
@@ -308,7 +307,7 @@ jobs:
             sed -i '/<body>/a <!-- Navbar Start -->' "$html_file"
 
             # Adjust the navbar links for the reports
-            sed "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" ./worflow_templates/navbar.html > temp_navbar.html
+            sed "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" workflow_templates/navbar.html > temp_navbar.html
 
             # Inject the adjusted navbar
             sed -i '/<!-- Navbar Start -->/r temp_navbar.html' "$html_file"
