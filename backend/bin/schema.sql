@@ -20,7 +20,6 @@
       `price_per_unit` INT NOT NULL,
       PRIMARY KEY (`id`)
   ) ENGINE = InnoDB
-  AUTO_INCREMENT = 4
   DEFAULT CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
@@ -76,7 +75,6 @@
       `date` DATE NOT NULL,
       PRIMARY KEY (`id`)
   ) ENGINE = InnoDB
-  AUTO_INCREMENT = 3
   DEFAULT CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
@@ -103,7 +101,6 @@
         ON DELETE CASCADE
         ON UPDATE NO ACTION
   ) ENGINE = InnoDB
-  AUTO_INCREMENT = 10
   DEFAULT CHARACTER SET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
