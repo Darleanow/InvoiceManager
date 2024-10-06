@@ -305,8 +305,6 @@ jobs:
           rm -rf reports/backend/unit-tests
           rm -rf reports/backend/integration-tests
           rm -rf reports/e2e-tests
-          rm -rf docs/api/frontend
-          rm -rf docs/api/backend
 
           # Create fresh directories for reports and docs
           mkdir -p reports/frontend/unit-tests
@@ -317,17 +315,12 @@ jobs:
           mkdir -p docs/api/frontend
           mkdir -p docs/api/backend
 
-          ls
-
           # Move the reports
           mv unit-tests/frontend/* reports/frontend/unit-tests/
           mv integration-tests/frontend/* reports/frontend/integration-tests/
           mv unit-tests/backend/* reports/backend/unit-tests/
           mv integration-tests/backend/* reports/backend/integration-tests/
           mv e2e-tests/playwright-report/* reports/e2e-tests/
-
-          ls -lR docs/
-
 
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
