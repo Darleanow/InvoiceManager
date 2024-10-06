@@ -13,6 +13,7 @@ export default function SubNavigationBilling() {
   const handleSubNavChange = (subNav) => {
     setCurrentSubNav(subNav);
     setActive(subNav);
+    setActiveTab(subNav);
   };
 
 
