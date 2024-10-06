@@ -293,10 +293,6 @@ jobs:
           mv integration-tests/backend/* reports/backend/integration-tests/
           mv e2e-tests/playwright-report/* reports/e2e-tests/
 
-          # Move the generated docs
-          mv backend/docs/* docs/api/backend/
-          mv frontend/docs/* docs/api/frontend/
-
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
         run: |
