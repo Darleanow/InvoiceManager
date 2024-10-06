@@ -192,43 +192,23 @@ jobs:
           fetch-depth: 0
           clean: false
 
+      - name: Checkout develop branch to fetch docs
+        run: git checkout develop
+
       - name: Configure Git
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
 
-      # Copy your updated index.html and custom.css from develop branch
-      - name: Copy updated index.html and custom.css
-        run: |
-          git checkout origin/develop -- workflow_templates/index.html workflow_templates/custom.css workflow_templates/navbar.html
-          cp workflow_templates/index.html ./ 
-          cp workflow_templates/custom.css ./ 
-          cp workflow_templates/navbar.html ./
-
-      # Adjust index.html paths if necessary
-      - name: Adjust index.html paths
-        run: |
-          REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
-
-          # Adjust the CSS link in index.html
-          sed -i "s|<link rel=\"stylesheet\" href=\"custom.css\">|<link rel=\"stylesheet\" href=\"/$REPO_NAME/custom.css\">|" index.html
-
-          # Adjust the navbar links in index.html if necessary
-          sed -i "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" index.html
-
       # Generate Backend Documentation
       - name: Generate Backend Documentation
-        run: |
-          cd backend
-          npm run generate-docs
-          cd ..
+        working-directory: ./backend
+        run: npm run generate-docs
 
       # Generate Frontend Documentation
       - name: Generate Frontend Documentation
-        run: |
-          cd frontend
-          npm run generate-docs
-          cd ..
+        working-directory: ./frontend
+        run: npm run generate-docs
 
       # Download Playwright report
       - name: Download Playwright report
