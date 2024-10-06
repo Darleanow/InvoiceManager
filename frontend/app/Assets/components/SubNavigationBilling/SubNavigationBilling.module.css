@@ -159,7 +159,7 @@
 
 .rectangle_left_top {
     background: #222222;
-    border: 0.102vh solid white;
+    border: 0.102vh solid transparent;
     height: 33.605vh;
     width: 47.619vw;
     border-radius: 1.629vw;
@@ -170,7 +170,7 @@
 
 .rectangle_right_top {
     background: #222222;
-    border: 0.102vh solid white;
+    border: 0.102vh solid transparent;
     height: 33.605vh;
     width: 47.619vw;
     border-radius: 1.629vw;
@@ -181,7 +181,7 @@
 
 .rectangle_left_bottom {
     background: #222222;
-    border: 0.102vh solid white;
+    border: 0.102vh solid transparent;
     height: 33.605vh;
     width: 47.619vw;
     border-radius: 1.629vw;
@@ -192,7 +192,7 @@
 
 .rectangle_right_bottom {
     background: #222222;
-    border: 0.102vh solid white;
+    border: 0.102vh solid transparent;
     height: 33.605vh;
     width: 47.619vw;
     border-radius: 1.629vw;
