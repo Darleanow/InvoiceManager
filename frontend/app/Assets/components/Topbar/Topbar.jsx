@@ -42,7 +42,7 @@ export default function Topbar() {
          >
           <IoIosSearch className={styles.topbar_search_icon} />
           <input
-            type="text"
+            type="button"
             placeholder="Search"
             className={styles.topbar_search}
             data-testid="search_input"
