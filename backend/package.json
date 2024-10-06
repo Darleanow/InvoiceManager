@@ -4,13 +4,15 @@
     "start": "node server.js",
     "test": "jest --coverage --testPathIgnorePatterns=__tests__",
     "test:ci:unit": "jest --coverage --testPathIgnorePatterns=__tests__",
-    "test:ci:integration": "jest --coverage --testPathPattern=__tests__"
+    "test:ci:integration": "jest --coverage --testPathPattern=__tests__",
+    "generate-docs": "npx jsdoc -c jsdoc.json"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-rate-limit": "^7.4.0",
+    "jsdoc": "^4.0.3",
     "mysql2": "^3.11.3",
     "pg": "^8.13.0"
   },

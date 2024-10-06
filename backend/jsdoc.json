@@ -1,0 +1,11 @@
+{
+  "source": {
+    "include": ["controllers", "routes", "app.js", "server.js"],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(node_modules|__tests__)"
+  },
+  "opts": {
+    "destination": "../docs/api/backend",
+    "recurse": true
+  }
+}

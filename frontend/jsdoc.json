@@ -1,0 +1,11 @@
+{
+  "source": {
+    "include": ["app"],
+    "includePattern": ".+\\.js(doc|x)?$",
+    "excludePattern": "(node_modules|__tests__)"
+  },
+  "opts": {
+    "destination": "../docs/api/frontend",
+    "recurse": true
+  }
+}

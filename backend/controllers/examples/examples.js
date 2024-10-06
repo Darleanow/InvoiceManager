@@ -14,6 +14,6 @@ exports.multiply = (req, res) => {
 
 exports.reverseString = (req, res) => {
   const input = req.params.input;
-  const reversed = input.split('').reverse().join('');
+  const reversed = input.split("").reverse().join("");
   res.json({ reversed });
 };
