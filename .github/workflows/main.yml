@@ -218,13 +218,17 @@ jobs:
 
       # Generate Backend Documentation
       - name: Generate Backend Documentation
-        working-directory: backend
-        run: npm run generate-docs
+        run: |
+          cd backend
+          npm run generate-docs
+          cd ..
 
       # Generate Frontend Documentation
       - name: Generate Frontend Documentation
-        working-directory: frontend
-        run: npm run generate-docs
+        run: |
+          cd frontend
+          npm run generate-docs
+          cd ..
 
       # Download Playwright report
       - name: Download Playwright report
