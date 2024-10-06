@@ -17,6 +17,12 @@ export default function Topbar() {
       input.focus(); 
     }
   };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter" || event.key === " ") {  
+      handleSearchClick(event);
+    }
+  };
   return (
     <div className={styles.topbar_container}>
       <div className={styles.topbar_left_pannel}>
