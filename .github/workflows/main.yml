@@ -269,6 +269,8 @@ jobs:
           mkdir -p docs/api/frontend
           mkdir -p docs/api/backend
 
+          ls
+          
           # Move the reports
           mv unit-tests/frontend/* reports/frontend/unit-tests/
           mv integration-tests/frontend/* reports/frontend/integration-tests/
