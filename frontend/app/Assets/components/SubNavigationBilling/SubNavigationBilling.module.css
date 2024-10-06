@@ -1,5 +1,5 @@
 .billing_title {
-    font-size: 1.935vh;
+    font-size: 1.935vh 53.333vw;
     color: #DADADA;
     font-weight: 700;
     margin: 0;
@@ -10,7 +10,7 @@
 }
 
 .billing_subnav_items {
-    font-size: 1.018vh;
+    font-size: 1.018vh 53.333vw;
     color: #828282;
     font-weight: 500;
     display: flex;
