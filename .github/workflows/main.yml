@@ -195,6 +195,11 @@ jobs:
       - name: Checkout develop branch to fetch docs
         run: git checkout develop
 
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
       - name: Set up Node.js environment
         uses: actions/setup-node@v3
         with:
