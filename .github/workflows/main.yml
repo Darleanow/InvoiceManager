@@ -297,6 +297,8 @@ jobs:
           mv unit-tests/backend/* reports/backend/unit-tests/
           mv integration-tests/backend/* reports/backend/integration-tests/
           mv e2e-tests/playwright-report/* reports/e2e-tests/
+          mv docs/api/frontend/* docs/frontend/
+          mv docs/api/backend/* docs/backend/
 
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
