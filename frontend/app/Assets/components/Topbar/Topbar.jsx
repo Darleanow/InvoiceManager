@@ -11,18 +11,15 @@ import {
 } from "react-icons/io";
 
 export default function Topbar() {
-  const handleSearchClick = (event) => {
-    const input = event.currentTarget.querySelector("input");
-    if (input) {
-      input.focus(); 
+  const handleInteraction = (event) => {
+    if (event.type === "click" || event.key === "Enter" || event.key === " ") {
+      const input = event.currentTarget.querySelector("input");
+      if (input) {
+        input.focus(); 
+      }
     }
   };
 
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter" || event.key === " ") {  
-      handleSearchClick(event);
-    }
-  };
   return (
     <div className={styles.topbar_container}>
       <div className={styles.topbar_left_pannel}>
@@ -36,7 +33,13 @@ export default function Topbar() {
         <IoIosArrowDown className={styles.topbar_arrow} />
       </div>
       <div className={styles.topbar_middle_pannel}>
-        <div className={styles.topbar_search_container} onClick={handleSearchClick} >
+        <div className={styles.topbar_search_container} 
+        onClick={handleInteraction}
+        onKeyDown={handleInteraction} 
+        role="button" 
+        tabIndex={0}     
+        aria-label="Search bar" 
+         >
           <IoIosSearch className={styles.topbar_search_icon} />
           <input
             type="text"
