@@ -234,7 +234,7 @@ jobs:
         working-directory: ./backend
         run: |
           npm run generate-docs
-          mv ../backend/docs/api/backend ../docs/api/backend
+          mv ../docs/api/backend ../docs/api/backend
 
       # Generate Frontend Documentation
       - name: Generate Frontend Documentation
@@ -242,7 +242,7 @@ jobs:
         run: |
           npm run generate-docs
           ls -l ../docs/api/frontend
-          mv ../frontend/docs/api/frontend ../docs/api/frontend
+          mv ../docs/api/frontend ../docs/api/frontend
 
       # Download Playwright report
       - name: Download Playwright report
