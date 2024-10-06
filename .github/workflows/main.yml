@@ -296,6 +296,7 @@ jobs:
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
         run: |
+          ls -lrt
           REPO_NAME=$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)
 
           # Inject navbar and custom CSS into all HTML files in reports/
