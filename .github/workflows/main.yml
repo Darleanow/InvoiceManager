@@ -312,8 +312,8 @@ jobs:
 
           # Move the generated docs
           ls -lR docs/
-          mv docs/api/frontend/* docs/frontend/
-          mv docs/api/backend/* docs/backend/
+          mv docs/api/* docs/
+          rm -rf docs/api
 
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
