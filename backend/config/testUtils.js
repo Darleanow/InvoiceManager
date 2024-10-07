@@ -26,9 +26,9 @@ async function initDatabase() {
 }
 
 async function startMySQLContainer() {
-  const rootUser = process.env.DB_ROOT_USER;
-  const rootPassword = process.env.DB_ROOT_PASSWORD;
-  const databaseName = process.env.DB_NAME;
+  const rootUser = process.env.TEST_DB_ROOT_USER;
+  const rootPassword = process.env.TEST_DB_ROOT_PASSWORD;
+  const databaseName = process.env.TEST_DB_NAME;
 
   container = await new MySqlContainer()
     .withRootPassword(rootPassword)
@@ -36,14 +36,14 @@ async function startMySQLContainer() {
     .start();
 
   // Set environment variables for MySQL pool connection
-  process.env.DB_HOST = container.getHost();
-  process.env.DB_PORT = container.getPort();
+  process.env.TEST_DB_HOST = container.getHost();
+  process.env.TEST_DB_PORT = container.getPort();
 }
 
 async function setupDatabase() {
-  const rootUser = process.env.DB_ROOT_USER;
-  const rootPassword = process.env.DB_ROOT_PASSWORD;
-  const databaseName = process.env.DB_NAME;
+  const rootUser = process.env.TEST_DB_ROOT_USER;
+  const rootPassword = process.env.TEST_DB_ROOT_PASSWORD;
+  const databaseName = process.env.TEST_DB_NAME;
 
   // Create a temporary connection as root
   const tempConnection = await createConnection({
@@ -60,8 +60,8 @@ async function setupDatabase() {
 
 async function createConnection({ user, password, database }) {
   return await mysql.createConnection({
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
+    host: process.env.TEST_DB_HOST,
+    port: process.env.TEST_DB_PORT,
     user,
     password,
     database,
@@ -83,9 +83,9 @@ function loadSqlFile(relativeFilePath) {
 }
 
 async function createTestUser(connection) {
-  const testUser = process.env.DB_USER;
-  const testPassword = process.env.DB_PASSWORD;
-  const databaseName = process.env.DB_NAME;
+  const testUser = process.env.TEST_DB_USER;
+  const testPassword = process.env.TEST_DB_PASSWORD;
+  const databaseName = process.env.TEST_DB_NAME;
 
   const createUserSql = `
     CREATE USER '${testUser}'@'%' IDENTIFIED BY '${testPassword}';
