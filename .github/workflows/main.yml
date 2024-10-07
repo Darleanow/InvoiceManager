@@ -315,7 +315,7 @@ jobs:
           mv e2e-tests/playwright-report/* reports/e2e-tests/
 
           # Move the generated docs
-          ls -lrt docs/
+          ls -lR docs/
           mv api/frontend/** docs/frontend/
           mv api/backend/** docs/backend/
 
