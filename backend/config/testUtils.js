@@ -26,7 +26,6 @@ async function initDatabase() {
 }
 
 async function startMySQLContainer() {
-  const rootUser = process.env.TEST_DB_ROOT_USER;
   const rootPassword = process.env.TEST_DB_ROOT_PASSWORD;
   const databaseName = process.env.TEST_DB_NAME;
 
