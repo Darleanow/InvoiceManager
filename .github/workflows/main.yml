@@ -205,6 +205,37 @@ jobs:
         with:
           node-version: '20'
 
+      # Download artifacts
+      - name: Download Playwright report
+        uses: actions/download-artifact@v3
+        with:
+          name: playwright-report
+          path: e2e-tests/playwright-report/
+
+      - name: Download frontend unit test report
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-unit-test-report
+          path: unit-tests/frontend
+
+      - name: Download backend unit test report
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-unit-test-report
+          path: unit-tests/backend
+
+      - name: Download frontend integration test report
+        uses: actions/download-artifact@v3
+        with:
+          name: frontend-integration-test-report
+          path: integration-tests/frontend
+
+      - name: Download backend integration test report
+        uses: actions/download-artifact@v3
+        with:
+          name: backend-integration-test-report
+          path: integration-tests/backend
+
       # Generate Backend Documentation and upload as artifact
       - name: Generate Backend Documentation
         working-directory: ./backend
