@@ -248,20 +248,6 @@ jobs:
           # Adjust the navbar links in index.html if necessary
           sed -i "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" index.html
 
-      # # Generate Backend Documentation
-      # - name: Generate Backend Documentation
-      #   run: |
-      #     cd backend
-      #     npm ci
-      #     npm run generate-docs
-
-      # # Generate Frontend Documentation
-      # - name: Generate Frontend Documentation
-      #   run: |
-      #     cd frontend
-      #     npm ci
-      #     npm run generate-docs
-
       # Download Documentation
       - name: Download Documentation
         uses: actions/download-artifact@v3
@@ -329,8 +315,8 @@ jobs:
           mv e2e-tests/playwright-report/* reports/e2e-tests/
 
           # Move the generated docs
-          mv backend/docs/* docs/api/backend/
-          mv frontend/docs/* docs/api/frontend/
+          mv docs/api/frontend/** docs/frontend/
+          mv docs/api/backend/** docs/backend/
 
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
