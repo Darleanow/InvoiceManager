@@ -1,14 +1,31 @@
-const { MySqlContainer } = require('@testcontainers/mysql');
-const mysql = require('mysql2/promise');
-const path = require('path');
-const fs = require('fs');
-require('dotenv').config({ path: '../.env.test' });
+const { MySqlContainer } = require("@testcontainers/mysql");
+const mysql = require("mysql2/promise");
+const path = require("path");
+const fs = require("fs");
+require("dotenv").config({ path: path.resolve(__dirname, "../.env.test") });
 
 let container;
 let pool;
 
 async function initDatabase() {
-  // Start MySQL container with root user and test user, using .env.test variables
+  try {
+    // Start MySQL container with root user and test user, using environment variables
+    await startMySQLContainer();
+
+    // Setup the schema, populate data, and grant privileges
+    await setupDatabase();
+
+    // Import the pool after setting environment variables
+    pool = require("./database");
+
+    return { pool, container };
+  } catch (error) {
+    console.error("Error during database initialization:", error);
+    throw error;
+  }
+}
+
+async function startMySQLContainer() {
   const rootUser = process.env.DB_ROOT_USER;
   const rootPassword = process.env.DB_ROOT_PASSWORD;
   const databaseName = process.env.DB_NAME;
@@ -21,54 +38,75 @@ async function initDatabase() {
   // Set environment variables for MySQL pool connection
   process.env.DB_HOST = container.getHost();
   process.env.DB_PORT = container.getPort();
+}
 
-  // Use environment variables for test user credentials
-  const testUser = process.env.DB_USER;
-  const testPassword = process.env.DB_PASSWORD;
+async function setupDatabase() {
+  const rootUser = process.env.DB_ROOT_USER;
+  const rootPassword = process.env.DB_ROOT_PASSWORD;
+  const databaseName = process.env.DB_NAME;
 
-  // Create a temporary connection as root with multipleStatements: true
-  const tempConnection = await mysql.createConnection({
-    host: container.getHost(),
+  // Create a temporary connection as root
+  const tempConnection = await createConnection({
     user: rootUser,
     password: rootPassword,
     database: databaseName,
-    port: container.getPort(),
-    multipleStatements: true,
   });
 
-  // Load schema and populate SQL scripts
-  const schemaPath = path.join(__dirname, '..', 'bin', 'schema.sql');
-  const populatePath = path.join(__dirname, '..', 'bin', 'populate.sql');
+  await executeSqlScripts(tempConnection);
+  await createTestUser(tempConnection);
 
-  const schemaSql = fs.readFileSync(schemaPath, 'utf8');
-  const populateSql = fs.readFileSync(populatePath, 'utf8');
+  await tempConnection.end();
+}
 
-  // Execute schema and populate scripts
-  await tempConnection.query(schemaSql);
-  await tempConnection.query(populateSql);
+async function createConnection({ user, password, database }) {
+  return await mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    user,
+    password,
+    database,
+    multipleStatements: true,
+  });
+}
 
-  // Grant all privileges to 'testuser' on 'invoice_manager' database
-  await tempConnection.query(`
+async function executeSqlScripts(connection) {
+  const schemaSql = loadSqlFile("../bin/schema.sql");
+  const populateSql = loadSqlFile("../bin/populate.sql");
+
+  await connection.query(schemaSql);
+  await connection.query(populateSql);
+}
+
+function loadSqlFile(relativeFilePath) {
+  const filePath = path.resolve(__dirname, relativeFilePath);
+  return fs.readFileSync(filePath, "utf8");
+}
+
+async function createTestUser(connection) {
+  const testUser = process.env.DB_USER;
+  const testPassword = process.env.DB_PASSWORD;
+  const databaseName = process.env.DB_NAME;
+
+  const createUserSql = `
     CREATE USER '${testUser}'@'%' IDENTIFIED BY '${testPassword}';
     GRANT ALL PRIVILEGES ON ${databaseName}.* TO '${testUser}'@'%';
     FLUSH PRIVILEGES;
-  `);
+  `;
 
-  // Close the temporary connection
-  await tempConnection.end();
-
-  // Import the pool after setting environment variables
-  pool = require('../config/database');
-
-  return { pool, container };
+  await connection.query(createUserSql);
 }
 
 async function teardownDatabase() {
-  if (container) {
-    await container.stop();
-  }
-  if (pool) {
-    await pool.end();
+  try {
+    if (pool) {
+      await pool.end();
+    }
+    if (container) {
+      await container.stop();
+    }
+  } catch (error) {
+    console.error("Error during database teardown:", error);
+    throw error;
   }
 }
 
