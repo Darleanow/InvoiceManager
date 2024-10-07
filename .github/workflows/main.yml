@@ -296,6 +296,9 @@ jobs:
           rm -rf reports/backend/integration-tests
           rm -rf reports/e2e-tests
 
+          [ -d "docs/frontend" ] && rm -rf docs/frontend
+          [ -d "docs/backend" ] && rm -rf docs/backend
+
           # Create fresh directories for reports and docs
           mkdir -p reports/frontend/unit-tests
           mkdir -p reports/frontend/integration-tests
