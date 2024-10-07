@@ -176,7 +176,39 @@ jobs:
         working-directory: ./frontend
         run: kill $(cat frontend.pid)
 
+  generate-documentation:
+    name: Generate Documentation
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      # Generate Backend Documentation
+      - name: Generate Backend Documentation
+        run: |
+          cd backend
+          npm ci
+          npm run generate-docs
+
+      # Generate Frontend Documentation
+      - name: Generate Frontend Documentation
+        run: |
+          cd frontend
+          npm ci
+          npm run generate-docs
+
+      # Upload Backend Documentation
+      - name: Upload Documentation
+        uses: actions/upload-artifact@v3
+        with:
+          name: docs
+          path: docs/**
 
   # Deploy Test Reports and JSDoc to GitHub Pages
   deploy-reports:
@@ -216,19 +248,26 @@ jobs:
           # Adjust the navbar links in index.html if necessary
           sed -i "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" index.html
 
-      # Generate Backend Documentation
-      - name: Generate Backend Documentation
-        run: |
-          cd backend
-          npm ci
-          npm run generate-docs
+      # # Generate Backend Documentation
+      # - name: Generate Backend Documentation
+      #   run: |
+      #     cd backend
+      #     npm ci
+      #     npm run generate-docs
 
-      # Generate Frontend Documentation
-      - name: Generate Frontend Documentation
-        run: |
-          cd frontend
-          npm ci
-          npm run generate-docs
+      # # Generate Frontend Documentation
+      # - name: Generate Frontend Documentation
+      #   run: |
+      #     cd frontend
+      #     npm ci
+      #     npm run generate-docs
+
+      # Download Documentation
+      - name: Download Documentation
+        uses: actions/download-artifact@v3
+        with:
+          name: docs
+          path: docs/
 
       # Download Playwright report
       - name: Download Playwright report
