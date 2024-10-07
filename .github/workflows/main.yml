@@ -225,7 +225,6 @@ jobs:
 
       # Generate Frontend Documentation
       - name: Generate Frontend Documentation
-        working-directory: frontend
         run: |
           cd frontend
           npm ci
