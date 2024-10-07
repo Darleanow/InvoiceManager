@@ -5,9 +5,16 @@
     "excludePattern": "(node_modules|__tests__)"
   },
   "opts": {
-    "template": "node_modules/minami",
+    "template": "node_modules/docdash",
     "encoding": "utf8",
     "destination": "../docs/api/frontend",
     "recurse": true
+  },
+  "plugins": ["plugins/markdown"],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": true,
+    "systemName": "Frontend Documentation",
+    "footer": "Generated with JSDoc & Docdash"
   }
 }
