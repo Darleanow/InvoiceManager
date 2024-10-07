@@ -1,5 +1,4 @@
 module.exports = {
-  testEnvironment: "jsdom",
   testPathIgnorePatterns: ["/end_to_end/"],
   collectCoverage: true,
   coverageReporters: ["lcov", "text"],
@@ -11,8 +10,5 @@ module.exports = {
       lines: 0,
       statements: 0,
     },
-  },
-  moduleNameMapper: {
-    "\\.(css|less|scss|sass)$": "identity-obj-proxy", 
   },
 };

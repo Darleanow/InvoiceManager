@@ -8,7 +8,7 @@ body {
 
 body {
   color: var(--foreground);
-  background: #1D1D1D;
+  background: #222222;
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
