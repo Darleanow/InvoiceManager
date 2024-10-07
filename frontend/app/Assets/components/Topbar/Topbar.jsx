@@ -1,3 +1,5 @@
+'use client';
+
 import React from "react";
 import styles from "./styles.module.css";
 
@@ -9,6 +11,15 @@ import {
 } from "react-icons/io";
 
 export default function Topbar() {
+  const handleInteraction = (event) => {
+    if (event.type === "click" || event.key === "Enter" || event.key === " ") {
+      const input = event.currentTarget.querySelector("input");
+      if (input) {
+        input.focus(); 
+      }
+    }
+  };
+
   return (
     <div className={styles.topbar_container}>
       <div className={styles.topbar_left_pannel}>
@@ -22,15 +33,22 @@ export default function Topbar() {
         <IoIosArrowDown className={styles.topbar_arrow} />
       </div>
       <div className={styles.topbar_middle_pannel}>
-        <div className={styles.topbar_search_container}>
+        <button
+          className={styles.topbar_search_container} 
+          onClick={handleInteraction}                 
+          aria-label="Search bar"                     
+        >
           <IoIosSearch className={styles.topbar_search_icon} />
           <input
             type="text"
             placeholder="Search"
             className={styles.topbar_search}
             data-testid="search_input"
+            aria-label="Search input"                 
           />
-        </div>
+        </button>
+      </div>
+      <div className={styles.topbar_right_pannel}>
       </div>
       <div className={styles.topbar_right_pannel}>
         <IoIosNotifications

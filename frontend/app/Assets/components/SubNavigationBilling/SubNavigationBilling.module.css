@@ -1,0 +1,201 @@
+.billing_title {
+    font-size: 1.935vh 53.333vw;
+    color: #DADADA;
+    font-weight: 700;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 2.342vh;
+    margin-top: 4.684vh;
+    margin-left: 1.587vw;
+}
+
+.billing_subnav_items {
+    font-size: 1.12vh 1.984vw;
+    color: #828282;
+    font-weight: 500;
+    display: flex;
+    margin-left: 1.587vw;
+    gap: 2.844vw; 
+}
+
+.billing_subnav_items button {
+    position: relative;
+    padding-bottom: 1.018vh;
+    margin-bottom: 0;
+    width: 5vw;
+    text-align: center;
+    color: white;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s ease; 
+    font-size: 1.833vh;
+}
+
+.billing_subnav_items button:hover {
+    color: #DADADA; 
+}
+
+.billing_subnav_items button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0.204vh;
+    background-color: #E29C23;
+    transition: width 0.3s ease; 
+}
+
+.billing_subnav_items button:hover::after {
+    width: 100%; 
+}
+
+.billing_subnav_item_active {
+    color: #DADADA;
+    font-weight: 500;
+    border-bottom: 0.204vh solid #E29C23;
+    padding-bottom: 1.018vh;
+}
+
+.billing_subnav_items button:not(.billing_subnav_item_active):hover::after {
+    width: 100%; 
+}
+
+.separator_line {
+    margin: 0;
+    position: relative;
+    border: none;
+    border-top: 0.102vh solid #828282;
+    margin-bottom: 1.629vh;
+    margin-right: 1.587vw;
+    margin-left: 1.587vw;
+}
+
+.filter_options {
+    display: flex;
+    align-items: center;
+    width: calc(100% - 1.918vw);
+    margin-left: 1.918vw;
+}
+
+.filter_options>*:last-child {
+    margin-left: auto;
+}
+
+.date_picker_place_holder_left {
+    background: #292929;
+    border: 0.051vh solid #696969;
+    height: 2.24vh;
+    width: 6.283vw;
+    border-top-left-radius: 0.265vw;
+    border-bottom-left-radius: 0.265vw;
+}
+
+.date_picker_place_holder_right {
+    background: #292929;
+    border: 0.051vh solid #696969;
+    height: 2.24vh;
+    width: 9.524vw;
+    border-top-right-radius: 0.265vw;
+    border-bottom-right-radius: 0.265vw;
+}
+
+.compared_to_text {
+    font-size: 0.794vw;
+    color: white;
+    margin-left: 0.463vw;
+    margin-right: 0.661vw;
+}
+
+.compared_to_dropdown_period {
+    background: #292929;
+    border: 0.051vh solid #696969;
+    height: 2.24vh;
+    width: 7.606vw;
+    border-radius: 0.265vw;
+    padding-left: 0.661vw;
+    padding-right: 0.661vw;
+}
+
+.export_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #292929;
+    border: 0.051vh solid #696969;
+    height: 2.24vh;
+    width: 4.365vw;
+    border-radius: 0.265vw;
+    padding-left: 0.661vw;
+    padding-right: 0.661vw;
+    color: #DADADA;
+    margin-right: 0.661vw;
+    font-size: 1.12vh;
+    gap: 0.661vw; 
+}
+
+.export_button:hover {
+    cursor: pointer;
+    color: white;
+    border-color: white;
+}
+
+.export_icon {
+    color: #828282;
+    align-items: center;
+    display: flex;
+    font-size: 1.12vh 1.587vw; 
+}
+
+.rectangle_container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: center;
+    align-items: center;
+    gap: 1vh;
+}
+
+.rectangle_left_top {
+    background: #222222;
+    border: 0.102vh solid transparent;
+    height: 33.605vh;
+    width: 47.619vw;
+    border-radius: 1.629vw;
+    margin-left: 1.72vw;
+    margin-top: 2.444vh;
+    margin-bottom: 2vh;
+}
+
+.rectangle_right_top {
+    background: #222222;
+    border: 0.102vh solid transparent;
+    height: 33.605vh;
+    width: 47.619vw;
+    border-radius: 1.629vw;
+    margin-right: 1.72vw;
+    margin-top: 2.444vh;
+    margin-bottom: 2vh;
+}
+
+.rectangle_left_bottom {
+    background: #222222;
+    border: 0.102vh solid transparent;
+    height: 33.605vh;
+    width: 47.619vw;
+    border-radius: 1.629vw;
+    margin-left: 1.72vw;
+    margin-top: 0;
+    margin-bottom: 3.055vh;
+}
+
+.rectangle_right_bottom {
+    background: #222222;
+    border: 0.102vh solid transparent;
+    height: 33.605vh;
+    width: 47.619vw;
+    border-radius: 1.629vw;
+    margin-right: 1.72vw;
+    margin-top: 0;
+    margin-bottom: 3.055vh;
+}
