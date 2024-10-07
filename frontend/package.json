@@ -33,6 +33,7 @@
     "@playwright/test": "^1.47.2",
     "babel-jest": "^29.7.0",
     "coveralls": "^3.1.1",
+    "docdash": "^2.0.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.13",
     "jest": "^29.7.0",
