@@ -216,7 +216,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: backend-docs
-          path: ./backend/docs/api/backend/**
+          path: ./docs/api/backend/**/*
           if-no-files-found: error
 
       # Generate Frontend Documentation and upload as artifact
@@ -230,7 +230,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: frontend-docs
-          path: ./frontend/docs/api/frontend/**
+          path: ./docs/api/frontend/**/*
           if-no-files-found: error
 
       # Download Backend Documentation
