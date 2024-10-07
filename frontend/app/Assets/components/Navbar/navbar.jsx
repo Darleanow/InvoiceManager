@@ -72,7 +72,7 @@ export default function Navbar() {
             <li key={tab.id} className={styles.nav_item}>
               <button
                 data-testid={`${tab.id}_button`}
-                data-active={active === tab.id ? "true" : "false"}
+                test-data-active={active === tab.id ? "true" : "false"}
                 className={`${styles.nav_button} ${
                   active === tab.id ? styles.active : ""
                 }`}
