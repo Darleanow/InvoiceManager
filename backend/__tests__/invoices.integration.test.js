@@ -1,40 +1,31 @@
-const request = require('supertest');
-const express = require('express');
-const { initDatabase, teardownDatabase } = require('../config/testUtils');
+const request = require("supertest");
+const express = require("express");
+const {
+  setupTestEnvironment,
+  teardownTestEnvironment,
+} = require("./utils/testSetup");
 
-let pool;
-let container;
-let app;
-let router;
+let app, pool;
 
 beforeAll(async () => {
-  // Initialize the database and get pool and container
-  const dbInit = await initDatabase();
-  pool = dbInit.pool;
-  container = dbInit.container;
-
-  router = require('../routes/index');
-
-  // Initialize Express app for testing
-  app = express();
-  app.use(express.json());
-  app.use('/', router);
+  const { pool: dbPool, app: expressApp } = await setupTestEnvironment(
+    "../routes/index"
+  );
+  pool = dbPool;
+  app = expressApp;
 }, 60000);
-
 afterAll(async () => {
-  await teardownDatabase();
+  await teardownTestEnvironment();
 });
 
-describe('Invoice Controller', () => {
+describe("Invoice Controller", () => {
+  // Define unit types
+  const UnitTypes = {
+    ITEM: 1,
+    SERVICE: 2,
+  };
 
-    // Define unit types
-    const UnitTypes = {
-        ITEM: 1,
-        SERVICE: 2,
-        // Add other units as needed
-    };
-
-  it('should create a new invoice', async () => {
+  it("should create a new invoice", async () => {
     // Create a customer
     const [customerResult] = await pool.query(`
       INSERT INTO invoice_manager.customer (name, email, postal_address) VALUES ('Test Customer', 'test@example.com', '123 Test St')
@@ -43,42 +34,41 @@ describe('Invoice Controller', () => {
 
     // Create benefits
     const [benefitResult1] = await pool.execute(
-        'INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)',
-        ['Benefit 1', UnitTypes.SERVICE, 100.00]
-      );
-      
+      "INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)",
+      ["Benefit 1", UnitTypes.SERVICE, 100.0]
+    );
+
     const benefitId1 = benefitResult1.insertId;
 
     const [benefitResult2] = await pool.execute(
-        'INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)',
-        ['Benefit 2', UnitTypes.ITEM, 50.00]
+      "INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)",
+      ["Benefit 2", UnitTypes.ITEM, 50.0]
     );
     const benefitId2 = benefitResult2.insertId;
 
     const response = await request(app)
-      .post('/invoices')
+      .post("/invoices")
       .send({
-        name: 'Test Invoice',
-        date: '2023-10-01',
+        name: "Test Invoice",
+        date: "2023-10-01",
         customer_id: customerId,
-        benefit_ids: [benefitId1, benefitId2]
+        benefit_ids: [benefitId1, benefitId2],
       });
 
     expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty('invoiceId');
-    expect(response.body.message).toBe('Invoice created successfully');
+    expect(response.body).toHaveProperty("invoiceId");
+    expect(response.body.message).toBe("Invoice created successfully");
   });
 
-  it('should retrieve all invoices', async () => {
-    const response = await request(app)
-      .get('/invoices');
+  it("should retrieve all invoices", async () => {
+    const response = await request(app).get("/invoices");
 
     expect(response.status).toBe(200);
     expect(response.body).toBeInstanceOf(Array);
     expect(response.body.length).toBeGreaterThan(0);
   });
 
-  it('should retrieve an invoice by ID', async () => {
+  it("should retrieve an invoice by ID", async () => {
     // Create a customer
     const [customerResult] = await pool.query(`
       INSERT INTO invoice_manager.customer (name, email, postal_address) VALUES ('Invoice Customer', 'invoice@example.com', '456 Invoice Blvd')
@@ -87,37 +77,36 @@ describe('Invoice Controller', () => {
 
     // Create a benefit
     const [benefitResult] = await pool.execute(
-        'INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)',
-        ['Invoice Benefit', UnitTypes.SERVICE, 200.00]
-      );
+      "INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)",
+      ["Invoice Benefit", UnitTypes.SERVICE, 200.0]
+    );
     const benefitId = benefitResult.insertId;
 
     // Create an invoice
     const responseCreate = await request(app)
-      .post('/invoices')
+      .post("/invoices")
       .send({
-        name: 'Invoice for Testing',
-        date: '2023-10-02',
+        name: "Invoice for Testing",
+        date: "2023-10-02",
         customer_id: customerId,
-        benefit_ids: [benefitId]
+        benefit_ids: [benefitId],
       });
 
     const invoiceId = responseCreate.body.invoiceId;
 
     // Retrieve the invoice
-    const response = await request(app)
-      .get(`/invoices/${invoiceId}`);
+    const response = await request(app).get(`/invoices/${invoiceId}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty('id', invoiceId);
-    expect(response.body).toHaveProperty('name', 'Invoice for Testing');
-    expect(response.body.customer).toHaveProperty('id', customerId);
+    expect(response.body).toHaveProperty("id", invoiceId);
+    expect(response.body).toHaveProperty("name", "Invoice for Testing");
+    expect(response.body.customer).toHaveProperty("id", customerId);
     expect(response.body.benefits).toBeInstanceOf(Array);
     expect(response.body.benefits.length).toBe(1);
-    expect(response.body.benefits[0]).toHaveProperty('id', benefitId);
+    expect(response.body.benefits[0]).toHaveProperty("id", benefitId);
   });
 
-  it('should update an invoice', async () => {
+  it("should update an invoice", async () => {
     // Create a customer
     const [customerResult] = await pool.query(`
       INSERT INTO invoice_manager.customer (name, email, postal_address) VALUES ('Update Customer', 'update@example.com', '789 Update Rd')
@@ -126,25 +115,25 @@ describe('Invoice Controller', () => {
 
     // Create benefits
     const [benefitResult1] = await pool.execute(
-        'INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)',
-        ['Update Benefit 1', UnitTypes.SERVICE, 150.00]
+      "INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)",
+      ["Update Benefit 1", UnitTypes.SERVICE, 150.0]
     );
     const benefitId1 = benefitResult1.insertId;
-    
+
     const [benefitResult2] = await pool.execute(
-        'INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)',
-        ['Update Benefit 2', UnitTypes.ITEM, 75.00]
+      "INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)",
+      ["Update Benefit 2", UnitTypes.ITEM, 75.0]
     );
     const benefitId2 = benefitResult2.insertId;
 
     // Create an invoice
     const responseCreate = await request(app)
-      .post('/invoices')
+      .post("/invoices")
       .send({
-        name: 'Invoice to Update',
-        date: '2023-10-03',
+        name: "Invoice to Update",
+        date: "2023-10-03",
         customer_id: customerId,
-        benefit_ids: [benefitId1]
+        benefit_ids: [benefitId1],
       });
 
     const invoiceId = responseCreate.body.invoiceId;
@@ -153,93 +142,87 @@ describe('Invoice Controller', () => {
     const responseUpdate = await request(app)
       .put(`/invoices/${invoiceId}`)
       .send({
-        name: 'Updated Invoice',
-        date: '2023-10-04',
+        name: "Updated Invoice",
+        date: "2023-10-04",
         customer_id: customerId,
-        benefit_ids: [benefitId1, benefitId2]
+        benefit_ids: [benefitId1, benefitId2],
       });
 
     expect(responseUpdate.status).toBe(200);
-    expect(responseUpdate.body.message).toBe('Invoice updated successfully');
+    expect(responseUpdate.body.message).toBe("Invoice updated successfully");
 
     // Retrieve the invoice to verify updates
-    const responseGet = await request(app)
-      .get(`/invoices/${invoiceId}`);
+    const responseGet = await request(app).get(`/invoices/${invoiceId}`);
 
     expect(responseGet.status).toBe(200);
-    expect(responseGet.body).toHaveProperty('name', 'Updated Invoice');
+    expect(responseGet.body).toHaveProperty("name", "Updated Invoice");
     expect(responseGet.body.benefits.length).toBe(2);
   });
 
-  it('should delete an invoice', async () => {
+  it("should delete an invoice", async () => {
     // Create a customer
     const [customerResult] = await pool.query(`
       INSERT INTO invoice_manager.customer (name, email, postal_address) VALUES ('Delete Customer', 'delete@example.com', '101 Delete Ln')
     `);
     const customerId = customerResult.insertId;
 
-   // Create a benefit
+    // Create a benefit
     const [benefitResult] = await pool.execute(
-    'INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)',
-    ['Delete Benefit', UnitTypes.SERVICE, 250.00]
+      "INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)",
+      ["Delete Benefit", UnitTypes.SERVICE, 250.0]
     );
     const benefitId = benefitResult.insertId;
 
-
     // Create an invoice
     const responseCreate = await request(app)
-      .post('/invoices')
+      .post("/invoices")
       .send({
-        name: 'Invoice to Delete',
-        date: '2023-10-05',
+        name: "Invoice to Delete",
+        date: "2023-10-05",
         customer_id: customerId,
-        benefit_ids: [benefitId]
+        benefit_ids: [benefitId],
       });
 
     const invoiceId = responseCreate.body.invoiceId;
 
     // Delete the invoice
-    const responseDelete = await request(app)
-      .delete(`/invoices/${invoiceId}`);
+    const responseDelete = await request(app).delete(`/invoices/${invoiceId}`);
 
     expect(responseDelete.status).toBe(200);
-    expect(responseDelete.body.message).toBe('Invoice deleted successfully');
+    expect(responseDelete.body.message).toBe("Invoice deleted successfully");
 
     // Try to retrieve the invoice to confirm deletion
-    const responseGet = await request(app)
-      .get(`/invoices/${invoiceId}`);
+    const responseGet = await request(app).get(`/invoices/${invoiceId}`);
 
     expect(responseGet.status).toBe(404);
-    expect(responseGet.body.message).toBe('Invoice not found');
+    expect(responseGet.body.message).toBe("Invoice not found");
   });
 
-  it('should return 404 when retrieving a non-existent invoice', async () => {
-    const response = await request(app)
-      .get('/invoices/999999');
+  it("should return 404 when retrieving a non-existent invoice", async () => {
+    const response = await request(app).get("/invoices/999999");
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe('Invoice not found');
+    expect(response.body.message).toBe("Invoice not found");
   });
 
-  it('should return 404 when updating a non-existent invoice', async () => {
+  it("should return 404 when updating a non-existent invoice", async () => {
     const response = await request(app)
-      .put('/invoices/999999')
+      .put("/invoices/999999")
       .send({
-        name: 'Non-existent Invoice',
-        date: '2023-10-06',
+        name: "Non-existent Invoice",
+        date: "2023-10-06",
         customer_id: 1,
-        benefit_ids: [1]
+        benefit_ids: [1],
       });
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe('Invoice not found');
+    expect(response.body.message).toBe("Invoice not found");
   });
 
-  it('should return 404 when deleting a non-existent invoice', async () => {
-    const response = await request(app)
-      .delete('/invoices/999999');
+  it("should return 404 when deleting a non-existent invoice", async () => {
+    const response = await request(app).delete("/invoices/999999");
 
     expect(response.status).toBe(404);
-    expect(response.body.message).toBe('Invoice not found');
+    expect(response.body.message).toBe("Invoice not found");
   });
 });

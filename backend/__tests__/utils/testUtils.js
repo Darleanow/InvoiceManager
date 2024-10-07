@@ -2,7 +2,7 @@ const { MySqlContainer } = require("@testcontainers/mysql");
 const mysql = require("mysql2/promise");
 const path = require("path");
 const fs = require("fs");
-require("dotenv").config({ path: path.resolve(__dirname, "../.env.test") });
+require("dotenv").config({ path: path.resolve(__dirname, "../../.env.test") });
 
 let container;
 let pool;
@@ -16,7 +16,7 @@ async function initDatabase() {
     await setupDatabase();
 
     // Import the pool after setting environment variables
-    pool = require("./database");
+    pool = require("../../config/database");
 
     return { pool, container };
   } catch (error) {
@@ -69,8 +69,8 @@ async function createConnection({ user, password, database }) {
 }
 
 async function executeSqlScripts(connection) {
-  const schemaSql = loadSqlFile("../bin/schema.sql");
-  const populateSql = loadSqlFile("../bin/populate.sql");
+  const schemaSql = loadSqlFile("../../bin/schema.sql");
+  const populateSql = loadSqlFile("../../bin/populate.sql");
 
   await connection.query(schemaSql);
   await connection.query(populateSql);
