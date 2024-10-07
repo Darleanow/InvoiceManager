@@ -21,12 +21,59 @@
 <link rel="stylesheet" href="custom.css">
 
 <nav class="nav_container">
+    <style>
+        .nav_container {
+            background-color: #1a1a1d;
+            padding: 15px 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav_link {
+            color: #f4f7f6;
+            margin: 0 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav_link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background-color: #ffc559;
+            transition: width 0.3s;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav_link:hover {
+            color: #ffc559;
+        }
+
+        .nav_link:hover::after {
+            width: 100%;
+        }
+    </style>
     <a class="nav_link" href="/InvoiceManager/index.html">Home</a>
     <a class="nav_link" href="/InvoiceManager/reports/frontend/unit-tests/index.html">Frontend Unit Tests</a>
     <a class="nav_link" href="/InvoiceManager/reports/frontend/integration-tests/index.html">Frontend Integration Tests</a>
     <a class="nav_link" href="/InvoiceManager/reports/backend/unit-tests/index.html">Backend Unit Tests</a>
     <a class="nav_link" href="/InvoiceManager/reports/backend/integration-tests/index.html">Backend Integration Tests</a>
     <a class="nav_link" href="/InvoiceManager/reports/e2e-tests/index.html">E2E Tests</a>
+    <a class="nav_link" href="docs/frontend/index.html">Frontend Documentation</a>
+    <a class="nav_link" href="docs/backend/index.html">Backend Documentation</a>
 </nav><div class='wrapper'>
     <div class='pad1'>
         <h1><a href="../../../../index.html">All files</a> / <a href="index.html">app/Assets/components/Topbar</a> Topbar.jsx</h1>
@@ -127,7 +174,31 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -181,9 +252,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from "react";
 import styles from "./styles.module.css";
-&nbsp;
 import {
   IoIosNotifications,
   IoIosSettings,
@@ -191,20 +269,33 @@ import {
   IoIosArrowDown,
 } from "react-icons/io";
 &nbsp;
+/**
+ * Renders the Topbar component for displaying the top navigation bar.
+ *
+ * This component shows the company's logo, a search bar, user information,
+ * and action icons like notifications and settings.
+ *
+ * @function Topbar
+ * @returns {JSX.Element} The rendered Topbar component.
+ */
 export default function <span class="fstat-no" title="function not covered" >Topbar(</span>) {
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;div className={styles.topbar_container}&gt;
       &lt;div className={styles.topbar_left_pannel}&gt;
+        {/* Company/Logo Name */}
         &lt;p className={styles.topbar_text} data-testid="logo_text"&gt;
           InMa
         &lt;/p&gt;
+        {/* Vertical Line Divider */}
         &lt;div className={styles.topbar_vertical_line}&gt;&lt;/div&gt;
+        {/* Username Display */}
         &lt;p className={styles.topbar_user} data-testid="username_text"&gt;
           Username
         &lt;/p&gt;
         &lt;IoIosArrowDown className={styles.topbar_arrow} /&gt;
       &lt;/div&gt;
       &lt;div className={styles.topbar_middle_pannel}&gt;
+        {/* Search Input */}
         &lt;div className={styles.topbar_search_container}&gt;
           &lt;IoIosSearch className={styles.topbar_search_icon} /&gt;
           &lt;input
@@ -216,15 +307,19 @@ export default function <span class="fstat-no" title="function not covered" >Top
         &lt;/div&gt;
       &lt;/div&gt;
       &lt;div className={styles.topbar_right_pannel}&gt;
+        {/* Notifications Icon */}
         &lt;IoIosNotifications
           className={styles.topbar_notification}
           data-testid="notifications_icon"
         /&gt;
+        {/* Settings Icon */}
         &lt;IoIosSettings
           className={styles.topbar_settings}
           data-testid="settings_icon"
         /&gt;
+        {/* Vertical Line Divider */}
         &lt;div className={styles.topbar_vertical_line}&gt;&lt;/div&gt;
+        {/* Create Invoice Button */}
         &lt;button
           className={styles.topbar_button}
           data-testid="create_invoice_button"
@@ -242,7 +337,7 @@ export default function <span class="fstat-no" title="function not covered" >Top
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-07T01:42:18.785Z
+                at 2024-10-07T02:50:25.746Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

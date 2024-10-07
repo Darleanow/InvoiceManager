@@ -21,12 +21,59 @@
 <link rel="stylesheet" href="custom.css">
 
 <nav class="nav_container">
+    <style>
+        .nav_container {
+            background-color: #1a1a1d;
+            padding: 15px 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+        }
+
+        .nav_link {
+            color: #f4f7f6;
+            margin: 0 20px;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .nav_link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background-color: #ffc559;
+            transition: width 0.3s;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .nav_link:hover {
+            color: #ffc559;
+        }
+
+        .nav_link:hover::after {
+            width: 100%;
+        }
+    </style>
     <a class="nav_link" href="/InvoiceManager/index.html">Home</a>
     <a class="nav_link" href="/InvoiceManager/reports/frontend/unit-tests/index.html">Frontend Unit Tests</a>
     <a class="nav_link" href="/InvoiceManager/reports/frontend/integration-tests/index.html">Frontend Integration Tests</a>
     <a class="nav_link" href="/InvoiceManager/reports/backend/unit-tests/index.html">Backend Unit Tests</a>
     <a class="nav_link" href="/InvoiceManager/reports/backend/integration-tests/index.html">Backend Integration Tests</a>
     <a class="nav_link" href="/InvoiceManager/reports/e2e-tests/index.html">E2E Tests</a>
+    <a class="nav_link" href="docs/frontend/index.html">Frontend Documentation</a>
+    <a class="nav_link" href="docs/backend/index.html">Backend Documentation</a>
 </nav><div class='wrapper'>
     <div class='pad1'>
         <h1><a href="../../../../index.html">All files</a> / <a href="index.html">app/Assets/components/Navbar</a> navbar.jsx</h1>
@@ -143,7 +190,49 @@
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a>
+<a name='L101'></a><a href='#L101'>101</a>
+<a name='L102'></a><a href='#L102'>102</a>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,44 +247,70 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -217,23 +332,52 @@
 &nbsp;
 import React, { useState, useRef } from "react";
 import styles from "./styles.module.css";
-&nbsp;
 import { AiFillDollarCircle } from "react-icons/ai";
 import { IoIosPeople } from "react-icons/io";
 import { BiSolidReport } from "react-icons/bi";
 &nbsp;
+/**
+ * Renders the Navbar for navigation between different application sections.
+ *
+ * This component displays a navigation bar with tabs for different sections
+ * (Billing, Clients, Reporting) and supports mouse and keyboard interaction.
+ *
+ * @function Navbar
+ * @returns {JSX.Element} The rendered Navbar component.
+ */
 export default function <span class="fstat-no" title="function not covered" >Navbar(</span>) {
   const [active, setActive] = <span class="cstat-no" title="statement not covered" >useState("billing");</span>
   const billingRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const clientsRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
   const reportingRef = <span class="cstat-no" title="statement not covered" >useRef(null);</span>
 &nbsp;
+  /**
+   * Array of tab objects representing each navigation tab.
+   *
+   * @type {Array&lt;{ id: string, label: string, icon: React.ElementType, ref: React.RefObject&lt;HTMLButtonElement&gt; }&gt;}
+   */
   const tabs = <span class="cstat-no" title="statement not covered" >[</span>
-    { id: "billing", label: "Billing", icon: AiFillDollarCircle, ref: billingRef },
+    {
+      id: "billing",
+      label: "Billing",
+      icon: AiFillDollarCircle,
+      ref: billingRef,
+    },
     { id: "clients", label: "Clients", icon: IoIosPeople, ref: clientsRef },
-    { id: "reporting", label: "Reporting", icon: BiSolidReport, ref: reportingRef },
+    {
+      id: "reporting",
+      label: "Reporting",
+      icon: BiSolidReport,
+      ref: reportingRef,
+    },
   ];
 &nbsp;
+  /**
+   * Handles keyboard navigation within the navbar.
+   *
+   * @param {KeyboardEvent} e - The keyboard event object.
+   * @param {number} index - The index of the current tab being focused.
+   */
   const handleKeyDown = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(e</span>, index) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (e.key === "ArrowRight" || e.key === "ArrowLeft") {</span>
 <span class="cstat-no" title="statement not covered" >      e.preventDefault();</span>
@@ -259,7 +403,9 @@ export default function <span class="fstat-no" title="function not covered" >Nav
               &lt;button
                 data-testid={`${tab.id}_button`}
                 test-data-active={active === tab.id ? "true" : "false"}
-                className={`${styles.nav_button} ${active === tab.id ? styles.active : ""}`}
+                className={`${styles.nav_button} ${
+                  active === tab.id ? styles.active : ""
+                }`}
                 onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setActive(tab.id)}</span>
                 role="tab"
                 aria-selected={active === tab.id ? "true" : "false"}
@@ -271,7 +417,10 @@ export default function <span class="fstat-no" title="function not covered" >Nav
                   className={styles.icon}
                   data-testid={`${tab.id}_icon`}
                 /&gt;
-                &lt;span className={styles.nav_text} data-testid={`${tab.id}_text`}&gt;
+                &lt;span
+                  className={styles.nav_text}
+                  data-testid={`${tab.id}_text`}
+                &gt;
                   {tab.label}
                 &lt;/span&gt;
               &lt;/button&gt;
@@ -290,7 +439,7 @@ export default function <span class="fstat-no" title="function not covered" >Nav
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-10-07T01:42:18.785Z
+                at 2024-10-07T02:50:25.746Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
