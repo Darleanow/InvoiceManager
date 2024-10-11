@@ -1,10 +1,9 @@
 {
   "lint-staged": {
-    "frontend/**/*.{js,json,jsx}": [
-      "eslint --fix",
+    "**/*.{js,json,jsx}": [
       "prettier --write"
     ],
-    "frontend/**/*.{scss,css}": [
+    "**/*.{scss,css}": [
       "prettier --write"
     ]
   },

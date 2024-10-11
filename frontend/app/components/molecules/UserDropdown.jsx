@@ -11,12 +11,13 @@ export default function UserDropdown() {
   return (
     <div className={styles.dropdown_wrapper}>
       <DropdownButton
-        children={'Username'}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
         state={isOpen}
-      />
+      >
+        Username
+      </DropdownButton>
       <div
         className={`${styles.dropdown_content_wrapper} ${
           isOpen ? styles.open : ''
