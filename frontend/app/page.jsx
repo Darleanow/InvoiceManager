@@ -7,8 +7,5 @@
  * @returns {JSX.Element} The rendered Home component.
  */
 export default function Home() {
-  return (
-    <div>
-    </div>
-  );
+  return <div></div>;
 }

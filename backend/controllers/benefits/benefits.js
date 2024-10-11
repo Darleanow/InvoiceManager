@@ -4,7 +4,7 @@
  * @description Handles benefit-related operations such as creating, retrieving, updating, and deleting benefits.
  */
 
-const pool = require("../../config/database");
+const pool = require('../../config/database');
 
 /**
  * Creates a new benefit.
@@ -25,16 +25,16 @@ async function createBenefit(req, res) {
     const { object, unit, price_per_unit } = req.body;
 
     const [result] = await pool.execute(
-      "INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)",
+      'INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES (?, ?, ?)',
       [object, unit, price_per_unit]
     );
 
     res
       .status(201)
-      .json({ id: result.insertId, message: "Benefit created successfully" });
+      .json({ id: result.insertId, message: 'Benefit created successfully' });
   } catch (error) {
-    console.error("Error creating benefit:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error creating benefit:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
@@ -71,13 +71,13 @@ async function getBenefitByInvoiceId(req, res) {
     if (rows.length === 0) {
       return res
         .status(404)
-        .json({ message: "No benefits found for this invoice" });
+        .json({ message: 'No benefits found for this invoice' });
     }
 
     res.json(rows);
   } catch (error) {
-    console.error("Error retrieving benefits for invoice:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error retrieving benefits for invoice:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
@@ -103,18 +103,18 @@ async function updateBenefit(req, res) {
     const { object, unit, price_per_unit } = req.body;
 
     const [result] = await pool.execute(
-      "UPDATE invoice_manager.benefit SET object = ?, unit = ?, price_per_unit = ? WHERE id = ?",
+      'UPDATE invoice_manager.benefit SET object = ?, unit = ?, price_per_unit = ? WHERE id = ?',
       [object, unit, price_per_unit, id]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Benefit not found" });
+      return res.status(404).json({ message: 'Benefit not found' });
     }
 
-    res.status(200).json({ message: "Benefit updated successfully" });
+    res.status(200).json({ message: 'Benefit updated successfully' });
   } catch (error) {
-    console.error("Error updating benefit:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error updating benefit:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
@@ -136,18 +136,18 @@ async function deleteBenefit(req, res) {
     const { id } = req.params;
 
     const [result] = await pool.execute(
-      "DELETE FROM invoice_manager.benefit WHERE id = ?",
+      'DELETE FROM invoice_manager.benefit WHERE id = ?',
       [id]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Benefit not found" });
+      return res.status(404).json({ message: 'Benefit not found' });
     }
 
-    res.status(200).json({ message: "Benefit deleted successfully" });
+    res.status(200).json({ message: 'Benefit deleted successfully' });
   } catch (error) {
-    console.error("Error deleting benefit:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error deleting benefit:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 

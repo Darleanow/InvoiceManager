@@ -49,5 +49,4 @@ describe('Examples Controller', () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('result', null);
   });
-
 });

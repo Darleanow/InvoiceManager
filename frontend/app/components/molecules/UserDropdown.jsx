@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import DropdownButton from "../atoms/DropdownButton";
-import DropdownContent from "../atoms/DropdownContent";
-import styles from "./UserDropdown.module.scss";
+import { useState } from 'react';
+import DropdownButton from '../atoms/DropdownButton';
+import DropdownContent from '../atoms/DropdownContent';
+import styles from './UserDropdown.module.scss';
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +11,7 @@ export default function UserDropdown() {
   return (
     <div className={styles.dropdown_wrapper}>
       <DropdownButton
-        children={"Username"}
+        children={'Username'}
         onClick={() => {
           setIsOpen(!isOpen);
         }}
@@ -19,7 +19,7 @@ export default function UserDropdown() {
       />
       <div
         className={`${styles.dropdown_content_wrapper} ${
-          isOpen ? styles.open : ""
+          isOpen ? styles.open : ''
         }`}
       >
         <DropdownContent />
