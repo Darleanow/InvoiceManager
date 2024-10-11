@@ -28,6 +28,10 @@ $font_weight: 600;
         font-size: 16px;
     }
 
+    .rotated {
+        transform: rotate(180deg);
+    }
+
     &:hover {
         * {
             color: $hover_color;

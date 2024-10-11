@@ -9,9 +9,10 @@ $hover_bg_color: rgba(217, 217, 217, 0.2);
     font-size: 12px;
     font-weight: 500;
     color: $color;
-    width: 100%;
+    width: 96%;
     padding: 4px 5px;
     border-radius: 4px;
+    padding-right: 0;
 
     &:hover {
         background-color: $hover_bg_color;
@@ -23,7 +24,7 @@ $hover_bg_color: rgba(217, 217, 217, 0.2);
     display: flex;
     flex-direction: column;
     gap: 2px;
-    width: 120px;
+    width: 100%;
 }
 
 .action {
