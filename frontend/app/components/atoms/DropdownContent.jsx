@@ -1,5 +1,4 @@
 import styles from "./DropdownContent.module.scss";
-
 import {
   IoIosPerson,
   IoIosWallet,

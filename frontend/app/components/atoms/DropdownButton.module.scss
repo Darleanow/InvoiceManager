@@ -8,6 +8,12 @@ $font_weight: 600;
     align-items: center;
 }
 
+@mixin button-styles($color, $size) {
+    color: $color;
+    font-size: $size;
+    font-weight: $font_weight;
+}
+
 .dropdown_button {
     @include flex-center;
     justify-content: space-between;
@@ -17,9 +23,7 @@ $font_weight: 600;
     gap: 6px;
 
     .button_text {
-        color: $button_color;
-        font-weight: $font_weight;
-        font-size: $default_font_size;
+        @include button-styles($button_color, $default_font_size);
     }
 
     .button_icon {
@@ -28,13 +32,21 @@ $font_weight: 600;
         font-size: 16px;
     }
 
-    .rotated {
-        transform: rotate(180deg);
-    }
-
     &:hover {
-        * {
+        .button_text,
+        .button_icon {
             color: $hover_color;
         }
     }
+
+    &.active {
+        .button_text,
+        .button_icon {
+            color: $hover_color;
+        }
+    }
+}
+
+.rotated {
+    transform: rotate(180deg);
 }

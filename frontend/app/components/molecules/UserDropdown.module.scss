@@ -1,3 +1,6 @@
+$dropdown-bg-color: #1A1A1A;
+$dropdown-border-color: #5A5A5A;
+
 .dropdown_wrapper {
     position: relative;
     display: inline-block;
@@ -9,8 +12,8 @@
     left: 0;
     z-index: 10;
     margin-top: 4px;
-    background-color: #1A1A1A;
-    border: 0.5px solid #5A5A5A;
+    background-color: $dropdown-bg-color;
+    border: 0.5px solid $dropdown-border-color;
     border-radius: 4px;
     padding: 6px;
     width: 154px;

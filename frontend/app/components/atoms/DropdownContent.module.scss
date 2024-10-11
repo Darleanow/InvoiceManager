@@ -35,9 +35,6 @@ $hover_bg_color: rgba(217, 217, 217, 0.2);
     @include action_base($color_exit);
 }
 
-.action,
-.action_exit {
-    .icon {
-        font-size: 16px;
-    }
+.icon {
+    font-size: 16px;
 }
