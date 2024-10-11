@@ -17,11 +17,13 @@ export default function UserDropdown() {
         }}
         state={isOpen}
       />
-      {isOpen && (
-        <div className={styles.dropdown_content_wrapper}>
-          <DropdownContent />
-        </div>
-      )}
+      <div
+        className={`${styles.dropdown_content_wrapper} ${
+          isOpen ? styles.open : ""
+        }`}
+      >
+        <DropdownContent />
+      </div>
     </div>
   );
 }

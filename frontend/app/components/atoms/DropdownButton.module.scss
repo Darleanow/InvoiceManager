@@ -2,6 +2,7 @@ $button_color: #9F9F9F;
 $hover_color: #DADADA;
 $default_font_size: 14px;
 $font_weight: 600;
+$transition-duration: 0.3s;
 
 @mixin flex-center {
     display: flex;
@@ -30,9 +31,11 @@ $font_weight: 600;
         @include flex-center;
         color: $button_color;
         font-size: 16px;
+        transition: transform $transition-duration ease;
     }
 
     &:hover {
+
         .button_text,
         .button_icon {
             color: $hover_color;
@@ -40,6 +43,7 @@ $font_weight: 600;
     }
 
     &.active {
+
         .button_text,
         .button_icon {
             color: $hover_color;
@@ -49,4 +53,5 @@ $font_weight: 600;
 
 .rotated {
     transform: rotate(180deg);
+    transition: transform $transition-duration ease;
 }
