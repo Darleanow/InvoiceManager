@@ -1,0 +1,36 @@
+$button_color: #9F9F9F;
+$hover_color: #DADADA;
+$default_font_size: 14px;
+$font_weight: 600;
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown_button {
+    @include flex-center;
+    justify-content: space-between;
+    border: none;
+    background: none;
+    cursor: pointer;
+    gap: 6px;
+
+    .button_text {
+        color: $button_color;
+        font-weight: $font_weight;
+        font-size: $default_font_size;
+    }
+
+    .button_icon {
+        @include flex-center;
+        color: $button_color;
+        font-size: 16px;
+    }
+
+    &:hover {
+        * {
+            color: $hover_color;
+        }
+    }
+}
