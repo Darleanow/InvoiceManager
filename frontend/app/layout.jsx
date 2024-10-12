@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import './styles/globals.scss';
 
 export const metadata = {
@@ -12,3 +13,7 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
+RootLayout.propTypes = {
+  children: PropTypes.node.isRequired,
+};

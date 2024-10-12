@@ -16,8 +16,8 @@ export default function DropdownContent() {
 
   return (
     <div className={styles.user_actions}>
-      {actions.map(({ icon: Icon, label, style }, index) => (
-        <span key={index} className={style}>
+      {actions.map(({ icon: Icon, label, style }) => (
+        <span key={label} className={style}>
           <Icon className={styles.icon} />
           <span className={styles.text}>{label}</span>
         </span>

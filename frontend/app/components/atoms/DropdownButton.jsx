@@ -1,4 +1,5 @@
 import styles from './DropdownButton.module.scss';
+import PropTypes from 'prop-types';
 import { IoIosArrowDown } from 'react-icons/io';
 
 export default function DropdownButton({ children, onClick, state }) {
@@ -14,3 +15,9 @@ export default function DropdownButton({ children, onClick, state }) {
     </button>
   );
 }
+
+DropdownButton.propTypes = {
+  children: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  state: PropTypes.bool.isRequired,
+};
