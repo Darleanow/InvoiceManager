@@ -1,0 +1,17 @@
+.icon_button_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+  background-color: transparent;
+  color: #828282;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+
+  *:hover {
+    color: lighten(#828282, 10%);
+  }
+}

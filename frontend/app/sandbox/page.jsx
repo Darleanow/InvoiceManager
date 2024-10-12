@@ -1,9 +1,13 @@
+'use client';
+
 import styles from './page.module.scss';
 
 import Logo from '../components/atoms/Logo';
 import SeparatorLine from '../components/atoms/SeparatorLine';
 import UserDropdown from '../components/molecules/UserDropdown';
 import SearchBar from '../components/atoms/SearchBar';
+import NotificationsDropdown from '../components/molecules/NotificationsDropdown';
+import SettingsIcon from '../components/atoms/SettingsIcon';
 
 export default function SandBox() {
   return (
@@ -11,7 +15,13 @@ export default function SandBox() {
       <Logo />
       <SeparatorLine />
       <UserDropdown />
-      <SearchBar />
+      {/* <SearchBar /> */}
+      <NotificationsDropdown />
+      <SettingsIcon
+        onClick={() => {
+          alert('Settings icon clicked');
+        }}
+      />
     </div>
   );
 }
