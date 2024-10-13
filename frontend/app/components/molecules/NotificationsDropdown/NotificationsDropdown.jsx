@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import NotificationIcon from '../atoms/NotificationsIcon/NotificationIcon';
-import NotificationsContent from '../atoms/NotificationsContent/NotificationsContent';
+import NotificationIcon from '../../atoms/NotificationsIcon/NotificationIcon';
+import NotificationsContent from '../../atoms/NotificationsContent/NotificationsContent';
 import styles from './NotificationsDropdown.module.scss';
 
 export default function NotificationsDropdown() {

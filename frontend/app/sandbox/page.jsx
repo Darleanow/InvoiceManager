@@ -6,8 +6,8 @@ import Logo from '../components/atoms/Logo/Logo';
 import SeparatorLine from '../components/atoms/SeparatorLine/SeparatorLine';
 import UserDropdown from '../components/molecules/UserDropdown';
 import SearchBar from '../components/atoms/Searchbar/SearchBar';
-import NotificationsDropdown from '../components/molecules/NotificationsDropdown';
-import SettingsIcon from '../components/atoms/SettingsIcon/SettingsIcon';
+import NotificationsDropdown from '../components/molecules/NotificationsDropdown/NotificationsDropdown';
+import Settings from '../components/molecules/Settings/Settings';
 
 export default function SandBox() {
   return (
@@ -17,11 +17,7 @@ export default function SandBox() {
       <UserDropdown />
       {/* <SearchBar /> */}
       <NotificationsDropdown />
-      <SettingsIcon
-        onClick={() => {
-          alert('Settings icon clicked');
-        }}
-      />
+      <Settings />
     </div>
   );
 }
