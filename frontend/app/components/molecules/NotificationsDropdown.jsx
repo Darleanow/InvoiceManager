@@ -28,16 +28,18 @@ export default function NotificationsDropdown() {
   };
 
   return (
-    <div className={`${styles.dropdown_wrapper} ${isOpen ? styles.open : ''}`}>
+    <div className={styles.dropdown_wrapper}>
       <NotificationIcon onClick={toggleDropdown} hasUnread={hasUnread} />
-      {isOpen && (
-        <div className={styles.dropdown_content_wrapper}>
-          <NotificationsContent
-            notifications={notifications}
-            toggleReadStatus={toggleReadStatus}
-          />
-        </div>
-      )}
+      <div
+        className={`${styles.dropdown_content_wrapper} ${
+          isOpen ? styles.open : ''
+        }`}
+      >
+        <NotificationsContent
+          notifications={notifications}
+          toggleReadStatus={toggleReadStatus}
+        />
+      </div>
     </div>
   );
 }

@@ -13,13 +13,6 @@ $dropdown-border-radius: 4px;
 .dropdown_wrapper {
   position: relative;
   display: inline-block;
-
-  &.open .dropdown_content_wrapper {
-    visibility: visible;
-    opacity: 1;
-    transform: translateY(0);
-    @include transition(opacity, transform);
-  }
 }
 
 .dropdown_content_wrapper {
