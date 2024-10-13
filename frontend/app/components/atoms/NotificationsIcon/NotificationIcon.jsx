@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { IoIosNotifications } from 'react-icons/io';
-import generic from '../../styles/atoms/_icons.module.scss';
+import generic from '../../../styles/atoms/_icons.module.scss';
 import styles from './NotificationIcon.module.scss';
 
 export default function NotificationIcon({ onClick, hasUnread }) {

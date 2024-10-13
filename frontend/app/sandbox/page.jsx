@@ -2,12 +2,12 @@
 
 import styles from './page.module.scss';
 
-import Logo from '../components/atoms/Logo';
-import SeparatorLine from '../components/atoms/SeparatorLine';
+import Logo from '../components/atoms/Logo/Logo';
+import SeparatorLine from '../components/atoms/SeparatorLine/SeparatorLine';
 import UserDropdown from '../components/molecules/UserDropdown';
-import SearchBar from '../components/atoms/SearchBar';
+import SearchBar from '../components/atoms/Searchbar/SearchBar';
 import NotificationsDropdown from '../components/molecules/NotificationsDropdown';
-import SettingsIcon from '../components/atoms/SettingsIcon';
+import SettingsIcon from '../components/atoms/SettingsIcon/SettingsIcon';
 
 export default function SandBox() {
   return (

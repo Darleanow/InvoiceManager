@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { IoIosSettings } from 'react-icons/io';
-import styles from '../../styles/atoms/_icons.module.scss';
+import styles from '../../../styles/atoms/_icons.module.scss';
 
 export default function NotificationIcon({ onClick }) {
   return (
