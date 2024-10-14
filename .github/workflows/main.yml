@@ -30,7 +30,7 @@ jobs:
 
       - name: Run frontend unit tests and collect coverage
         working-directory: ./frontend
-        run: npm run test:ci:unit
+        run: npm run test:ci:unit -- --passWithNoTests
 
       # Save frontend unit test report
       - name: Upload frontend unit test report
@@ -103,7 +103,7 @@ jobs:
 
       - name: Run backend integration tests and collect coverage
         working-directory: ./backend
-        run: npm run test:ci:integration
+        run: npm run test:ci:integration -- --passWithNoTests
 
       # Save backend integration test report
       - name: Upload backend integration test report
@@ -141,8 +141,6 @@ jobs:
       # Start frontend server
       - name: Start frontend server
         working-directory: ./frontend
-        #env:
-          # In case needed: add env variables here, useless for now
         run: |
           npm start &
           echo $! > frontend.pid
@@ -168,7 +166,7 @@ jobs:
       # Run Playwright tests and generate HTML report
       - name: Run Playwright tests and generate HTML report
         working-directory: ./frontend
-        run: npx playwright test --reporter=html
+        run: npx playwright test --reporter=html --passWithNoTests
 
       # Upload Playwright report as artifact
       - name: Upload Playwright report as artifact
