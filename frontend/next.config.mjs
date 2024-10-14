@@ -3,6 +3,9 @@ const nextConfig = {
   experimental: {
     forceSwcTransforms: true,
   },
+  compiler: {
+    styledComponents: true,
+  },
 };
 
 export default nextConfig;
