@@ -19,16 +19,23 @@ export default function SettingsPopup({ onClose }) {
   const [selectedCategory, setSelectedCategory] = useState('General');
   const [isClosing, setIsClosing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isContentVisible, setIsContentVisible] = useState(false);
 
   useEffect(() => {
-    // Trigger the entry animation after the component has mounted
-    setTimeout(() => setIsVisible(true), 10); // Small delay to ensure DOM is ready
+    const entryTimeout = setTimeout(() => setIsVisible(true), 10);
+    return () => clearTimeout(entryTimeout);
   }, []);
+
+  useEffect(() => {
+    setIsContentVisible(false);
+    const contentTimeout = setTimeout(() => setIsContentVisible(true), 200);
+    return () => clearTimeout(contentTimeout);
+  }, [selectedCategory]);
 
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       setIsClosing(true);
-      setTimeout(onClose, 400); // Delay matches the transition duration in CSS
+      setTimeout(onClose, 400);
     }
   };
 
@@ -92,8 +99,12 @@ export default function SettingsPopup({ onClose }) {
               </button>
             ))}
           </div>
-          <SeparatorLine />
-          <div className={styles.settings_content}>{renderContent()}</div>
+          <SeparatorLine className={styles.separator_line} />
+          <div
+            className={`${styles.settings_content} ${isContentVisible ? styles.content_visible : ''}`}
+          >
+            {renderContent()}
+          </div>
         </div>
       </div>
     </div>
