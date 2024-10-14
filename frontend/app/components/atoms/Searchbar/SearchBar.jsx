@@ -14,7 +14,12 @@ export default function SearchBar() {
   };
 
   return (
-    <div className={styles.searchbar_container} onClick={handleContainerClick}>
+    <button
+      type="button"
+      className={styles.searchbar_container}
+      onClick={handleContainerClick}
+      aria-label="Search"
+    >
       <IoIosSearch className={styles.icon} />
       <input
         type="text"
@@ -22,6 +27,6 @@ export default function SearchBar() {
         className={styles.search_input}
         ref={inputRef}
       />
-    </div>
+    </button>
   );
 }

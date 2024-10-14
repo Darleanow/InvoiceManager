@@ -15,7 +15,7 @@ export default function SandBox() {
       <Logo />
       <SeparatorLine />
       <UserDropdown />
-      {/* <SearchBar /> */}
+      <SearchBar />
       <NotificationsDropdown />
       <Settings />
     </div>

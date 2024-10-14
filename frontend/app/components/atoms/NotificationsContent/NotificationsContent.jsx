@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { IoIosEye, IoIosEyeOff } from 'react-icons/io';
 import styles from './NotificationsContent.module.scss';
 
@@ -9,12 +10,13 @@ export default function NotificationsContent({
     <div className={styles.dropdown_content}>
       {notifications.map((notification) => (
         <div key={notification.id} className={styles.notification_item}>
-          <a
-            href="#"
+          <button
+            type="button"
             className={notification.isRead ? styles.read : styles.unread}
+            onClick={() => toggleReadStatus(notification.id)}
           >
             {notification.text}
-          </a>
+          </button>
           <div className={styles.eye_icon}>
             {notification.isRead ? (
               <IoIosEyeOff
@@ -33,3 +35,14 @@ export default function NotificationsContent({
     </div>
   );
 }
+
+NotificationsContent.propTypes = {
+  notifications: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      text: PropTypes.string.isRequired,
+      isRead: PropTypes.bool.isRequired,
+    })
+  ).isRequired,
+  toggleReadStatus: PropTypes.func.isRequired,
+};

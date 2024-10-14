@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import styles from './SettingsPopup.module.scss';
+import PropTypes from 'prop-types';
 import {
   IoIosClose,
   IoIosSettings,
@@ -17,27 +18,31 @@ import SeparatorLine from '@/app/components/atoms/SeparatorLine/SeparatorLine';
 
 export default function SettingsPopup({ onClose }) {
   const [selectedCategory, setSelectedCategory] = useState('General');
-  const [isClosing, setIsClosing] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isContentVisible, setIsContentVisible] = useState(false);
+  const [fadeOutContent, setFadeOutContent] = useState(false);
+  const dialogRef = useRef(null);
 
   useEffect(() => {
-    const entryTimeout = setTimeout(() => setIsVisible(true), 10);
-    return () => clearTimeout(entryTimeout);
+    setTimeout(() => setIsVisible(true), 10);
   }, []);
 
-  useEffect(() => {
-    setIsContentVisible(false);
-    const contentTimeout = setTimeout(() => setIsContentVisible(true), 200);
-    return () => clearTimeout(contentTimeout);
-  }, [selectedCategory]);
+  const handleClose = useCallback(() => {
+    setIsVisible(false);
+    setTimeout(onClose, 300);
+  }, [onClose]);
 
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      setIsClosing(true);
-      setTimeout(onClose, 400);
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dialogRef.current && !dialogRef.current.contains(event.target)) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [handleClose]);
 
   const categories = [
     { name: 'General', icon: <IoIosSettings /> },
@@ -47,41 +52,62 @@ export default function SettingsPopup({ onClose }) {
     { name: 'Reports', icon: <IoIosStats /> },
   ];
 
+  const handleCategoryChange = (name) => {
+    // Trigger fade-out effect
+    setFadeOutContent(true);
+    setTimeout(() => {
+      setSelectedCategory(name);
+      setFadeOutContent(false);
+    }, 300); // Duration matches the CSS transition time
+  };
+
   const renderContent = () => {
-    switch (selectedCategory) {
-      case 'General':
-        return <SettingsGeneral />;
-      case 'Invoices':
-        return <SettingsInvoice />;
-      case 'Clients':
-        return <SettingsClients />;
-      case 'Tax':
-        return <SettingsTax />;
-      case 'Reports':
-        return <SettingsReports />;
-      default:
-        return <SettingsGeneral />;
-    }
+    return (
+      <div
+        className={`${styles.settings_content} ${
+          fadeOutContent ? styles.content_hidden : styles.content_visible
+        }`}
+      >
+        {(() => {
+          switch (selectedCategory) {
+            case 'General':
+              return <SettingsGeneral />;
+            case 'Invoices':
+              return <SettingsInvoice />;
+            case 'Clients':
+              return <SettingsClients />;
+            case 'Tax':
+              return <SettingsTax />;
+            case 'Reports':
+              return <SettingsReports />;
+            default:
+              return <SettingsGeneral />;
+          }
+        })()}
+      </div>
+    );
   };
 
   return (
-    <div
-      className={`${styles.popup_backdrop} ${isClosing ? styles.fadeOut : ''}`}
-      onClick={handleBackdropClick}
+    <dialog
+      className={`${styles.popup_backdrop} ${
+        isVisible ? styles.visible : styles.hidden
+      }`}
+      ref={dialogRef}
     >
       <div
         className={`${styles.popup_container} ${
-          isClosing
-            ? styles.slideOut
-            : isVisible
-              ? styles.visible
-              : styles.hidden
+          isVisible ? styles.visible : styles.hidden
         }`}
       >
-        <IoIosClose
-          className={styles.close_icon}
-          onClick={handleBackdropClick}
-        />
+        <button
+          type="button"
+          className={styles.close_button}
+          onClick={handleClose}
+          aria-label="Close"
+        >
+          <IoIosClose className={styles.close_icon} />
+        </button>
         <div className={styles.popup_main_container}>
           <div className={styles.settings_navbar}>
             {categories.map(({ name, icon }) => (
@@ -92,7 +118,7 @@ export default function SettingsPopup({ onClose }) {
                     ? styles.active_nav_item
                     : styles.nav_item
                 }
-                onClick={() => setSelectedCategory(name)}
+                onClick={() => handleCategoryChange(name)}
               >
                 {icon}
                 {name}
@@ -100,13 +126,13 @@ export default function SettingsPopup({ onClose }) {
             ))}
           </div>
           <SeparatorLine className={styles.separator_line} />
-          <div
-            className={`${styles.settings_content} ${isContentVisible ? styles.content_visible : ''}`}
-          >
-            {renderContent()}
-          </div>
+          {renderContent()}
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }
+
+SettingsPopup.propTypes = {
+  onClose: PropTypes.func.isRequired,
+};
