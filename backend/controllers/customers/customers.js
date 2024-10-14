@@ -14,19 +14,19 @@ const pool = require("../../config/database");
  * @memberof module:customersController
  * @param {Object} req - The request object containing the customer data.
  * @param {Object} req.body - The request body.
- * @param {string} req.body.customer_name - The name of the customer.
- * @param {string} req.body.customer_email - The email of the customer.
+ * @param {string} req.body.name - The name of the customer.
+ * @param {string} req.body.email - The email of the customer.
  * @param {string} req.body.postal_address - The postal address of the customer.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response with the created customer ID or an error message.
  */
 async function createCustomer(req, res) {
   try {
-    const { customer_name, customer_email, postal_address } = req.body;
+    const { name, email, postal_address } = req.body;
 
     const [result] = await pool.execute(
-      "INSERT INTO invoice_manager.customer (customer_name, customer_email, postal_address) VALUES (?, ?, ?)",
-      [customer_name, customer_email, postal_address]
+      "INSERT INTO invoice_manager.customer (name, email, postal_address) VALUES (?, ?, ?)",
+      [name, email, postal_address]
     );
 
     res
@@ -77,7 +77,7 @@ async function getCustomerById(req, res) {
   const { id } = req.params;
   try {
     const [rows] = await pool.query(
-      "SELECT * FROM invoice_manager.customer WHERE customer_id = ?",
+      "SELECT * FROM invoice_manager.customer WHERE id = ?",
       [id]
     );
 
@@ -102,20 +102,20 @@ exports.getCustomerById = getCustomerById;
  * @memberof module:customersController
  * @param {Object} req - The request object containing the updated customer data.
  * @param {string} req.params.id - The ID of the customer to update.
- * @param {string} req.body.customer_name - The updated name of the customer.
- * @param {string} req.body.customer_email - The updated email of the customer.
+ * @param {string} req.body.name - The updated name of the customer.
+ * @param {string} req.body.email - The updated email of the customer.
  * @param {string} req.body.postal_address - The updated postal address of the customer.
  * @param {Object} res - The response object.
  * @returns {Object} JSON response indicating success or failure of the update operation.
  */
 async function updateCustomer(req, res) {
   const { id } = req.params;
-  const { customer_name, customer_email, postal_address } = req.body;
+  const { name, email, postal_address } = req.body;
 
   try {
     const [result] = await pool.execute(
-      "UPDATE invoice_manager.customer SET customer_name = ?, customer_email = ?, postal_address = ? WHERE customer_id = ?",
-      [customer_name, customer_email, postal_address, id]
+      "UPDATE invoice_manager.customer SET name = ?, email = ?, postal_address = ? WHERE id = ?",
+      [name, email, postal_address, id]
     );
 
     if (result.affectedRows === 0) {
@@ -147,7 +147,7 @@ async function deleteCustomer(req, res) {
 
   try {
     const [result] = await pool.execute(
-      "DELETE FROM invoice_manager.customer WHERE customer_id = ?",
+      "DELETE FROM invoice_manager.customer WHERE id = ?",
       [id]
     );
 
