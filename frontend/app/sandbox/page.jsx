@@ -8,6 +8,7 @@ import UserDropdown from '../components/molecules/UserDropdown/UserDropdown';
 import SearchBar from '../components/atoms/Searchbar/SearchBar';
 import NotificationsDropdown from '../components/molecules/NotificationsDropdown/NotificationsDropdown';
 import Settings from '../components/molecules/Settings/Settings';
+import CreateInvoiceButton from '../components/atoms/CreateInvoiceButton/CreateInvoiceButton';
 
 export default function SandBox() {
   return (
@@ -18,6 +19,8 @@ export default function SandBox() {
       <SearchBar />
       <NotificationsDropdown />
       <Settings />
+      <SeparatorLine />
+      <CreateInvoiceButton />
     </div>
   );
 }
