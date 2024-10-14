@@ -136,7 +136,9 @@ jobs:
       # Build frontend (if required)
       - name: Build frontend
         working-directory: ./frontend
-        run: npm run build
+        run: |
+          npm i sass
+          npm run build
 
       # Start frontend server
       - name: Start frontend server
