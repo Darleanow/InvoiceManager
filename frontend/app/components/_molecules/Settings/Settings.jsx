@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import SettingsIcon from '../../atoms/SettingsIcon/SettingsIcon';
+import SettingsIcon from '../../_atoms/SettingsIcon/SettingsIcon';
 import SettingsPopup from './SettingsPopup/SettingsPopup';
 
 export default function Settings() {
