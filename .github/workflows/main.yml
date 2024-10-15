@@ -395,7 +395,22 @@ jobs:
 
       # List reports and docs directories to verify
       - name: List reports and docs directories to verify
-        run: ls -lR reports/ docs/
+        run: |
+          # Check if 'reports/' directory exists and is not empty
+          if [ -d "reports" ] && [ "$(ls -A reports)" ]; then
+            echo "Listing contents of reports directory:"
+            ls -lR reports/
+          else
+            echo "No reports to list."
+          fi
+
+          # Check if 'docs/' directory exists and is not empty
+          if [ -d "docs" ] && [ "$(ls -A docs)" ]; then
+            echo "Listing contents of docs directory:"
+            ls -lR docs/
+          else
+            echo "No docs to list."
+          fi
 
       # Commit and push changes
       - name: Commit and push changes
