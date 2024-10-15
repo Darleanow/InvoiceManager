@@ -128,27 +128,44 @@ jobs:
         with:
           node-version: '20'
 
-      # Install frontend dependencies
+      # Check if there are any E2E tests
+      - name: Check for E2E tests
+        working-directory: ./frontend
+        id: check-e2e-tests
+        run: |
+          if ls tests/e2e/*.spec.ts 1> /dev/null 2>&1; then
+            echo "E2E tests found."
+            echo "tests_exist=true" >> $GITHUB_ENV
+          else
+            echo "No E2E tests found, skipping setup."
+            echo "tests_exist=false" >> $GITHUB_ENV
+          fi
+
+      # Install frontend dependencies if E2E tests exist
       - name: Install frontend dependencies
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: npm ci
 
-      # Build frontend (if required)
+      # Build frontend (if required) if E2E tests exist
       - name: Build frontend
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: |
           npm i sass
           npm run build
 
-      # Start frontend server
+      # Start frontend server if E2E tests exist
       - name: Start frontend server
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: |
           npm start &
           echo $! > frontend.pid
 
-      # Wait for frontend server to be up
+      # Wait for frontend server to be up if E2E tests exist
       - name: Wait for frontend server to be up
+        if: env.tests_exist == 'true'
         run: |
           echo "Waiting for frontend to be up..."
           for i in {1..10}; do
@@ -160,25 +177,29 @@ jobs:
             sleep 5
           done
 
-      # Install Playwright Browsers
+      # Install Playwright Browsers if E2E tests exist
       - name: Install Playwright Browsers
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: npx playwright install --with-deps
 
-      # Run Playwright tests and generate HTML report
+      # Run Playwright tests and generate HTML report if E2E tests exist
       - name: Run Playwright tests and generate HTML report
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
-        run: npx playwright test --reporter=html --passWithNoTests
+        run: npx playwright test --reporter=html
 
-      # Upload Playwright report as artifact
+      # Upload Playwright report as artifact if E2E tests exist
       - name: Upload Playwright report as artifact
+        if: env.tests_exist == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: playwright-report
           path: ./frontend/playwright-report/
 
-      # Stop frontend server
+      # Stop frontend server if E2E tests exist
       - name: Stop frontend server
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: kill $(cat frontend.pid)
 
