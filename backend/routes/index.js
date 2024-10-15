@@ -5,13 +5,13 @@
  * @see {@link TODO} Swagger Documentation
  */
 
-const express = require("express");
-const rateLimit = require("express-rate-limit");
+const express = require('express');
+const rateLimit = require('express-rate-limit');
 const router = express.Router();
-const examplesController = require("../controllers/examples/examples");
-const invoicesController = require("../controllers/invoices/invoices");
-const benefitsController = require("../controllers/benefits/benefits");
-const customersController = require("../controllers/customers/customers");
+const examplesController = require('../controllers/examples/examples');
+const invoicesController = require('../controllers/invoices/invoices');
+const benefitsController = require('../controllers/benefits/benefits');
+const customersController = require('../controllers/customers/customers');
 
 /**
  * Rate limiting middleware to restrict excessive requests from a single IP.
@@ -21,7 +21,7 @@ const customersController = require("../controllers/customers/customers");
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 2000,
-  message: "Too many requests from this IP, please try again after 15 minutes",
+  message: 'Too many requests from this IP, please try again after 15 minutes',
 });
 
 router.use(limiter); // Apply rate limiting to all routes
@@ -69,7 +69,7 @@ router.use(limiter); // Apply rate limiting to all routes
  *                   type: integer
  *                   description: The ID of the created invoice.
  */
-router.post("/invoices", invoicesController.createInvoice);
+router.post('/invoices', invoicesController.createInvoice);
 
 /**
  * @swagger
@@ -95,7 +95,7 @@ router.post("/invoices", invoicesController.createInvoice);
  *                     type: string
  *                     format: date
  */
-router.get("/invoices", invoicesController.getInvoices);
+router.get('/invoices', invoicesController.getInvoices);
 
 /**
  * @swagger
@@ -128,7 +128,7 @@ router.get("/invoices", invoicesController.getInvoices);
  *       404:
  *         description: Invoice not found
  */
-router.get("/invoices/:id", invoicesController.getInvoiceById);
+router.get('/invoices/:id', invoicesController.getInvoiceById);
 
 /**
  * @swagger
@@ -161,7 +161,7 @@ router.get("/invoices/:id", invoicesController.getInvoiceById);
  *       404:
  *         description: Invoice not found
  */
-router.put("/invoices/:id", invoicesController.updateInvoice);
+router.put('/invoices/:id', invoicesController.updateInvoice);
 
 /**
  * @swagger
@@ -182,7 +182,7 @@ router.put("/invoices/:id", invoicesController.updateInvoice);
  *       404:
  *         description: Invoice not found
  */
-router.delete("/invoices/:id", invoicesController.deleteInvoice);
+router.delete('/invoices/:id', invoicesController.deleteInvoice);
 
 /**
  * @swagger
@@ -214,7 +214,7 @@ router.delete("/invoices/:id", invoicesController.deleteInvoice);
  *       201:
  *         description: Benefit created successfully
  */
-router.post("/benefits", benefitsController.createBenefit);
+router.post('/benefits', benefitsController.createBenefit);
 
 /**
  * @swagger
@@ -249,7 +249,7 @@ router.post("/benefits", benefitsController.createBenefit);
  *                     type: number
  */
 router.get(
-  "/invoices/:invoiceId/benefits",
+  '/invoices/:invoiceId/benefits',
   benefitsController.getBenefitByInvoiceId
 );
 
@@ -285,7 +285,7 @@ router.get(
  *       404:
  *         description: Benefit not found
  */
-router.put("/benefits/:id", benefitsController.updateBenefit);
+router.put('/benefits/:id', benefitsController.updateBenefit);
 
 /**
  * @swagger
@@ -306,7 +306,7 @@ router.put("/benefits/:id", benefitsController.updateBenefit);
  *       404:
  *         description: Benefit not found
  */
-router.delete("/benefits/:id", benefitsController.deleteBenefit);
+router.delete('/benefits/:id', benefitsController.deleteBenefit);
 
 /**
  * @swagger
@@ -338,7 +338,7 @@ router.delete("/benefits/:id", benefitsController.deleteBenefit);
  *       201:
  *         description: Customer created successfully
  */
-router.post("/customers", customersController.createCustomer);
+router.post('/customers', customersController.createCustomer);
 
 /**
  * @swagger
@@ -365,7 +365,7 @@ router.post("/customers", customersController.createCustomer);
  *                   postal_address:
  *                     type: string
  */
-router.get("/customers", customersController.getCustomers);
+router.get('/customers', customersController.getCustomers);
 
 /**
  * @swagger
@@ -399,7 +399,7 @@ router.get("/customers", customersController.getCustomers);
  *       404:
  *         description: Customer not found
  */
-router.get("/customers/:id", customersController.getCustomerById);
+router.get('/customers/:id', customersController.getCustomerById);
 
 /**
  * @swagger
@@ -433,7 +433,7 @@ router.get("/customers/:id", customersController.getCustomerById);
  *       404:
  *         description: Customer not found
  */
-router.put("/customers/:id", customersController.updateCustomer);
+router.put('/customers/:id', customersController.updateCustomer);
 
 /**
  * @swagger
@@ -454,7 +454,7 @@ router.put("/customers/:id", customersController.updateCustomer);
  *       404:
  *         description: Customer not found
  */
-router.delete("/customers/:id", customersController.deleteCustomer);
+router.delete('/customers/:id', customersController.deleteCustomer);
 
 /**
  * @swagger
@@ -490,7 +490,7 @@ router.delete("/customers/:id", customersController.deleteCustomer);
  *             schema:
  *               type: integer
  */
-router.get("/test/add/:num1/:num2", examplesController.add);
+router.get('/test/add/:num1/:num2', examplesController.add);
 
 /**
  * @swagger
@@ -519,7 +519,7 @@ router.get("/test/add/:num1/:num2", examplesController.add);
  *             schema:
  *               type: integer
  */
-router.get("/test/multiply/:num1/:num2", examplesController.multiply);
+router.get('/test/multiply/:num1/:num2', examplesController.multiply);
 
 /**
  * @swagger
@@ -542,6 +542,6 @@ router.get("/test/multiply/:num1/:num2", examplesController.multiply);
  *             schema:
  *               type: string
  */
-router.get("/test/reverse/:input", examplesController.reverseString);
+router.get('/test/reverse/:input', examplesController.reverseString);
 
 module.exports = router;

@@ -1,6 +1,3 @@
-import Navbar from "./Assets/components/Navbar/navbar";
-import Topbar from "./Assets/components/Topbar/Topbar";
-
 /**
  * Home component for the main landing page.
  *
@@ -10,10 +7,5 @@ import Topbar from "./Assets/components/Topbar/Topbar";
  * @returns {JSX.Element} The rendered Home component.
  */
 export default function Home() {
-  return (
-    <div>
-      <Topbar />
-      <Navbar />
-    </div>
-  );
+  return <div></div>;
 }

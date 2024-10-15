@@ -30,7 +30,7 @@ jobs:
 
       - name: Run frontend unit tests and collect coverage
         working-directory: ./frontend
-        run: npm run test:ci:unit
+        run: npm run test:ci:unit -- --passWithNoTests
 
       # Save frontend unit test report
       - name: Upload frontend unit test report
@@ -103,7 +103,7 @@ jobs:
 
       - name: Run backend integration tests and collect coverage
         working-directory: ./backend
-        run: npm run test:ci:integration
+        run: npm run test:ci:integration -- --passWithNoTests
 
       # Save backend integration test report
       - name: Upload backend integration test report
@@ -128,27 +128,44 @@ jobs:
         with:
           node-version: '20'
 
-      # Install frontend dependencies
+      # Check if there are any E2E tests
+      - name: Check for E2E tests
+        working-directory: ./frontend
+        id: check-e2e-tests
+        run: |
+          if ls tests/e2e/*.spec.ts 1> /dev/null 2>&1; then
+            echo "E2E tests found."
+            echo "tests_exist=true" >> $GITHUB_ENV
+          else
+            echo "No E2E tests found, skipping setup."
+            echo "tests_exist=false" >> $GITHUB_ENV
+          fi
+
+      # Install frontend dependencies if E2E tests exist
       - name: Install frontend dependencies
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: npm ci
 
-      # Build frontend (if required)
+      # Build frontend (if required) if E2E tests exist
       - name: Build frontend
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
-        run: npm run build
+        run: |
+          npm i sass
+          npm run build
 
-      # Start frontend server
+      # Start frontend server if E2E tests exist
       - name: Start frontend server
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
-        #env:
-          # In case needed: add env variables here, useless for now
         run: |
           npm start &
           echo $! > frontend.pid
 
-      # Wait for frontend server to be up
+      # Wait for frontend server to be up if E2E tests exist
       - name: Wait for frontend server to be up
+        if: env.tests_exist == 'true'
         run: |
           echo "Waiting for frontend to be up..."
           for i in {1..10}; do
@@ -160,25 +177,29 @@ jobs:
             sleep 5
           done
 
-      # Install Playwright Browsers
+      # Install Playwright Browsers if E2E tests exist
       - name: Install Playwright Browsers
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: npx playwright install --with-deps
 
-      # Run Playwright tests and generate HTML report
+      # Run Playwright tests and generate HTML report if E2E tests exist
       - name: Run Playwright tests and generate HTML report
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: npx playwright test --reporter=html
 
-      # Upload Playwright report as artifact
+      # Upload Playwright report as artifact if E2E tests exist
       - name: Upload Playwright report as artifact
+        if: env.tests_exist == 'true'
         uses: actions/upload-artifact@v3
         with:
           name: playwright-report
           path: ./frontend/playwright-report/
 
-      # Stop frontend server
+      # Stop frontend server if E2E tests exist
       - name: Stop frontend server
+        if: env.tests_exist == 'true'
         working-directory: ./frontend
         run: kill $(cat frontend.pid)
 
@@ -257,40 +278,46 @@ jobs:
           # Adjust the navbar links in index.html if necessary
           sed -i "s|href=\"index.html\"|href=\"/$REPO_NAME/index.html\"|g; s|href=\"reports/|href=\"/$REPO_NAME/reports/|g" index.html
 
-      # Download Documentation
+      # Download Documentation if exists
       - name: Download Documentation
         uses: actions/download-artifact@v3
+        if: steps.unit-tests.outputs.docs_exists == 'true'
         with:
           name: docs
           path: docs/
 
-      # Download Playwright report
+      # Download Playwright report if exists
       - name: Download Playwright report
         uses: actions/download-artifact@v3
+        if: steps.unit-tests.outputs.playwright_exists == 'true'
         with:
           name: playwright-report
           path: e2e-tests/playwright-report/
 
-      - name: Download frontend unit test report
+      - name: Download frontend unit test report if exists
         uses: actions/download-artifact@v3
+        if: steps.unit-tests.outputs.frontend_unit_exists == 'true'
         with:
           name: frontend-unit-test-report
           path: unit-tests/frontend
 
-      - name: Download backend unit test report
+      - name: Download backend unit test report if exists
         uses: actions/download-artifact@v3
+        if: steps.unit-tests.outputs.backend_unit_exists == 'true'
         with:
           name: backend-unit-test-report
           path: unit-tests/backend
 
-      - name: Download frontend integration test report
+      - name: Download frontend integration test report if exists
         uses: actions/download-artifact@v3
+        if: steps.unit-tests.outputs.frontend_integration_exists == 'true'
         with:
           name: frontend-integration-test-report
           path: integration-tests/frontend
 
-      - name: Download backend integration test report
+      - name: Download backend integration test report if exists
         uses: actions/download-artifact@v3
+        if: steps.unit-tests.outputs.backend_integration_exists == 'true'
         with:
           name: backend-integration-test-report
           path: integration-tests/backend
@@ -315,17 +342,32 @@ jobs:
           mkdir -p reports/backend/integration-tests
           mkdir -p reports/e2e-tests
 
-          # Move the reports
-          mv unit-tests/frontend/* reports/frontend/unit-tests/
-          mv integration-tests/frontend/* reports/frontend/integration-tests/
-          mv unit-tests/backend/* reports/backend/unit-tests/
-          mv integration-tests/backend/* reports/backend/integration-tests/
-          mv e2e-tests/playwright-report/* reports/e2e-tests/
+          # Move the reports if they exist
+          if [ -d "unit-tests/frontend" ]; then
+            mv unit-tests/frontend/* reports/frontend/unit-tests/
+          fi
+
+          if [ -d "integration-tests/frontend" ]; then
+            mv integration-tests/frontend/* reports/frontend/integration-tests/
+          fi
+
+          if [ -d "unit-tests/backend" ]; then
+            mv unit-tests/backend/* reports/backend/unit-tests/
+          fi
+
+          if [ -d "integration-tests/backend" ]; then
+            mv integration-tests/backend/* reports/backend/integration-tests/
+          fi
+
+          if [ -d "e2e-tests/playwright-report" ]; then
+            mv e2e-tests/playwright-report/* reports/e2e-tests/
+          fi
 
           # Move the generated docs
-          ls -lR docs/
-          mv docs/api/* docs/
-          rm -rf docs/api
+          if [ -d "docs/api" ]; then
+            mv docs/api/* docs/
+            rm -rf docs/api
+          fi
 
       # Inject Navbar and Custom CSS into Reports (Exclude index.html)
       - name: Inject Navbar and Custom CSS into Reports
@@ -353,7 +395,22 @@ jobs:
 
       # List reports and docs directories to verify
       - name: List reports and docs directories to verify
-        run: ls -lR reports/ docs/
+        run: |
+          # Check if 'reports/' directory exists and is not empty
+          if [ -d "reports" ] && [ "$(ls -A reports)" ]; then
+            echo "Listing contents of reports directory:"
+            ls -lR reports/
+          else
+            echo "No reports to list."
+          fi
+
+          # Check if 'docs/' directory exists and is not empty
+          if [ -d "docs" ] && [ "$(ls -A docs)" ]; then
+            echo "Listing contents of docs directory:"
+            ls -lR docs/
+          else
+            echo "No docs to list."
+          fi
 
       # Commit and push changes
       - name: Commit and push changes

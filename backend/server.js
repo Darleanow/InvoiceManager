@@ -5,8 +5,8 @@
  * The server runs on a specified port and connects to a MySQL database pool.
  */
 
-const app = require("./app");
-const pool = require("./config/database");
+const app = require('./app');
+const pool = require('./config/database');
 const port = 3001;
 
 /**
@@ -29,7 +29,7 @@ const port = 3001;
      * @throws Will throw an error if the connection to the database fails.
      */
     await pool.getConnection();
-    console.log("Connected to the database successfully.");
+    console.log('Connected to the database successfully.');
 
     /**
      * Starts the Express server and listens on the specified port.
@@ -49,7 +49,7 @@ const port = 3001;
      * @function handleError
      * @param {Error} error - The error object that contains the message explaining why the connection failed.
      */
-    console.error("Error connecting to the database:", error.message);
+    console.error('Error connecting to the database:', error.message);
     process.exit(1); // Exits the process with failure code.
   }
 })();

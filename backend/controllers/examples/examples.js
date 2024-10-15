@@ -15,12 +15,8 @@ exports.multiply = (req, res) => {
 exports.reverseString = (req, res) => {
   const input = req.params.input;
   if (input === undefined || input === '') {
-    return res.status(404).json({ message: "Input cannot be empty" });
+    return res.status(404).json({ message: 'Input cannot be empty' });
   }
-  const reversed = input.split("").reverse().join("");
+  const reversed = input.split('').reverse().join('');
   res.json({ reversed });
 };
-
-
-
-

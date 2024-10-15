@@ -4,7 +4,7 @@
  * @description Handles customer-related operations such as creating, retrieving, updating, and deleting customers.
  */
 
-const pool = require("../../config/database");
+const pool = require('../../config/database');
 
 /**
  * Creates a new customer.
@@ -25,16 +25,16 @@ async function createCustomer(req, res) {
     const { name, email, postal_address } = req.body;
 
     const [result] = await pool.execute(
-      "INSERT INTO invoice_manager.customer (name, email, postal_address) VALUES (?, ?, ?)",
+      'INSERT INTO invoice_manager.customer (name, email, postal_address) VALUES (?, ?, ?)',
       [name, email, postal_address]
     );
 
     res
       .status(201)
-      .json({ id: result.insertId, message: "Customer created successfully" });
+      .json({ id: result.insertId, message: 'Customer created successfully' });
   } catch (error) {
-    console.error("Error creating customer:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error creating customer:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
@@ -52,11 +52,11 @@ exports.createCustomer = createCustomer;
  */
 async function getCustomers(req, res) {
   try {
-    const [rows] = await pool.query("SELECT * FROM invoice_manager.customer");
+    const [rows] = await pool.query('SELECT * FROM invoice_manager.customer');
     res.status(200).json(rows);
   } catch (error) {
-    console.error("Error retrieving customers:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error retrieving customers:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
@@ -77,18 +77,18 @@ async function getCustomerById(req, res) {
   const { id } = req.params;
   try {
     const [rows] = await pool.query(
-      "SELECT * FROM invoice_manager.customer WHERE id = ?",
+      'SELECT * FROM invoice_manager.customer WHERE id = ?',
       [id]
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: "Customer not found" });
+      return res.status(404).json({ message: 'Customer not found' });
     }
 
     res.status(200).json(rows[0]);
   } catch (error) {
-    console.error("Error retrieving customer:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error retrieving customer:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
@@ -114,18 +114,18 @@ async function updateCustomer(req, res) {
 
   try {
     const [result] = await pool.execute(
-      "UPDATE invoice_manager.customer SET name = ?, email = ?, postal_address = ? WHERE id = ?",
+      'UPDATE invoice_manager.customer SET name = ?, email = ?, postal_address = ? WHERE id = ?',
       [name, email, postal_address, id]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Customer not found" });
+      return res.status(404).json({ message: 'Customer not found' });
     }
 
-    res.status(200).json({ message: "Customer updated successfully" });
+    res.status(200).json({ message: 'Customer updated successfully' });
   } catch (error) {
-    console.error("Error updating customer:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error updating customer:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 
@@ -147,18 +147,18 @@ async function deleteCustomer(req, res) {
 
   try {
     const [result] = await pool.execute(
-      "DELETE FROM invoice_manager.customer WHERE id = ?",
+      'DELETE FROM invoice_manager.customer WHERE id = ?',
       [id]
     );
 
     if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Customer not found" });
+      return res.status(404).json({ message: 'Customer not found' });
     }
 
-    res.status(200).json({ message: "Customer deleted successfully" });
+    res.status(200).json({ message: 'Customer deleted successfully' });
   } catch (error) {
-    console.error("Error deleting customer:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error('Error deleting customer:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 }
 

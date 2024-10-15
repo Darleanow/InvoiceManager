@@ -4,9 +4,9 @@
  * @description Initializes the Express application, configures middleware, and sets up routes for the API.
  */
 
-const express = require("express");
-const cors = require("cors");
-const routes = require("./routes/index");
+const express = require('express');
+const cors = require('cors');
+const routes = require('./routes/index');
 
 const app = express();
 
@@ -33,6 +33,6 @@ app.use(express.json());
  * @memberof module:app
  * @description All routes are defined in the `routes/index.js` file, and are mounted on the `/api` path for the application.
  */
-app.use("/api", routes);
+app.use('/api', routes);
 
 module.exports = app;

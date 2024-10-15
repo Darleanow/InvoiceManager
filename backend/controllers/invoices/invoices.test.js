@@ -1,7 +1,7 @@
-const pool = require("../../config/database");
-const invoicesController = require("./invoices");
+const pool = require('../../config/database');
+const invoicesController = require('./invoices');
 
-jest.mock("../../config/database");
+jest.mock('../../config/database');
 
 const mockResponse = () => {
   return {
@@ -29,16 +29,16 @@ const mockGetConnection = (mockQueryResults = []) => {
   return connection;
 };
 
-describe("Invoices Controller", () => {
+describe('Invoices Controller', () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  test("createInvoice should return 201 and success message", async () => {
+  test('createInvoice should return 201 and success message', async () => {
     const req = {
       body: {
-        name: "Invoice for Health Services",
-        date: "2024-10-01",
+        name: 'Invoice for Health Services',
+        date: '2024-10-01',
         customer_id: 1,
         benefit_ids: [1, 2],
       },
@@ -50,16 +50,16 @@ describe("Invoices Controller", () => {
 
     expect(res.status).toHaveBeenCalledWith(201);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Invoice created successfully",
+      message: 'Invoice created successfully',
       invoiceId: 1,
     });
   });
 
-  test("createInvoice should return 400 if required fields are missing", async () => {
+  test('createInvoice should return 400 if required fields are missing', async () => {
     const req = {
       body: {
-        name: "Invoice for Health Services",
-        date: "2024-10-01",
+        name: 'Invoice for Health Services',
+        date: '2024-10-01',
         customer_id: 1,
         benefit_ids: [],
       },
@@ -71,15 +71,15 @@ describe("Invoices Controller", () => {
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
       message:
-        "Invoice name, date, customer ID, and at least one benefit ID are required",
+        'Invoice name, date, customer ID, and at least one benefit ID are required',
     });
   });
 
-  test("createInvoice should return 500 on database error", async () => {
+  test('createInvoice should return 500 on database error', async () => {
     const req = {
       body: {
-        name: "Invoice for Health Services",
-        date: "2024-10-01",
+        name: 'Invoice for Health Services',
+        date: '2024-10-01',
         customer_id: 1,
         benefit_ids: [1, 2],
       },
@@ -88,32 +88,32 @@ describe("Invoices Controller", () => {
     const connection = mockConnection();
 
     pool.getConnection.mockResolvedValue(connection);
-    connection.query.mockRejectedValue(new Error("Database error"));
+    connection.query.mockRejectedValue(new Error('Database error'));
 
     await invoicesController.createInvoice(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Database error",
+      message: 'Database error',
       error: expect.any(Error),
     });
   });
 
-  test("getInvoices should return invoices", async () => {
+  test('getInvoices should return invoices', async () => {
     const req = {};
     const res = mockResponse();
     pool.query.mockResolvedValue([
       [
         {
           id: 1,
-          name: "Invoice for Health Services",
-          date: "2024-10-01",
+          name: 'Invoice for Health Services',
+          date: '2024-10-01',
           customer_id: 1,
-          customer_name: "John Doe",
-          customer_email: "john@example.com",
-          postal_address: "123 Main St",
+          customer_name: 'John Doe',
+          customer_email: 'john@example.com',
+          postal_address: '123 Main St',
           benefit_id: 1,
-          benefit_object: "Health Insurance",
+          benefit_object: 'Health Insurance',
           benefit_unit: 12,
           price_per_unit: 100,
         },
@@ -127,18 +127,18 @@ describe("Invoices Controller", () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: 1,
-          name: "Invoice for Health Services",
-          date: "2024-10-01",
+          name: 'Invoice for Health Services',
+          date: '2024-10-01',
           customer: expect.objectContaining({
             id: 1,
-            name: "John Doe",
-            email: "john@example.com",
-            postal_address: "123 Main St",
+            name: 'John Doe',
+            email: 'john@example.com',
+            postal_address: '123 Main St',
           }),
           benefits: expect.arrayContaining([
             expect.objectContaining({
               id: 1,
-              object: "Health Insurance",
+              object: 'Health Insurance',
               unit: 12,
               price_per_unit: 100,
             }),
@@ -148,7 +148,7 @@ describe("Invoices Controller", () => {
     );
   });
 
-  test("getInvoices should return 404 if no invoices found", async () => {
+  test('getInvoices should return 404 if no invoices found', async () => {
     const req = {};
     const res = mockResponse();
 
@@ -157,25 +157,25 @@ describe("Invoices Controller", () => {
     await invoicesController.getInvoices(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: "No invoices found" });
+    expect(res.json).toHaveBeenCalledWith({ message: 'No invoices found' });
   });
 
-  test("getInvoices should return 500 on error", async () => {
+  test('getInvoices should return 500 on error', async () => {
     const req = {};
     const res = mockResponse();
 
-    pool.query.mockRejectedValue(new Error("Database error"));
+    pool.query.mockRejectedValue(new Error('Database error'));
 
     await invoicesController.getInvoices(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Database error",
+      message: 'Database error',
       error: expect.any(Error),
     });
   });
 
-  test("getInvoiceById should return invoice details", async () => {
+  test('getInvoiceById should return invoice details', async () => {
     const req = { params: { id: 1 } };
     const res = mockResponse();
 
@@ -183,14 +183,14 @@ describe("Invoices Controller", () => {
       [
         {
           id: 1,
-          name: "Invoice for Health Services",
-          date: "2024-10-01",
+          name: 'Invoice for Health Services',
+          date: '2024-10-01',
           customer_id: 1,
-          customer_name: "John Doe",
-          customer_email: "john@example.com",
-          postal_address: "123 Main St",
+          customer_name: 'John Doe',
+          customer_email: 'john@example.com',
+          postal_address: '123 Main St',
           benefit_id: 1,
-          benefit_object: "Health Insurance",
+          benefit_object: 'Health Insurance',
           benefit_unit: 12,
           price_per_unit: 100,
         },
@@ -203,18 +203,18 @@ describe("Invoices Controller", () => {
     expect(res.json).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 1,
-        name: "Invoice for Health Services",
-        date: "2024-10-01",
+        name: 'Invoice for Health Services',
+        date: '2024-10-01',
         customer: expect.objectContaining({
           id: 1,
-          name: "John Doe",
-          email: "john@example.com",
-          postal_address: "123 Main St",
+          name: 'John Doe',
+          email: 'john@example.com',
+          postal_address: '123 Main St',
         }),
         benefits: expect.arrayContaining([
           expect.objectContaining({
             id: 1,
-            object: "Health Insurance",
+            object: 'Health Insurance',
             unit: 12,
             price_per_unit: 100,
           }),
@@ -223,7 +223,7 @@ describe("Invoices Controller", () => {
     );
   });
 
-  test("getInvoiceById should return 404 if invoice not found", async () => {
+  test('getInvoiceById should return 404 if invoice not found', async () => {
     const req = { params: { id: 999 } };
     const res = mockResponse();
 
@@ -232,30 +232,30 @@ describe("Invoices Controller", () => {
     await invoicesController.getInvoiceById(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: "Invoice not found" });
+    expect(res.json).toHaveBeenCalledWith({ message: 'Invoice not found' });
   });
 
-  test("getInvoiceById should return 500 on database error", async () => {
+  test('getInvoiceById should return 500 on database error', async () => {
     const req = { params: { id: 1 } };
     const res = mockResponse();
 
-    pool.query.mockRejectedValue(new Error("Database error"));
+    pool.query.mockRejectedValue(new Error('Database error'));
 
     await invoicesController.getInvoiceById(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Database error",
+      message: 'Database error',
       error: expect.any(Error),
     });
   });
 
-  test("updateInvoice should return 200 on success", async () => {
+  test('updateInvoice should return 200 on success', async () => {
     const req = {
       params: { id: 1 },
       body: {
-        name: "Updated Invoice",
-        date: "2024-10-02",
+        name: 'Updated Invoice',
+        date: '2024-10-02',
         customer_id: 2,
         benefit_ids: [2],
       },
@@ -267,11 +267,11 @@ describe("Invoices Controller", () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Invoice updated successfully",
+      message: 'Invoice updated successfully',
     });
   });
 
-  test("updateInvoice should return 400 if required fields are missing", async () => {
+  test('updateInvoice should return 400 if required fields are missing', async () => {
     const req = {
       params: { id: 1 },
       body: {
@@ -286,16 +286,16 @@ describe("Invoices Controller", () => {
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.json).toHaveBeenCalledWith({
       message:
-        "Invoice name, date, customer ID, and at least one benefit ID are required",
+        'Invoice name, date, customer ID, and at least one benefit ID are required',
     });
   });
 
-  test("updateInvoice should return 404 if invoice not found", async () => {
+  test('updateInvoice should return 404 if invoice not found', async () => {
     const req = {
       params: { id: 999 },
       body: {
-        name: "Updated Invoice",
-        date: "2024-10-02",
+        name: 'Updated Invoice',
+        date: '2024-10-02',
         customer_id: 2,
         benefit_ids: [2],
       },
@@ -306,15 +306,15 @@ describe("Invoices Controller", () => {
     await invoicesController.updateInvoice(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: "Invoice not found" });
+    expect(res.json).toHaveBeenCalledWith({ message: 'Invoice not found' });
   });
 
-  test("updateInvoice should return 500 on database error", async () => {
+  test('updateInvoice should return 500 on database error', async () => {
     const req = {
       params: { id: 1 },
       body: {
-        name: "Updated Invoice",
-        date: "2024-10-02",
+        name: 'Updated Invoice',
+        date: '2024-10-02',
         customer_id: 2,
         benefit_ids: [2],
       },
@@ -323,18 +323,18 @@ describe("Invoices Controller", () => {
     const connection = mockConnection();
 
     pool.getConnection.mockResolvedValue(connection);
-    connection.query.mockRejectedValue(new Error("Database error"));
+    connection.query.mockRejectedValue(new Error('Database error'));
 
     await invoicesController.updateInvoice(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Database error",
+      message: 'Database error',
       error: expect.any(Error),
     });
   });
 
-  test("deleteInvoice should return 200 on success", async () => {
+  test('deleteInvoice should return 200 on success', async () => {
     const req = { params: { id: 1 } };
     const res = mockResponse();
     mockGetConnection([[{}], [{}], [{ affectedRows: 1 }]]);
@@ -343,11 +343,11 @@ describe("Invoices Controller", () => {
 
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Invoice deleted successfully",
+      message: 'Invoice deleted successfully',
     });
   });
 
-  test("deleteInvoice should return 404 if invoice not found", async () => {
+  test('deleteInvoice should return 404 if invoice not found', async () => {
     const req = { params: { id: 999 } };
     const res = mockResponse();
     mockGetConnection([[{}], [{}], [{ affectedRows: 0 }]]);
@@ -355,22 +355,22 @@ describe("Invoices Controller", () => {
     await invoicesController.deleteInvoice(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ message: "Invoice not found" });
+    expect(res.json).toHaveBeenCalledWith({ message: 'Invoice not found' });
   });
 
-  test("deleteInvoice should return 500 on database error", async () => {
+  test('deleteInvoice should return 500 on database error', async () => {
     const req = { params: { id: 1 } };
     const res = mockResponse();
     const connection = mockConnection();
 
     pool.getConnection.mockResolvedValue(connection);
-    connection.query.mockRejectedValue(new Error("Database error"));
+    connection.query.mockRejectedValue(new Error('Database error'));
 
     await invoicesController.deleteInvoice(req, res);
 
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({
-      message: "Database error",
+      message: 'Database error',
       error: expect.any(Error),
     });
   });

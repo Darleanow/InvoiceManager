@@ -4,7 +4,7 @@
  * @description Handles invoice-related operations such as creating, retrieving, updating, and deleting invoices.
  */
 
-const pool = require("../../config/database");
+const pool = require('../../config/database');
 
 /**
  * Creates a new invoice and associates it with a customer and multiple benefits.
@@ -33,7 +33,7 @@ async function createInvoice(req, res) {
   ) {
     return res.status(400).json({
       message:
-        "Invoice name, date, customer ID, and at least one benefit ID are required",
+        'Invoice name, date, customer ID, and at least one benefit ID are required',
     });
   }
 
@@ -42,19 +42,19 @@ async function createInvoice(req, res) {
     await connection.beginTransaction();
 
     const [invoiceResult] = await connection.query(
-      "INSERT INTO invoice_manager.invoice (name, date) VALUES (?, ?)",
+      'INSERT INTO invoice_manager.invoice (name, date) VALUES (?, ?)',
       [name, date]
     );
     const invoice_id = invoiceResult.insertId;
 
     await connection.query(
-      "INSERT INTO invoice_manager.customer_invoice (customer_id, invoice_id) VALUES (?, ?)",
+      'INSERT INTO invoice_manager.customer_invoice (customer_id, invoice_id) VALUES (?, ?)',
       [customer_id, invoice_id]
     );
 
     for (const benefit_id of benefit_ids) {
       await connection.query(
-        "INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (?, ?)",
+        'INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (?, ?)',
         [invoice_id, benefit_id]
       );
     }
@@ -62,10 +62,10 @@ async function createInvoice(req, res) {
     await connection.commit();
     res
       .status(201)
-      .json({ message: "Invoice created successfully", invoiceId: invoice_id });
+      .json({ message: 'Invoice created successfully', invoiceId: invoice_id });
   } catch (err) {
     await connection.rollback();
-    res.status(500).json({ message: "Database error", error: err });
+    res.status(500).json({ message: 'Database error', error: err });
   } finally {
     connection.release();
   }
@@ -106,7 +106,7 @@ async function getInvoices(req, res) {
     `);
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: "No invoices found" });
+      return res.status(404).json({ message: 'No invoices found' });
     }
 
     const invoicesMap = new Map();
@@ -139,8 +139,8 @@ async function getInvoices(req, res) {
 
     res.status(200).json(invoices);
   } catch (err) {
-    console.error("Error retrieving invoices:", err);
-    res.status(500).json({ message: "Database error", error: err });
+    console.error('Error retrieving invoices:', err);
+    res.status(500).json({ message: 'Database error', error: err });
   }
 }
 
@@ -185,7 +185,7 @@ async function getInvoiceById(req, res) {
     );
 
     if (rows.length === 0) {
-      return res.status(404).json({ message: "Invoice not found" });
+      return res.status(404).json({ message: 'Invoice not found' });
     }
 
     const invoice = {
@@ -208,8 +208,8 @@ async function getInvoiceById(req, res) {
 
     res.status(200).json(invoice);
   } catch (err) {
-    console.error("Error retrieving invoice:", err);
-    res.status(500).json({ message: "Database error", error: err });
+    console.error('Error retrieving invoice:', err);
+    res.status(500).json({ message: 'Database error', error: err });
   }
 }
 
@@ -243,7 +243,7 @@ async function updateInvoice(req, res) {
   ) {
     return res.status(400).json({
       message:
-        "Invoice name, date, customer ID, and at least one benefit ID are required",
+        'Invoice name, date, customer ID, and at least one benefit ID are required',
     });
   }
 
@@ -253,36 +253,36 @@ async function updateInvoice(req, res) {
     await connection.beginTransaction();
 
     const [result] = await connection.query(
-      "UPDATE invoice_manager.invoice SET name = ?, date = ? WHERE id = ?",
+      'UPDATE invoice_manager.invoice SET name = ?, date = ? WHERE id = ?',
       [name, date, id]
     );
 
     if (result.affectedRows === 0) {
       await connection.rollback();
-      return res.status(404).json({ message: "Invoice not found" });
+      return res.status(404).json({ message: 'Invoice not found' });
     }
 
     await connection.query(
-      "UPDATE invoice_manager.customer_invoice SET customer_id = ? WHERE invoice_id = ?",
+      'UPDATE invoice_manager.customer_invoice SET customer_id = ? WHERE invoice_id = ?',
       [customer_id, id]
     );
 
     await connection.query(
-      "DELETE FROM invoice_manager.invoice_benefit WHERE invoice_id = ?",
+      'DELETE FROM invoice_manager.invoice_benefit WHERE invoice_id = ?',
       [id]
     );
     for (const benefit_id of benefit_ids) {
       await connection.query(
-        "INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (?, ?)",
+        'INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (?, ?)',
         [id, benefit_id]
       );
     }
 
     await connection.commit();
-    res.status(200).json({ message: "Invoice updated successfully" });
+    res.status(200).json({ message: 'Invoice updated successfully' });
   } catch (err) {
     await connection.rollback();
-    res.status(500).json({ message: "Database error", error: err });
+    res.status(500).json({ message: 'Database error', error: err });
   } finally {
     connection.release();
   }
@@ -310,29 +310,29 @@ async function deleteInvoice(req, res) {
     await connection.beginTransaction();
 
     await connection.query(
-      "DELETE FROM invoice_manager.invoice_benefit WHERE invoice_id = ?",
+      'DELETE FROM invoice_manager.invoice_benefit WHERE invoice_id = ?',
       [id]
     );
     await connection.query(
-      "DELETE FROM invoice_manager.customer_invoice WHERE invoice_id = ?",
+      'DELETE FROM invoice_manager.customer_invoice WHERE invoice_id = ?',
       [id]
     );
 
     const [result] = await connection.query(
-      "DELETE FROM invoice_manager.invoice WHERE id = ?",
+      'DELETE FROM invoice_manager.invoice WHERE id = ?',
       [id]
     );
 
     if (result.affectedRows === 0) {
       await connection.rollback();
-      return res.status(404).json({ message: "Invoice not found" });
+      return res.status(404).json({ message: 'Invoice not found' });
     }
 
     await connection.commit();
-    res.status(200).json({ message: "Invoice deleted successfully" });
+    res.status(200).json({ message: 'Invoice deleted successfully' });
   } catch (err) {
     await connection.rollback();
-    res.status(500).json({ message: "Database error", error: err });
+    res.status(500).json({ message: 'Database error', error: err });
   } finally {
     connection.release();
   }

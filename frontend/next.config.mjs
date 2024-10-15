@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  experimental: {
+    forceSwcTransforms: true,
+  },
+  compiler: {
+    styledComponents: true,
+  },
+};
 
 export default nextConfig;
