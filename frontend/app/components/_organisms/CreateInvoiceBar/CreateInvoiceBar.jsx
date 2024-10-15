@@ -4,6 +4,7 @@ import SeparatorLine from '../../_atoms/SeparatorLine/SeparatorLine';
 import ImportExistingInvoices from '../../_atoms/ImportExistingInvoices/ImportExistingInvoices';
 import styles from './CreateInvoiceBar.module.scss';
 import { AiOutlineClose } from 'react-icons/ai';
+import HorizontalSeparatorLine from '../../_atoms/HoriontalSeparatorLine/HorizontalSeparatorLine';
 
 export default function CreateInvoiceBar() {
   const [isVisible, setIsVisible] = useState(false);
@@ -16,19 +17,22 @@ export default function CreateInvoiceBar() {
   }, []);
 
   return (
-    <div
-      className={`${styles.create_invoice_bar_container} ${isVisible ? styles.appear : ''}`}
-    >
-      <div className={styles.left_container}>
-        <Logo />
-        <SeparatorLine />
-        <p className={styles.create_invoice_text}>Create Invoice</p>
-        <SeparatorLine />
-        <ImportExistingInvoices />
+    <div className={styles.topbar_with_underline}>
+      <div
+        className={`${styles.create_invoice_bar_container} ${isVisible ? styles.appear : ''}`}
+      >
+        <div className={styles.left_container}>
+          <Logo />
+          <SeparatorLine />
+          <p className={styles.create_invoice_text}>Create Invoice</p>
+          <SeparatorLine />
+          <ImportExistingInvoices />
+        </div>
+        <div className={styles.right_container}>
+          <AiOutlineClose className={styles.close_icon} />
+        </div>
       </div>
-      <div className={styles.right_container}>
-        <AiOutlineClose className={styles.close_icon} />
-      </div>
+      <HorizontalSeparatorLine />
     </div>
   );
 }
