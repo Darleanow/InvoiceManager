@@ -1,12 +1,11 @@
 'use client';
 
 import styles from './page.module.scss';
-import CreateInvoiceBar from '../components/_organisms/CreateInvoiceBar/CreateInvoiceBar';
-
+import CreateInvoice from '../components/_templates/CreateInvoice/CreateInvoice';
 export default function SandBox() {
   return (
     <div className={styles.main}>
-      <CreateInvoiceBar />
+      <CreateInvoice />
     </div>
   );
 }
