@@ -1,0 +1,82 @@
+@keyframes smoothFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes smoothFadeOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+}
+
+.editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: #1a1a1a;
+  padding: 16px;
+  border-radius: 8px;
+  width: 100%;
+  animation: smoothFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transition: background 0.3s ease;
+}
+
+.editFormClosing {
+  animation: smoothFadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.editInput {
+  background: #1a1a1a;
+  border: 1px solid #828282;
+  border-radius: 6px;
+  padding: 10px;
+  color: #fff;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+
+  &:focus {
+    border-color: #e29c23;
+    outline: none;
+    background: #2c2c2c;
+  }
+
+  &:hover {
+    border-color: #e29c23;
+  }
+}
+
+.actionButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.saveButton,
+.cancelButton {
+  background: none;
+  border: none;
+  color: #e29c23;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    color: #fff;
+    transform: translateY(-2px);
+  }
+}
