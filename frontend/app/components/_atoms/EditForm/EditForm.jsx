@@ -16,7 +16,7 @@ export default function EditForm({
     setTimeout(() => {
       setIsClosing(false);
       onCancelEdit();
-    }, 400); // Match the duration of the closing animation (400ms)
+    }, 400);
   };
 
   const handleSaveClick = () => {
@@ -24,46 +24,46 @@ export default function EditForm({
     setTimeout(() => {
       setIsClosing(false);
       onSaveEdit();
-    }, 400); // Match the duration of the closing animation (400ms)
+    }, 400);
   };
 
   return (
     <div
-      className={`${styles.editForm} ${isClosing ? styles.editFormClosing : ''}`}
+      className={`${styles.edit_form} ${isClosing ? styles.edit_form_closing : ''}`}
     >
       <input
         type="text"
         name="name"
         value={editableClient.name}
         onChange={onEditChange}
-        className={styles.editInput}
+        className={styles.edit_input}
       />
       <input
         type="email"
         name="email"
         value={editableClient.email}
         onChange={onEditChange}
-        className={styles.editInput}
+        className={styles.edit_input}
       />
       <input
         type="text"
         name="phone"
         value={editableClient.phone}
         onChange={onEditChange}
-        className={styles.editInput}
+        className={styles.edit_input}
       />
       <input
         type="text"
         name="address"
         value={editableClient.address}
         onChange={onEditChange}
-        className={styles.editInput}
+        className={styles.edit_input}
       />
-      <div className={styles.actionButtons}>
-        <button className={styles.cancelButton} onClick={handleCancelClick}>
+      <div className={styles.action_buttons}>
+        <button className={styles.cancel_button} onClick={handleCancelClick}>
           <AiOutlineClose /> Cancel
         </button>
-        <button className={styles.saveButton} onClick={handleSaveClick}>
+        <button className={styles.save_button} onClick={handleSaveClick}>
           <AiOutlineSave /> Save
         </button>
       </div>

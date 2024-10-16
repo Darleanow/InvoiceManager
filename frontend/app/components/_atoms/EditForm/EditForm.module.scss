@@ -1,4 +1,4 @@
-@keyframes smoothFadeIn {
+@keyframes smooth_fade_in {
   0% {
     opacity: 0;
     transform: translateY(-5px);
@@ -9,7 +9,7 @@
   }
 }
 
-@keyframes smoothFadeOut {
+@keyframes smooth_fade_out {
   0% {
     opacity: 1;
     transform: translateY(0);
@@ -20,7 +20,7 @@
   }
 }
 
-.editForm {
+.edit_form {
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -28,15 +28,15 @@
   padding: 16px;
   border-radius: 8px;
   width: 100%;
-  animation: smoothFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: smooth_fade_in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   transition: background 0.3s ease;
 }
 
-.editFormClosing {
-  animation: smoothFadeOut 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+.edit_form_closing {
+  animation: smooth_fade_out 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-.editInput {
+.edit_input {
   background: #1a1a1a;
   border: 1px solid #828282;
   border-radius: 6px;
@@ -57,13 +57,13 @@
   }
 }
 
-.actionButtons {
+.action_buttons {
   display: flex;
   gap: 12px;
 }
 
-.saveButton,
-.cancelButton {
+.save_button,
+.cancel_button {
   background: none;
   border: none;
   color: #e29c23;

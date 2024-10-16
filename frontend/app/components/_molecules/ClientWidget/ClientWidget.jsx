@@ -49,7 +49,7 @@ export default function ClientWidget({
 
   const handleSaveClick = () => {
     if (localIsEditing) {
-      onSaveEdit(); // Save before starting the closing animation
+      onSaveEdit();
       setAnimationState('closing');
     }
   };

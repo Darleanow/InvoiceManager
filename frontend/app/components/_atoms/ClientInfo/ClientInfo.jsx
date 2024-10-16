@@ -4,7 +4,7 @@ import styles from './ClientInfo.module.scss';
 
 export default function ClientInfo({ client }) {
   return (
-    <div className={styles.clientInfo}>
+    <div className={styles.client_info}>
       <Avatar
         image_source={client.avatar}
         alt_text={client.name}

@@ -18,12 +18,12 @@
     transform 0.3s ease;
 }
 
-.dropdownEnter {
+.dropdown_enter {
   opacity: 1;
   transform: translateY(0) scale(1);
 }
 
-.clientItem {
+.client_item {
   display: flex;
   align-items: center;
   padding: 8px;
@@ -34,17 +34,17 @@
   }
 }
 
-.clientInfo {
+.client_info {
   display: flex;
   flex-direction: column;
 }
 
-.clientName {
+.client_name {
   font-weight: bold;
   color: #ffffff;
 }
 
-.clientEmail {
+.client_email {
   font-size: 0.9em;
   color: #dadada;
 }

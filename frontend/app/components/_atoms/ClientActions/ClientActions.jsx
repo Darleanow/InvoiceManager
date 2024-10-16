@@ -5,10 +5,10 @@ import styles from './ClientActions.module.scss';
 export default function ClientActions({ onEdit, onReset }) {
   return (
     <div className={styles.actions}>
-      <button className={styles.editButton} onClick={onEdit}>
+      <button className={styles.edit_button} onClick={onEdit}>
         <AiOutlineEdit />
       </button>
-      <button className={styles.resetButton} onClick={onReset}>
+      <button className={styles.reset_button} onClick={onReset}>
         <AiOutlineClose />
       </button>
     </div>
