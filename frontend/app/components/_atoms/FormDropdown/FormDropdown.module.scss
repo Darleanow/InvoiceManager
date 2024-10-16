@@ -1,0 +1,86 @@
+.dropdown {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  z-index: 1000;
+  background-color: #222222;
+  width: calc(100% + 12px);
+  border: 0.5px solid #ddd;
+  border-radius: 4px;
+  box-shadow:
+    0 8px 16px rgba(0, 0, 0, 0.3),
+    0 4px 6px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+}
+
+.dropdownEnter {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.clientItem {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  gap: 10px;
+  cursor: pointer;
+  &:hover {
+    background-color: #2c2c2c;
+  }
+}
+
+.clientInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.clientName {
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.clientEmail {
+  font-size: 0.9em;
+  color: #dadada;
+}
+
+.add_user {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin: 0;
+  background: none;
+  border: none;
+  color: #4a90e2;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  gap: 5px;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+
+  .icon_add {
+    color: #4a90e2;
+    font-size: 18px;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: #357abd;
+  }
+
+  &:hover .icon_add {
+    transform: translateX(2px);
+  }
+
+  &:focus {
+    outline: none;
+    text-decoration: underline;
+  }
+}
