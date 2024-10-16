@@ -22,12 +22,12 @@ export default function FormDropdown({ data, isOpen, onSelect }) {
 
   return (
     <div
-      className={`${styles.dropdown} ${isVisible ? styles.dropdownEnter : ''}`}
+      className={`${styles.dropdown} ${isVisible ? styles.dropdown_enter : ''}`}
     >
       {data.map((client) => (
         <div
           key={client.id}
-          className={styles.clientItem}
+          className={styles.client_item}
           onClick={() => onSelect(client)}
         >
           <Avatar
@@ -35,9 +35,9 @@ export default function FormDropdown({ data, isOpen, onSelect }) {
             alt_text={client.name}
             username={client.name}
           />
-          <div className={styles.clientInfo}>
-            <div className={styles.clientName}>{client.name}</div>
-            <div className={styles.clientEmail}>{client.email}</div>
+          <div className={styles.client_info}>
+            <div className={styles.client_name}>{client.name}</div>
+            <div className={styles.client_email}>{client.email}</div>
           </div>
         </div>
       ))}

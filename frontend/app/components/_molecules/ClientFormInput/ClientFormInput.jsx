@@ -103,7 +103,7 @@ export default function ClientFormInput() {
   );
 
   return (
-    <div className={styles.clientFormInput} ref={dropdownRef}>
+    <div className={styles.client_form_input} ref={dropdownRef}>
       {selectedClient ? (
         <ClientWidget
           client={selectedClient}
