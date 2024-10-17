@@ -25,7 +25,6 @@
   margin: 0;
   border-radius: 4px;
   overflow: hidden;
-  border-color: #828282;
   border: 1px solid #828282;
 }
 
@@ -36,5 +35,15 @@
 }
 
 .dropdownItem:hover {
-  background-color: #828282;
+  background-color: #E29C23;
+}
+
+.icon {
+  margin-left: 5px;
+  color: #d9d9d9;
+  transition: transform 0.3s ease;
+}
+
+.rotate {
+  transform: rotate(180deg);
 }

@@ -1,37 +1,47 @@
 .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .dropdownToggle {
-    background-color: #222222;
-    color: #828282;
-    padding: 10px;
-    border: 1px solid #828282;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  .dropdownMenu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #222222;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid #828282;
-  }
-  
-  .dropdownItem {
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .dropdownItem:hover {
-    background-color: #828282;
-  }
+  position: relative;
+  display: inline-block;
+}
+
+.dropdownToggle {
+  background-color: #222222;
+  color: #828282;
+  padding: 10px;
+  border: 1px solid #828282;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #222222;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #828282;
+}
+
+.dropdownItem {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.dropdownItem:hover {
+  background-color: #E29C23;
+}
+
+.icon {
+  margin-left: 5px;
+  color: #d9d9d9;
+  transition: transform 0.3s ease;
+}
+
+.rotate {
+  transform: rotate(180deg);
+}

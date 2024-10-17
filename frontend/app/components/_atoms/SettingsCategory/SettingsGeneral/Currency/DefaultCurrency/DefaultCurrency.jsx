@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './DefaultCurrency.module.scss'; 
+import { IoIosArrowDown } from "react-icons/io";
 
 const DefaultCurrency = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,6 +24,7 @@ const DefaultCurrency = () => {
     <div className={styles.dropdown}>
       <button onClick={toggleDropdown} className={styles.dropdownToggle}>
         {selectedCurrency}
+        <IoIosArrowDown className={`${styles.icon} ${isOpen ? styles.rotate : ''}`} />
       </button>
       {isOpen && (
         <ul className={styles.dropdownMenu}>

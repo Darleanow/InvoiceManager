@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Language.module.scss';
+import { IoIosArrowDown } from "react-icons/io";
 
 const Language = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +26,7 @@ const Language = () => {
     <div className={styles.dropdown}>
       <button onClick={toggleDropdown} className={styles.dropdownToggle}>
         {selectedLanguage}
+        <IoIosArrowDown className={`${styles.icon} ${isOpen ? styles.rotate : ''}`} />
       </button>
       {isOpen && (
         <ul className={styles.dropdownMenu}>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './DateFormat.module.scss';
+import { IoIosArrowDown } from "react-icons/io";
 
 const DateFormat = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ const DateFormat = () => {
         className={styles.dropdownToggle}
       >
         {selectedFormat}
+        <IoIosArrowDown className={`${styles.icon} ${isOpen ? styles.rotate : ''}`} />
       </button>
       {isOpen && (
         <ul className={styles.dropdownMenu}>
