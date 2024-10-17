@@ -7,7 +7,7 @@ import DateFormat from './Localization/DateFormat/DateFormat';
 import TimeZone from './Localization/TimeZone/TimeZone';
 import Language from './Localization/Language/Language';
 import DefaultCurrency from './Currency/DefaultCurrency/DefaultCurrency';
-import CurrencySymbolPosition from './Currency/DefaultCurrency/CurrencySymbolPosition/CurrencySymbolPosition';
+import CurrencySymbolPosition from './Currency/CurrencySymbolPosition/CurrencySymbolPosition';
 
 export default function SettingsGeneral() {
   return (
