@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import styles from './TimeZone.module.scss'; // Assure-toi que le fichier est bien importé
+import styles from './TimeZone.module.scss'; 
 
 const TimeZone = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedTimeZone, setSelectedTimeZone] = useState('UTC'); // Fuseau horaire par défaut
+  const [selectedTimeZone, setSelectedTimeZone] = useState('UTC'); 
 
   const timeZones = [
     'UTC',

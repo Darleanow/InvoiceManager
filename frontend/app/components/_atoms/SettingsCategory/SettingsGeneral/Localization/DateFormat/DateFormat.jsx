@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import styles from './DateFormat.module.scss'; 
-
+import styles from './DateFormat.module.scss';
 const DateFormat = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState('MM/DD/YYYY');
@@ -16,7 +15,7 @@ const DateFormat = () => {
 
   return (
     <div style={{ position: 'relative', display: 'inline-block' }}>
-      <button
+      <button className='button'
         onClick={toggleDropdown}
         style={{
           backgroundColor: '#3498db',

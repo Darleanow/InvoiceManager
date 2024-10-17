@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import styles from './currencySymbolPosition.module.css'; // Assure-toi que le fichier est bien importé
+import styles from './CurrencySymbolposition.module.scss'; 
 
 const CurrencySymbolPosition = () => {
-  const [selectedPosition, setSelectedPosition] = useState('before'); // Position par défaut
+  const [selectedPosition, setSelectedPosition] = useState('before'); 
 
   const handleChange = (event) => {
     setSelectedPosition(event.target.value);

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import styles from './language.module.css'; // Assure-toi que le fichier est bien importé
+import styles from './Language.module.scss';
 
 const Language = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState('English'); // Langue par défaut
+  const [selectedLanguage, setSelectedLanguage] = useState('English'); 
 
   const languages = [
     'English',

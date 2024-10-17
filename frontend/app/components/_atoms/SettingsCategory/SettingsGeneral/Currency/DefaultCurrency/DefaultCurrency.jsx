@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import styles from './DefaultCurrency.module.scss'; // Assure-toi que le fichier est bien importé
+import styles from './DefaultCurrency.module.scss'; 
 
 const DefaultCurrency = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCurrency, setSelectedCurrency] = useState('USD'); // Devise par défaut
+  const [selectedCurrency, setSelectedCurrency] = useState('USD'); 
 
   const currencies = [
     'USD (United States Dollar)',
