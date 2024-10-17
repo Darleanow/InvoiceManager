@@ -9,6 +9,8 @@ import Language from './Localization/Language/Language';
 import DefaultCurrency from './Currency/DefaultCurrency/DefaultCurrency';
 import CurrencySymbolPosition from './Currency/CurrencySymbolPosition/CurrencySymbolPosition';
 
+import styles from './SettingsGeneral.module.scss';
+
 export default function SettingsGeneral() {
   return (
     <div>
