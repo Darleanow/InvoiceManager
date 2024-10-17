@@ -3,6 +3,7 @@ import CompanyName from './CompanyDetails/CompanyName/CompanyName';
 import CompanyLogo from './CompanyDetails/CompanyLogo/CompanyLogo';
 import ContactInformation from './CompanyDetails/ContactInformation/ContactInformation';
 import Adress from './CompanyDetails/Adress/Adress';
+import DateFormat from './Localization/DateFormat/DateFormat'; 
 
 export default function SettingsGeneral() {
   return (
@@ -14,6 +15,10 @@ export default function SettingsGeneral() {
         <CompanyLogo />
         <ContactInformation />
         <Adress />
+      </div>
+      <div className={styles.localization_container}>
+        <h1>Localization</h1>
+        <DateFormat/>
       </div>
     </div>
   );
