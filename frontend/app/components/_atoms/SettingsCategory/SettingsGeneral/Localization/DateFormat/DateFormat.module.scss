@@ -1,13 +1,14 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  border-color: #828282;
 }
 
 .dropdownToggle {
-  background-color: #3498db;
-  color: white;
+  background-color: #222222;
+  color: #828282;
   padding: 10px;
-  border: none;
+  border: 1px solid #828282;
   cursor: pointer;
   border-radius: 4px;
 }
@@ -16,21 +17,24 @@
   position: absolute;
   top: 100%;
   left: 0;
-  background-color: white;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  background-color: #222222;
+  box-shadow: 0 8px 16px #828282;
   z-index: 1;
   list-style: none;
   padding: 0;
   margin: 0;
   border-radius: 4px;
   overflow: hidden;
+  border-color: #828282;
+  border: 1px solid #828282;
 }
 
 .dropdownItem {
   padding: 10px;
   cursor: pointer;
+  border-color: #828282;
 }
 
 .dropdownItem:hover {
-  background-color: #f1f1f1;
+  background-color: #828282;
 }

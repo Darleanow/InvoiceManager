@@ -1,0 +1,44 @@
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(255, 255, 255);
+    margin-bottom: 20px;
+    text-decoration: underline;
+}
+
+.general_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.localization_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.currency_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.wrapper {
+    max-height: 100vh;
+    overflow-y: auto;
+}
+
+.wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.wrapper::-webkit-scrollbar-thumb {
+    background-color: #3498db;
+    border-radius: 4px;
+}
+
+.wrapper::-webkit-scrollbar-track {
+    background-color: #e0e0e0;
+    border-radius: 4px;
+}
