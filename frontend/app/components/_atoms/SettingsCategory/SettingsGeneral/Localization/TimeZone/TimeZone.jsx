@@ -1,42 +1,45 @@
 import React, { useState } from 'react';
-import styles from './Language.module.scss';
+import styles from './TimeZone.module.scss'; 
 import { IoIosArrowDown } from "react-icons/io";
 
-const Language = () => {
+const TimeZone = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState('English'); 
+  const [selectedTimeZone, setSelectedTimeZone] = useState('UTC'); 
 
-  const languages = [
-    'English',
-    'French',
-    'Spanish',
-    'German',
+  const timeZones = [
+    'UTC',
+    'GMT',
+    'CET (Central European Time)',
+    'EST (Eastern Standard Time)',
+    'PST (Pacific Standard Time)',
+    'IST (Indian Standard Time)',
+    'AEST (Australian Eastern Standard Time)',
   ];
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
-  const selectLanguage = (language) => {
-    setSelectedLanguage(language);
+  const selectTimeZone = (timeZone) => {
+    setSelectedTimeZone(timeZone);
     setIsOpen(false);
   };
 
   return (
     <div className={styles.dropdown}>
       <button onClick={toggleDropdown} className={styles.dropdownToggle}>
-        {selectedLanguage}
+        {selectedTimeZone}
         <IoIosArrowDown className={`${styles.icon} ${isOpen ? styles.rotate : ''}`} />
       </button>
       {isOpen && (
         <ul className={styles.dropdownMenu}>
-          {languages.map((language) => (
+          {timeZones.map((zone) => (
             <li 
-              key={language} 
+              key={zone} 
               className={styles.dropdownItem} 
-              onClick={() => selectLanguage(language)}
+              onClick={() => selectTimeZone(zone)}
             >
-              {language}
+              {zone}
             </li>
           ))}
         </ul>
@@ -45,4 +48,4 @@ const Language = () => {
   );
 };
 
-export default Language;
+export default TimeZone;
