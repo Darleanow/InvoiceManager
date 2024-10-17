@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+  }
+  
+  .radio {
+    accent-color: #3498db;
+    cursor: pointer;
+  }
