@@ -1,0 +1,29 @@
+.notificationsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 16px;
+    color: #828282;
+    cursor: pointer;
+
+    input[type="checkbox"] {
+        accent-color: #222222;
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        border: 1px solid #828282;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    input[type="checkbox"]:checked {
+        background-color: #E29C23;
+        border-color: #828282;
+    }
+}

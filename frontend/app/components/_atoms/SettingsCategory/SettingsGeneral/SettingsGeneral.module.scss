@@ -1,7 +1,7 @@
 .title {
     font-size: 20px;
     font-weight: 600;
-    color: rgb(255, 255, 255);
+    color: white;
     margin-bottom: 20px;
     text-decoration: underline;
 }
@@ -34,11 +34,17 @@
 }
 
 .wrapper::-webkit-scrollbar-thumb {
-    background-color: #3498db;
+    background-color: #E29C23;
     border-radius: 4px;
 }
 
 .wrapper::-webkit-scrollbar-track {
-    background-color: #e0e0e0;
+    background-color: #828282;
     border-radius: 4px;
+}
+
+.notifications_container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }

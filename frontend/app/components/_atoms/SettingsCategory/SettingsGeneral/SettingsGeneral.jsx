@@ -8,6 +8,8 @@ import TimeZone from './Localization/TimeZone/TimeZone';
 import Language from './Localization/Language/Language';
 import DefaultCurrency from './Currency/DefaultCurrency/DefaultCurrency';
 import CurrencySymbolPosition from './Currency/CurrencySymbolPosition/CurrencySymbolPosition';
+import AppNotifications from './Notifications/AppNotifications/AppNotifications';
+import EmailNotifications from './Notifications/EmailNotifications/EmailNotifications';
 
 import styles from './SettingsGeneral.module.scss';
 
@@ -32,6 +34,11 @@ export default function SettingsGeneral() {
         <h3>Currency</h3>
         <DefaultCurrency/>
         <CurrencySymbolPosition/>
+      </div>
+      <div className={styles.notifications_container}>
+        <h3>Notifications</h3>
+        <AppNotifications/>
+        <EmailNotifications/>
       </div>
     </div>
   );
