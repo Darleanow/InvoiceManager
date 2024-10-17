@@ -1,0 +1,18 @@
+// src/components/atoms/companyname.module.scss
+.companyname_input {
+    width: 149px;
+    height: 40px;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #828282;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+    background-color: #222222;
+    color: #828282;
+
+    &:focus {
+        outline: none;
+        border-color: #E29C23;
+    }
+  }
