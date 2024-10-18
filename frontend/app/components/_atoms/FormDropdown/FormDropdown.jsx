@@ -25,10 +25,11 @@ export default function FormDropdown({ data, isOpen, onSelect }) {
       className={`${styles.dropdown} ${isVisible ? styles.dropdown_enter : ''}`}
     >
       {data.map((client) => (
-        <div
+        <button
           key={client.id}
           className={styles.client_item}
           onClick={() => onSelect(client)}
+          type="button"
         >
           <Avatar
             image_source={client.avatar}
@@ -39,9 +40,9 @@ export default function FormDropdown({ data, isOpen, onSelect }) {
             <div className={styles.client_name}>{client.name}</div>
             <div className={styles.client_email}>{client.email}</div>
           </div>
-        </div>
+        </button>
       ))}
-      <button className={styles.add_user}>
+      <button className={styles.add_user} type="button">
         <AiOutlineUserAdd className={styles.icon_add} />
         Create client
       </button>
