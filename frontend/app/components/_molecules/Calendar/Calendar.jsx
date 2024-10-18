@@ -19,12 +19,12 @@ export default function Calendar({ selectedDate, onDateSelect }) {
   const handlePreviousMonth = () => {
     if (!isSliding) {
       setIsSliding(true);
-      setSlideClass(styles['slide-out-right']); // Change to slide-out-right for previous month
+      setSlideClass(styles['slide-out-right']);
 
       setTimeout(() => {
         setCurrentMonth((prev) => (prev === 0 ? 11 : prev - 1));
         setCurrentYear((prev) => (currentMonth === 0 ? prev - 1 : prev));
-        setSlideClass(styles['slide-in-left']); // Slide in from the left for previous month
+        setSlideClass(styles['slide-in-left']);
 
         setTimeout(() => {
           setSlideClass(styles['slide-in-active']);
@@ -37,12 +37,12 @@ export default function Calendar({ selectedDate, onDateSelect }) {
   const handleNextMonth = () => {
     if (!isSliding) {
       setIsSliding(true);
-      setSlideClass(styles['slide-out-left']); // Keep as slide-out-left for next month
+      setSlideClass(styles['slide-out-left']);
 
       setTimeout(() => {
         setCurrentMonth((prev) => (prev === 11 ? 0 : prev + 1));
         setCurrentYear((prev) => (currentMonth === 11 ? prev + 1 : prev));
-        setSlideClass(styles['slide-in-right']); // Slide in from the right for next month
+        setSlideClass(styles['slide-in-right']);
 
         setTimeout(() => {
           setSlideClass(styles['slide-in-active']);
