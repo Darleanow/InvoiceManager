@@ -1,3 +1,5 @@
+'use client';
+
 import styles from './HomePage.module.scss';
 
 import TopBar from '../../_organisms/TopBar/TopBar';
