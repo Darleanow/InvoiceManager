@@ -6,6 +6,7 @@ import HorizontalSeparatorLine from '../../_atoms/HoriontalSeparatorLine/Horizon
 import FormInput from '../../_atoms/FormInput/FormInput';
 import ClientFormInput from '../../_molecules/ClientFormInput/ClientFormInput';
 import DateFormSelector from '../../_molecules/DateFormSelector/DateFormSelector';
+import CurrencySelector from '../../_molecules/CurrencySelector/CurrencySelector';
 
 export default function CreateInvoice() {
   const [dueDate, setDueDate] = useState('');
@@ -28,12 +29,12 @@ export default function CreateInvoice() {
           <p>Due date</p>
           <DateFormSelector onDateChange={handleDateChange} />
           <p>Currency</p>
-          <FormInput placeholder="Select currency" />
-          <HorizontalSeparatorLine />
+          <CurrencySelector />
+          <HorizontalSeparatorLine width="calc(100% + 18px)" />
           <h3>Product</h3>
           <p>Item</p>
           <FormInput placeholder="Find item" />
-          <HorizontalSeparatorLine />
+          <HorizontalSeparatorLine width="calc(100% + 18px)" />
           <h3>Additional Options</h3>
           <p>Terms & Conditions</p>
           <p>Attachement</p>
