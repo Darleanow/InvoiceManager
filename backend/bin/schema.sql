@@ -101,8 +101,6 @@ CREATE TABLE `Invoice_Line` (
     CONSTRAINT check_positive_price CHECK (price >= 0)
 );
 
-
-
 CREATE TABLE `Tax` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
@@ -185,8 +183,48 @@ CREATE INDEX idx_client_email ON Client(email);
 CREATE INDEX idx_item_name ON Item(name);
 CREATE INDEX idx_invoice_number ON Invoice(invoice_number);
 
--- Triggers
+-- Stored Procedures and Triggers
 DELIMITER //
+
+-- Stored Procedure to update the total_amount
+CREATE PROCEDURE update_total_amount(IN invoiceId INT UNSIGNED)
+BEGIN
+    DECLARE var_subtotal DECIMAL(10, 2);
+    DECLARE var_total_tax_rate DECIMAL(8, 2);
+    DECLARE var_total_discount DECIMAL(10, 2);
+    DECLARE var_final_amount DECIMAL(10, 2);
+
+    -- Get the subtotal with NULL handling
+    SELECT COALESCE(subtotal, 0) INTO var_subtotal 
+    FROM Invoice 
+    WHERE id = invoiceId;
+
+    -- Calculate the total tax rate with NULL handling
+    SELECT COALESCE(SUM(rate), 0) INTO var_total_tax_rate
+    FROM Tax t
+    INNER JOIN Invoice_Tax it ON t.id = it.tax_id
+    WHERE it.invoice_id = invoiceId;
+
+    -- Calculate the total discount with NULL handling
+    SELECT COALESCE(SUM(
+        CASE 
+            WHEN d.type = 'fixed' THEN d.value
+            WHEN d.type = 'percentage' THEN (var_subtotal * d.value / 100)
+            ELSE 0
+        END
+    ), 0) INTO var_total_discount
+    FROM Discount d
+    INNER JOIN Invoice_Discount id ON d.id = id.discount_id
+    WHERE id.invoice_id = invoiceId;
+
+    -- Calculate the final total_amount with NULL handling
+    SET var_final_amount = COALESCE(var_subtotal + (var_subtotal * var_total_tax_rate / 100) - var_total_discount, 0);
+
+    -- Update the invoice with the new total_amount
+    UPDATE Invoice
+    SET total_amount = var_final_amount
+    WHERE id = invoiceId;
+END;
 
 -- Trigger for checking expiration_date is not earlier than creation_date
 CREATE TRIGGER before_invoice_insert 
@@ -301,7 +339,8 @@ BEGIN
     UPDATE Invoice
     SET subtotal = new_subtotal
     WHERE id = NEW.invoice_id;
-END//
+    CALL update_total_amount(NEW.invoice_id);
+END;
 
 -- Trigger for updating subtotal when an Invoice_Line is updated
 CREATE TRIGGER after_invoice_line_update
@@ -329,14 +368,6 @@ BEGIN
     UPDATE Invoice
     SET subtotal = new_subtotal
     WHERE id = OLD.invoice_id;
-END//
-
--- Trigger for updating total_amount when an Invoice_Line is inserted
-CREATE TRIGGER after_invoice_line_insert_total
-AFTER INSERT ON Invoice_Line
-FOR EACH ROW
-BEGIN
-    CALL update_total_amount(NEW.invoice_id);
 END//
 
 -- Trigger for updating total_amount when an Invoice_Line is updated
@@ -383,40 +414,6 @@ AFTER DELETE ON Invoice_Discount
 FOR EACH ROW
 BEGIN
     CALL update_total_amount(OLD.invoice_id);
-END//
-
--- Stored Procedure to update the total_amount
-CREATE PROCEDURE update_total_amount(IN invoiceId INT UNSIGNED)
-BEGIN
-    DECLARE subtotal DECIMAL(10, 2);
-    DECLARE total_tax_rate DECIMAL(8, 2);
-    DECLARE total_discount DECIMAL(10, 2);
-
-    -- Calculate the subtotal
-    SET subtotal = (SELECT COALESCE(SUM(quantity * price), 0)
-                    FROM Invoice_Line
-                    WHERE invoice_id = invoiceId);
-
-    -- Calculate the total tax rate (sum of applicable rates)
-    SET total_tax_rate = (SELECT COALESCE(SUM(rate), 0)
-                          FROM Tax t
-                          INNER JOIN Invoice_Tax it ON t.id = it.tax_id
-                          WHERE it.invoice_id = invoiceId);
-
-    -- Calculate the total discount (sum of fixed discounts and percentage discounts)
-    SET total_discount = (SELECT COALESCE(SUM(CASE 
-        WHEN d.type = 'fixed' THEN d.value
-        WHEN d.type = 'percentage' THEN (subtotal * d.value / 100)
-        ELSE 0
-    END), 0)
-    FROM Discount d
-    INNER JOIN Invoice_Discount id ON d.id = id.discount_id
-    WHERE id.invoice_id = invoiceId);
-
-    -- Calculate the final total_amount
-    UPDATE Invoice
-    SET total_amount = subtotal + (subtotal * total_tax_rate / 100) - total_discount
-    WHERE id = invoiceId;
 END//
 
 DELIMITER ;

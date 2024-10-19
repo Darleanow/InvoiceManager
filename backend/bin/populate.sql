@@ -57,11 +57,11 @@ INSERT INTO `Invoice` (
     currency, invoice_name, invoice_subject, 
     total_amount, subtotal
 ) VALUES
-('INV-2024-001', 1, 1, 1, '2024-01-01', '2024-02-01', 'sent', 'USD', 'January Services', 'Web Development Services', 1800.00, 1500.00),
-('INV-2024-002', 2, 2, 1, '2024-01-15', '2024-02-15', 'paid', 'USD', 'Consultation', 'Expert Consultation Services', 240.00, 200.00),
-('INV-2024-003', 3, 1, 2, '2024-02-01', '2024-03-01', 'draft', 'USD', 'Hardware Purchase', 'Server Hardware', 2399.99, 1999.99);
+('INV-2024-001', 1, 1, 1, '2024-01-01', '2024-02-01', 'sent', 'USD', 'January Services', 'Web Development Services', 1500.00, 1500.00),
+('INV-2024-002', 2, 2, 1, '2024-01-15', '2024-02-15', 'paid', 'USD', 'Consultation', 'Expert Consultation Services', 200.00, 200.00),
+('INV-2024-003', 3, 1, 2, '2024-02-01', '2024-03-01', 'draft', 'USD', 'Hardware Purchase', 'Server Hardware', 1999.99, 1999.99);
 
--- Insert Invoice Lines
+-- Then insert invoice lines
 INSERT INTO `Invoice_Line` (invoice_id, item_id, quantity, price, description) VALUES
 (1, 1, 10, 150.00, 'Web Development - 10 hours'),
 (2, 2, 1, 200.00, 'Consultation Session'),
