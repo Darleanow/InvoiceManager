@@ -31,6 +31,8 @@ export default function EditForm({
     <div
       className={`${styles.edit_form} ${isClosing ? styles.edit_form_closing : ''}`}
     >
+      <h3>Edit Client</h3>
+      <p>Name</p>
       <input
         type="text"
         name="name"
@@ -38,6 +40,7 @@ export default function EditForm({
         onChange={onEditChange}
         className={styles.edit_input}
       />
+      <p>Email</p>
       <input
         type="email"
         name="email"
@@ -45,6 +48,7 @@ export default function EditForm({
         onChange={onEditChange}
         className={styles.edit_input}
       />
+      <p>Phone</p>
       <input
         type="text"
         name="phone"
@@ -52,6 +56,7 @@ export default function EditForm({
         onChange={onEditChange}
         className={styles.edit_input}
       />
+      <p>Address</p>
       <input
         type="text"
         name="address"

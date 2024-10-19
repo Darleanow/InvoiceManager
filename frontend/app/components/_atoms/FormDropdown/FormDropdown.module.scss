@@ -1,26 +1,39 @@
 .dropdown {
-  margin-top: 10px;
+  margin-top: -1px;
   display: flex;
   flex-direction: column;
   position: absolute;
   z-index: 1000;
   background-color: #222222;
-  width: calc(100% + 12px);
-  border: 0.5px solid #ddd;
-  border-radius: 4px;
+  width: calc(100% + 16px);
+  border-left: 0.5px solid #e29c23;
+  border-right: 0.5px solid #e29c23;
+  border-bottom: 0.5px solid #e29c23;
+  border-top: 0.5px solid #828282;
+  border-radius: 0 0 4px 4px;
   box-shadow:
     0 8px 16px rgba(0, 0, 0, 0.3),
     0 4px 6px rgba(0, 0, 0, 0.2);
   opacity: 0;
-  transform: translateY(-10px) scale(0.95);
+  transform: translateY(-10px);
+  max-height: 0;
+  overflow: hidden;
   transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
+    max-height 0.5s ease,
+    opacity 0.5s ease,
+    transform 0.5s ease;
 }
 
 .dropdown_enter {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
+  max-height: 500px;
+}
+
+.dropdown_exit {
+  opacity: 0;
+  transform: translateY(-10px);
+  max-height: 0;
 }
 
 .client_item {

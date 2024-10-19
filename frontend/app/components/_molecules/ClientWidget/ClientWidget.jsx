@@ -19,7 +19,6 @@ export default function ClientWidget({
   const [localIsEditing, setLocalIsEditing] = useState(isEditing);
   const widgetRef = useRef(null);
 
-  // Handle opening animation
   useEffect(() => {
     if (isEditing && !localIsEditing) {
       setAnimationState('opening');
