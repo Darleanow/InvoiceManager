@@ -23,13 +23,23 @@
 .edit_form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
   background: #1a1a1a;
   padding: 16px;
   border-radius: 8px;
   width: 100%;
   animation: smooth_fade_in 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   transition: background 0.3s ease;
+
+  h3 {
+    color: #dadada;
+    font-size: 14px;
+    padding: 0;
+    margin: 0;
+  }
+  p {
+    color: #cacaca;
+    font-size: 12px;
+  }
 }
 
 .edit_form_closing {
@@ -37,7 +47,7 @@
 }
 
 .edit_input {
-  background: #1a1a1a;
+  background: #1d1d1d;
   border: 1px solid #828282;
   border-radius: 6px;
   padding: 10px;
@@ -60,6 +70,9 @@
 .action_buttons {
   display: flex;
   gap: 12px;
+  padding: 20px 20% 0 20%;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .save_button,

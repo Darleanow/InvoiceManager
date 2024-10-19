@@ -7,11 +7,12 @@ export default function FormInput({
   value,
   onChange,
   onFocus,
+  isDropdownOpen,
 }) {
   return (
     <div>
       <input
-        className={styles.input}
+        className={`${styles.input} ${isDropdownOpen ? styles.open : styles.closed}`}
         type={type}
         placeholder={placeholder}
         value={value}
@@ -28,4 +29,5 @@ FormInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onFocus: PropTypes.func.isRequired,
+  isDropdownOpen: PropTypes.bool,
 };

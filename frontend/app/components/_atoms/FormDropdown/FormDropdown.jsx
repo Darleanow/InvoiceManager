@@ -14,7 +14,7 @@ export default function FormDropdown({ data, isOpen, onSelect }) {
       setTimeout(() => setIsVisible(true), 10);
     } else {
       setIsVisible(false);
-      setTimeout(() => setShouldRender(false), 300);
+      setTimeout(() => setShouldRender(false), 500);
     }
   }, [isOpen]);
 
@@ -22,7 +22,9 @@ export default function FormDropdown({ data, isOpen, onSelect }) {
 
   return (
     <div
-      className={`${styles.dropdown} ${isVisible ? styles.dropdown_enter : ''}`}
+      className={`${styles.dropdown} ${
+        isVisible ? styles.dropdown_enter : styles.dropdown_exit
+      }`}
     >
       {data.map((client) => (
         <button
