@@ -7,9 +7,37 @@ import FormInput from '../../_atoms/FormInput/FormInput';
 import ClientFormInput from '../../_molecules/ClientFormInput/ClientFormInput';
 import DateFormSelector from '../../_molecules/DateFormSelector/DateFormSelector';
 import CurrencySelector from '../../_molecules/CurrencySelector/CurrencySelector';
+import ProductSearchDropdown from '../../_molecules/ProductSearchDropdown/ProductSearchDropdown';
 
 export default function CreateInvoice() {
   const [dueDate, setDueDate] = useState('');
+
+  const products = [
+    {
+      icon: 'https://via.placeholder.com/40',
+      category: 'Category',
+      price: 100,
+      currency: 'USD',
+      currencySymbol: '$',
+      name: 'Product Name',
+    },
+    {
+      icon: 'https://via.placeholder.com/40',
+      category: 'Category2',
+      price: 100,
+      currency: 'USD',
+      currencySymbol: '$',
+      name: 'Product Name2',
+    },
+    {
+      icon: 'https://via.placeholder.com/40',
+      category: 'Category',
+      price: 100,
+      currency: 'USD',
+      currencySymbol: '$',
+      name: 'Product Name',
+    },
+  ];
 
   const handleDateChange = (newDate) => {
     setDueDate(newDate);
@@ -33,7 +61,7 @@ export default function CreateInvoice() {
           <HorizontalSeparatorLine width="calc(100% + 18px)" />
           <h3>Product</h3>
           <p>Item</p>
-          <FormInput placeholder="Find item" />
+          <ProductSearchDropdown products={products} />
           <HorizontalSeparatorLine width="calc(100% + 18px)" />
           <h3>Additional Options</h3>
           <p>Terms & Conditions</p>
@@ -47,6 +75,8 @@ export default function CreateInvoice() {
               <button className={styles.download_button}>Download</button>
             </div>
           </div>
+          {/* <CreateProductEntryButton />
+          <ProductEntry product={products.at(0)} /> */}
         </div>
         <div className={styles.right_panel}></div>
       </div>

@@ -2,29 +2,53 @@ import PropTypes from 'prop-types';
 import styles from './ProductEntry.module.scss';
 import Image from 'next/image';
 
-export default function ProductEntry({ product }) {
+export default function ProductEntry({ product, variant = 'default' }) {
   return (
-    <div className={styles.product_entry}>
-      <div className={styles.product_icon}>
+    <div
+      className={`${styles.product_entry} ${variant !== 'default' ? styles[variant] : ''}`}
+    >
+      <div
+        className={`${styles.product_icon} ${variant !== 'default' ? styles[variant] : ''}`}
+      >
         {product.icon ? (
           <Image
             src={product.icon}
             alt={product.name}
-            className={styles.icon_image}
+            className={`${styles.icon_image} ${variant !== 'default' ? styles[variant] : ''}`}
             width={40}
             height={40}
           />
         ) : (
-          <div className={styles.product_icon_text}>{product.name[0]}</div>
+          <div
+            className={`${styles.product_icon_text} ${variant !== 'default' ? styles[variant] : ''}`}
+          >
+            {product.name[0]}
+          </div>
         )}
       </div>
-      <div className={styles.product_infos}>
-        <div className={styles.title_line}>
-          <div className={styles.product_category}>{product.category}</div>
-          <div className={styles.product_name}>{product.name}</div>
+      <div
+        className={`${styles.product_infos} ${variant !== 'default' ? styles[variant] : ''}`}
+      >
+        <div
+          className={`${styles.title_line} ${variant !== 'default' ? styles[variant] : ''}`}
+        >
+          <div
+            className={`${styles.product_category} ${variant !== 'default' ? styles[variant] : ''}`}
+          >
+            {product.category}
+          </div>
+          <div
+            className={`${styles.product_name} ${variant !== 'default' ? styles[variant] : ''}`}
+          >
+            {product.name}
+          </div>
         </div>
-        <div className={styles.price_line}>
-          <div className={styles.product_price}>
+        <div
+          className={`${styles.price_line} ${variant !== 'default' ? styles[variant] : ''}`}
+        >
+          <div
+            className={`${styles.product_price} ${variant !== 'default' ? styles[variant] : ''}`}
+          >
             {product.price} {product.currencySymbol}
           </div>
         </div>
@@ -41,4 +65,5 @@ ProductEntry.propTypes = {
     currencySymbol: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
+  variant: PropTypes.string,
 };
