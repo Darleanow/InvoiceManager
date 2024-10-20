@@ -15,7 +15,7 @@ import styles from './SettingsGeneral.module.scss';
 
 export default function SettingsGeneral() {
   return (
-    <div>
+    <div className={styles.page}>
       <h1 className={styles.title}>SettingsGeneral</h1>
       <div className={styles.general_container}>
         <h3> Company Details</h3>
