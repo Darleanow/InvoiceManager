@@ -1,8 +1,8 @@
 .input {
   width: 100%;
   padding: 8px;
-  background: #1a1a1a;
-  border: 1px solid #828282;
+  background: #26262a;
+  border: 0.5px solid #2e2e32;
   border-radius: 4px;
   color: #fff;
   transition:
@@ -12,10 +12,11 @@
   &:focus {
     border-color: #e29c23;
     outline: none;
-    background: #2c2c2c;
+    background: #1f1f23;
   }
 
-  &:hover {
+  &:hover,
+  &:active {
     border-color: #e29c23;
   }
 }

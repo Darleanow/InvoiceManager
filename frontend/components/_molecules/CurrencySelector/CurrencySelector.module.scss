@@ -1,17 +1,31 @@
 .currency_selector {
   position: relative;
   width: calc(100% + 16px);
-  background-color: #1a1a1a;
-  border: 1px solid #828282;
+  background-color: #1f1f23;
+  border: 0.5px solid #2e2e32;
   border-radius: 4px;
   font-family: Arial, sans-serif;
   color: #fff;
-  transition: background-color 0.3s ease;
-  margin-bottom: 35px;
+  transition: 0.3s ease;
+  margin-bottom: 15px;
+
+  &:hover {
+    border-color: #e29c23;
+  }
+
+  &:active {
+    border-color: #e29c23;
+  }
 }
 
-.currency_selector:hover {
-  cursor: pointer;
+.open {
+  border-color: #e29c23;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.closed {
+  background-color: #26262a;
 }
 
 .selected_currency {
@@ -24,9 +38,15 @@
   border: none;
   background-color: transparent;
   color: #dadada;
+  transition: border-radius 0.3s ease;
+
   &:hover {
     cursor: pointer;
-    background-color: #2a2a2a;
+  }
+
+  &:focus {
+    outline: none;
+    color: #e29c23;
   }
 }
 
@@ -49,7 +69,7 @@
 
 .arrow_icon {
   font-size: 16px;
-  color: #e29c23;
+  color: #48484e;
   margin-left: auto;
   transition: transform 0.3s ease;
   margin-right: -4px;
@@ -58,12 +78,13 @@
 
 .currency_list {
   position: absolute;
-  top: calc(100%);
-  left: 0;
+  top: 50%;
+  left: -1px;
   width: 100%;
-  background-color: #1a1a1a;
-  border: 1px solid #828282;
-  border-radius: 4px;
+  background-color: #1f1f23;
+  border: 0.5px solid #e29c23;
+  border-top-color: #333;
+  border-radius: 0 0 4px 4px;
   z-index: 10;
   padding: 0;
   list-style: none;
@@ -73,16 +94,16 @@
   transition:
     max-height 0.5s ease,
     opacity 0.5s ease;
-}
 
-.show {
-  opacity: 1;
-  max-height: 500px;
-}
+  &.show {
+    opacity: 1;
+    max-height: 500px;
+  }
 
-.hide {
-  opacity: 0;
-  max-height: 0;
+  &.hide {
+    opacity: 0;
+    max-height: 0;
+  }
 }
 
 .currency_item {
@@ -93,20 +114,32 @@
     background-color 0.3s ease,
     transform 0.3s ease;
   width: 100%;
-  background-color: transparent;
+  background-color: #1f1f23;
   border: none;
   cursor: pointer;
   color: #dadada;
   opacity: 0;
   transform: translateY(20px);
-}
+  margin-left: 4px;
 
-.currency_item:hover {
-  background-color: #2a2a2a;
-}
+  &:hover {
+    background-color: #2d2d31;
+  }
 
-.currency_item:hover .currency_code {
-  color: #e29c23;
+  &:hover .currency_code {
+    color: #e29c23;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #333;
+  }
+
+  &:focus {
+    outline: none;
+    color: #e29c23;
+    background: #2d2d31;
+    transition: 0s;
+  }
 }
 
 @keyframes slideIn {
@@ -142,8 +175,4 @@ $currency-count: 9;
     animation: slideOut 0.3s ease forwards;
     animation-delay: #{0.1 + ($i * 0.05)}s;
   }
-}
-
-.currency_item:not(:last-child) {
-  border-bottom: 1px solid #333;
 }

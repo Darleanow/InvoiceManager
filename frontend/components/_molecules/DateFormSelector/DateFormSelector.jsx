@@ -61,7 +61,7 @@ export default function DateFormSelector({ label, onDateChange }) {
           type="text"
           value={selectedDate || 'Select a date'}
           readOnly
-          className={`${styles.date_input} ${isWarningVisible ? styles.warning_input : ''}`}
+          className={`${styles.date_input} ${selectedDate ? styles.selected : styles.unselected} ${isWarningVisible ? styles.warning_input : ''}`}
         />
         <FiCalendar className={styles.calendar_icon} />
       </div>
@@ -78,9 +78,8 @@ export default function DateFormSelector({ label, onDateChange }) {
       )}
       {isWarningVisible && (
         <div className={styles.warning_message}>
-          <p>
-            <FiCalendar /> The selected date is in the past!
-          </p>
+          <FiCalendar className={styles.icon_calendar_warning} />
+          <p>The selected date is in the past!</p>
         </div>
       )}
     </div>

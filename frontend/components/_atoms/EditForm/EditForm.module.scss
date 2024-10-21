@@ -23,7 +23,7 @@
 .edit_form {
   display: flex;
   flex-direction: column;
-  background: #1a1a1a;
+  background: #26262a;
   padding: 16px;
   border-radius: 8px;
   width: 100%;
@@ -47,8 +47,8 @@
 }
 
 .edit_input {
-  background: #1d1d1d;
-  border: 1px solid #828282;
+  background: #1f1f23;
+  border: 0.5px solid #2e2e32;
   border-radius: 6px;
   padding: 10px;
   color: #fff;
@@ -59,7 +59,7 @@
   &:focus {
     border-color: #e29c23;
     outline: none;
-    background: #2c2c2c;
+    background: #2e2e33;
   }
 
   &:hover {
@@ -79,7 +79,7 @@
 .cancel_button {
   background: none;
   border: none;
-  color: #e29c23;
+  color: #cacaca;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -88,8 +88,11 @@
     color 0.3s ease,
     transform 0.2s ease;
 
+  .icons {
+    font-size: 16px;
+  }
+
   &:hover {
-    color: #fff;
-    transform: translateY(-2px);
+    color: #e29c23;
   }
 }
