@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import './styles/globals.scss';
+import '../styles/globals.scss';
 
 export const metadata = {
   title: 'Invoice Manager',

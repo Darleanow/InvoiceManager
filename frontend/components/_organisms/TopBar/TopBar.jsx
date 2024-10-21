@@ -1,4 +1,5 @@
 import styles from './TopBar.module.scss';
+import { useRouter } from 'next/navigation'; // Import useRouter for App Router
 
 import Logo from '../../_atoms/Logo/Logo';
 import SeparatorLine from '../../_atoms/SeparatorLine/SeparatorLine';
@@ -9,6 +10,12 @@ import Settings from '../../_molecules/Settings/Settings';
 import CreateInvoiceButton from '../../_atoms/CreateInvoiceButton/CreateInvoiceButton';
 
 export default function TopBar() {
+  const router = useRouter();
+
+  const handleCreateInvoiceClick = () => {
+    router.push('/createInvoice');
+  };
+
   return (
     <div className={styles.topbar_container}>
       <Logo />
@@ -20,7 +27,7 @@ export default function TopBar() {
       <NotificationsDropdown />
       <Settings />
       <SeparatorLine />
-      <CreateInvoiceButton />
+      <CreateInvoiceButton onClick={handleCreateInvoiceClick} />
     </div>
   );
 }

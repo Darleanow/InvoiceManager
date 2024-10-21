@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import Avatar from '../../_atoms/Avatar/Avatar';
+import Avatar from '../Avatar/Avatar';
 import styles from './ClientInfo.module.scss';
 
 export default function ClientInfo({ client }) {

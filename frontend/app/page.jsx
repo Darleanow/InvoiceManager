@@ -7,7 +7,7 @@
  * @returns {JSX.Element} The rendered Home component.
  */
 
-import HomePage from './components/_templates/HomePage/HomePage';
+import HomePage from '../components/_templates/HomePage/HomePage';
 
 export default function Home() {
   return <HomePage />;
