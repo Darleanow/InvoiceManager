@@ -12,6 +12,16 @@
   flex-direction: row;
   justify-content: space-between;
   gap: 5vw;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+
+  &.appear {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .left_panel,
@@ -83,6 +93,7 @@
         background-color 0.3s ease,
         transform 0.2s ease;
       cursor: pointer;
+
       &:hover {
         background-color: #d4881e;
         transform: scale(1.05);
@@ -120,6 +131,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
 .right_panel {
   margin-right: 8vw;
 }

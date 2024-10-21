@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-
+import React, { useState, useEffect } from 'react';
 import CreateInvoiceBar from '../../_organisms/CreateInvoiceBar/CreateInvoiceBar';
 import styles from './CreateInvoice.module.scss';
 import HorizontalSeparatorLine from '../../_atoms/HoriontalSeparatorLine/HorizontalSeparatorLine';
@@ -13,6 +12,12 @@ import ProductSearchDropdown from '../../_molecules/ProductSearchDropdown/Produc
 
 export default function CreateInvoice() {
   const [dueDate, setDueDate] = useState('');
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => setIsVisible(true), 100);
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const products = [
     {
@@ -49,7 +54,9 @@ export default function CreateInvoice() {
   return (
     <div className={styles.page_container}>
       <CreateInvoiceBar />
-      <div className={styles.main_content}>
+      <div
+        className={`${styles.main_content} ${isVisible ? styles.appear : ''}`}
+      >
         <div className={styles.left_panel}>
           <h3>Create Invoice</h3>
           <div className={styles.form}>
@@ -66,11 +73,6 @@ export default function CreateInvoice() {
             <p>Item</p>
             <ProductSearchDropdown products={products} />
             <HorizontalSeparatorLine width="calc(100% + 18px)" />
-            {/* <h3>Additional Options</h3>
-            <p>Terms & Conditions</p>
-            <p>Attachement</p>
-            <p>Customer Notes</p>
-            <p>Footer</p> */}
           </div>
           <div className={styles.footer}>
             <p>Last saved: today 4:20pm</p>
