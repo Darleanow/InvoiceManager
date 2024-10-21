@@ -58,7 +58,7 @@ export default function CreateInvoice() {
         className={`${styles.main_content} ${isVisible ? styles.appear : ''}`}
       >
         <div className={styles.left_panel}>
-          <h3>Create Invoice</h3>
+          <h3 className={styles.create_invoice_title}>Create Invoice</h3>
           <div className={styles.form}>
             <p>Client</p>
             <ClientFormInput />
