@@ -30,16 +30,13 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  background: #1a1a1a;
-  border: 0.5px solid #828282;
+  background: #26262a;
+  border: 0.5px solid #2e2e32;
   width: 100%;
   padding: 8px;
   border-radius: 8px;
   overflow: hidden;
-  transition:
-    background 0.3s ease,
-    box-shadow 0.3s ease,
-    transform 0.2s ease;
+  transition: 0.3s ease;
   transform-origin: top;
   opacity: 1;
   transform: scaleY(1);
@@ -50,10 +47,6 @@
 
   &.opening {
     animation: widget_store_open 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-  }
-
-  &:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   }
 }
 

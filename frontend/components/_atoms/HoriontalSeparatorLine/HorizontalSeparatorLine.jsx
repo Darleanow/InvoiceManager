@@ -7,7 +7,7 @@ export default function HorizontalSeparatorLine({ width, color }) {
       className={styles.separator}
       style={{
         width: width || '100%',
-        backgroundColor: color || '#828282',
+        backgroundColor: color || '#2e2e32',
       }}
     />
   );

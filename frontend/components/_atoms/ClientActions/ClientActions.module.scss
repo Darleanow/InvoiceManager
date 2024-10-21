@@ -6,9 +6,10 @@
 
 .edit_button,
 .reset_button {
+  font-size: 16px;
   background: none;
   border: none;
-  color: #e29c23;
+  color: #48484e;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -17,8 +18,9 @@
     color 0.3s ease,
     transform 0.2s ease;
 
-  &:hover {
-    color: #fff;
-    transform: scale(1.1);
+  &:hover,
+  &:focus {
+    color: #e29c23;
+    outline: none;
   }
 }

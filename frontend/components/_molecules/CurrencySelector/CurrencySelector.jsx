@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import * as Flags from 'country-flag-icons/react/3x2'; // Import all flags
+import * as Flags from 'country-flag-icons/react/3x2';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import styles from './CurrencySelector.module.scss';
 
@@ -25,18 +25,22 @@ export default function CurrencySelector() {
 
   const handleCurrencyChange = (currency) => {
     setSelectedCurrency(currency);
-    setIsOpen(false); // Close the dropdown when a currency is selected
+    setIsOpen(false);
   };
 
-  // Dynamically render the appropriate flag component based on the country code
   const renderFlag = (countryCode) => {
-    const FlagComponent = Flags[countryCode]; // Get the flag component from the imported flags
+    const FlagComponent = Flags[countryCode];
     return FlagComponent ? <FlagComponent className={styles.flag} /> : null;
   };
 
   return (
-    <div className={styles.currency_selector}>
-      <button className={styles.selected_currency} onClick={toggleDropdown}>
+    <div
+      className={`${styles.currency_selector} ${isOpen ? styles.open : styles.closed}`}
+    >
+      <button
+        className={`${styles.selected_currency} `}
+        onClick={toggleDropdown}
+      >
         {renderFlag(selectedCurrency.countryCode)}
         <span className={styles.currency_code}>{selectedCurrency.code}</span>
         <span className={styles.currency_name}>({selectedCurrency.name})</span>

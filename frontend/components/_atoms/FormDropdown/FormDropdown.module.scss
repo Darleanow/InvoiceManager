@@ -4,12 +4,12 @@
   flex-direction: column;
   position: absolute;
   z-index: 1000;
-  background-color: #222222;
+  background-color: #1f1f23;
   width: calc(100% + 16px);
   border-left: 0.5px solid #e29c23;
   border-right: 0.5px solid #e29c23;
   border-bottom: 0.5px solid #e29c23;
-  border-top: 0.5px solid #828282;
+  border-top: 0.5px solid #2e2e32;
   border-radius: 0 0 4px 4px;
   box-shadow:
     0 8px 16px rgba(0, 0, 0, 0.3),
@@ -41,14 +41,14 @@
   align-items: center;
   padding: 8px;
   gap: 10px;
-  background: none;
+  background: #1f1f23;
   border: none;
   cursor: pointer;
   text-align: left;
   width: 100%;
 
   &:hover {
-    background-color: #2c2c2c;
+    background-color: #2e2e33;
   }
 }
 
@@ -71,7 +71,7 @@
   display: flex;
   align-items: center;
   padding: 8px;
-  background: none;
+  background: #1f1f23;
   border: none;
   color: #4a90e2;
   font-size: 12px;
