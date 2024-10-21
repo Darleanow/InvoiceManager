@@ -9,12 +9,12 @@ import {
   IoIosCash,
   IoIosStats,
 } from 'react-icons/io';
-import SettingsGeneral from '@/app/components/_atoms/SettingsCategory/SettingsGeneral/SettingsGeneral';
-import SettingsInvoice from '@/app/components/_atoms/SettingsCategory/SettingsInvoice/SettingsInvoice';
-import SettingsClients from '@/app/components/_atoms/SettingsCategory/SettingsClients/SettingsClients';
-import SettingsTax from '@/app/components/_atoms/SettingsCategory/SettingsTax/SettingsTax';
-import SettingsReports from '@/app/components/_atoms/SettingsCategory/SettingsReports/SettingsReports';
-import SeparatorLine from '@/app/components/_atoms/SeparatorLine/SeparatorLine';
+import SettingsGeneral from '@/components/_atoms/SettingsCategory/SettingsGeneral/SettingsGeneral';
+import SettingsInvoice from '@/components/_atoms/SettingsCategory/SettingsInvoice/SettingsInvoice';
+import SettingsClients from '@/components/_atoms/SettingsCategory/SettingsClients/SettingsClients';
+import SettingsTax from '@/components/_atoms/SettingsCategory/SettingsTax/SettingsTax';
+import SettingsReports from '@/components/_atoms/SettingsCategory/SettingsReports/SettingsReports';
+import SeparatorLine from '@/components/_atoms/SeparatorLine/SeparatorLine';
 
 export default function SettingsPopup({ onClose }) {
   const [selectedCategory, setSelectedCategory] = useState('General');

@@ -1,4 +1,7 @@
+'use client';
+
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Logo from '../../_atoms/Logo/Logo';
 import SeparatorLine from '../../_atoms/SeparatorLine/SeparatorLine';
 import ImportExistingInvoices from '../../_atoms/ImportExistingInvoices/ImportExistingInvoices';
@@ -8,12 +11,16 @@ import HorizontalSeparatorLine from '../../_atoms/HoriontalSeparatorLine/Horizon
 
 export default function CreateInvoiceBar() {
   const [isVisible, setIsVisible] = useState(false);
+  const router = useRouter();
+
+  const handleCloseClick = () => {
+    router.back();
+  };
 
   useEffect(() => {
-    // Use requestAnimationFrame for smoother appearance animation
     const timeoutId = setTimeout(() => setIsVisible(true), 100);
 
-    return () => clearTimeout(timeoutId); // Cleanup timeout
+    return () => clearTimeout(timeoutId);
   }, []);
 
   return (
@@ -29,7 +36,10 @@ export default function CreateInvoiceBar() {
           <ImportExistingInvoices />
         </div>
         <div className={styles.right_container}>
-          <AiOutlineClose className={styles.close_icon} />
+          <AiOutlineClose
+            className={styles.close_icon}
+            onClick={handleCloseClick}
+          />
         </div>
       </div>
       <HorizontalSeparatorLine />

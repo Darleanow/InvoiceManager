@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import FormInput from '../../_atoms/FormInput/FormInput';
 import FormDropdown from '../../_atoms/FormDropdown/FormDropdown';
-import ClientWidget from '../../_molecules/ClientWidget/ClientWidget';
+import ClientWidget from '../ClientWidget/ClientWidget';
 import styles from './ClientFormInput.module.scss';
 
 export default function ClientFormInput() {
