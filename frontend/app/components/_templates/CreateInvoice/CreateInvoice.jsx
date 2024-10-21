@@ -50,24 +50,26 @@ export default function CreateInvoice() {
       <div className={styles.main_content}>
         <div className={styles.left_panel}>
           <h3>Create Invoice</h3>
-          <p>Client</p>
-          <ClientFormInput />
-          <p>Subject</p>
-          <FormInput placeholder="Invoice Subject" />
-          <p>Due date</p>
-          <DateFormSelector onDateChange={handleDateChange} />
-          <p>Currency</p>
-          <CurrencySelector />
-          <HorizontalSeparatorLine width="calc(100% + 18px)" />
-          <h3>Product</h3>
-          <p>Item</p>
-          <ProductSearchDropdown products={products} />
-          <HorizontalSeparatorLine width="calc(100% + 18px)" />
-          <h3>Additional Options</h3>
-          <p>Terms & Conditions</p>
-          <p>Attachement</p>
-          <p>Customer Notes</p>
-          <p>Footer</p>
+          <div className={styles.form}>
+            <p>Client</p>
+            <ClientFormInput />
+            <p>Subject</p>
+            <FormInput placeholder="Invoice Subject" />
+            <p>Due date</p>
+            <DateFormSelector onDateChange={handleDateChange} />
+            <p>Currency</p>
+            <CurrencySelector />
+            <HorizontalSeparatorLine width="calc(100% + 18px)" />
+            <h3>Product</h3>
+            <p>Item</p>
+            <ProductSearchDropdown products={products} />
+            <HorizontalSeparatorLine width="calc(100% + 18px)" />
+            {/* <h3>Additional Options</h3>
+            <p>Terms & Conditions</p>
+            <p>Attachement</p>
+            <p>Customer Notes</p>
+            <p>Footer</p> */}
+          </div>
           <div className={styles.footer}>
             <p>Last saved: today 4:20pm</p>
             <div className={styles.buttons}>
@@ -75,8 +77,6 @@ export default function CreateInvoice() {
               <button className={styles.download_button}>Download</button>
             </div>
           </div>
-          {/* <CreateProductEntryButton />
-          <ProductEntry product={products.at(0)} /> */}
         </div>
         <div className={styles.right_panel}></div>
       </div>
