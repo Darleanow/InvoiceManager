@@ -1,0 +1,24 @@
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.edit_button,
+.reset_button {
+  background: none;
+  border: none;
+  color: #e29c23;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
+
+  &:hover {
+    color: #fff;
+    transform: scale(1.1);
+  }
+}

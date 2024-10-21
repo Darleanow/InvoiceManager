@@ -1,12 +1,11 @@
 'use client';
 
-import HomePage from '../components/_templates/HomePage/HomePage';
 import styles from './page.module.scss';
-
+import CreateInvoice from '../../components/_templates/CreateInvoice/CreateInvoice';
 export default function SandBox() {
   return (
     <div className={styles.main}>
-      <HomePage />
+      <CreateInvoice />
     </div>
   );
 }

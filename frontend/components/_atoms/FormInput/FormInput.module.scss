@@ -1,0 +1,29 @@
+.input {
+  width: 100%;
+  padding: 8px;
+  background: #1a1a1a;
+  border: 1px solid #828282;
+  border-radius: 4px;
+  color: #fff;
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease;
+
+  &:focus {
+    border-color: #e29c23;
+    outline: none;
+    background: #2c2c2c;
+  }
+
+  &:hover {
+    border-color: #e29c23;
+  }
+}
+
+.open {
+  border-radius: 4px 4px 0 0;
+}
+
+.closed {
+  border-radius: 4px;
+}
