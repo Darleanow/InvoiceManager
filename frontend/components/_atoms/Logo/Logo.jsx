@@ -1,5 +1,16 @@
+import { useRouter } from 'next/navigation';
 import styles from './Logo.module.scss';
 
 export default function Logo() {
-  return <h2 className={styles.logo}>InMa</h2>;
+  const router = useRouter();
+
+  const handleLogoClick = () => {
+    router.push('/');
+  };
+
+  return (
+    <button className={styles.logo} onClick={handleLogoClick}>
+      InMa
+    </button>
+  );
 }
