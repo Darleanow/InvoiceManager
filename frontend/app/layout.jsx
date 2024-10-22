@@ -1,10 +1,4 @@
-import {
-  ClerkProvider,
-  RedirectToSignIn,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from '@clerk/nextjs';
+import { ClerkProvider, RedirectToSignIn, SignedOut } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import PropTypes from 'prop-types';
 import '../styles/globals.scss';
