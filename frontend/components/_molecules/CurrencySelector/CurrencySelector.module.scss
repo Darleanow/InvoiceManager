@@ -2,7 +2,7 @@
   position: relative;
   width: calc(100% + 16px);
   background-color: #1f1f23;
-  border: 0.5px solid #2e2e32;
+  border: 1px solid #2e2e32;
   border-radius: 4px;
   font-family: Arial, sans-serif;
   color: #fff;
@@ -79,10 +79,10 @@
 .currency_list {
   position: absolute;
   top: 50%;
-  left: -1px;
   width: 100%;
+  left: -1px;
   background-color: #1f1f23;
-  border: 0.5px solid #e29c23;
+  border: 1px solid #e29c23;
   border-top-color: #333;
   border-radius: 0 0 4px 4px;
   z-index: 10;
@@ -110,6 +110,8 @@
   display: flex;
   align-items: center;
   padding: 8px;
+  margin-left: 4px;
+
   transition:
     background-color 0.3s ease,
     transform 0.3s ease;
@@ -120,7 +122,6 @@
   color: #dadada;
   opacity: 0;
   transform: translateY(20px);
-  margin-left: 4px;
 
   &:hover {
     background-color: #2d2d31;
