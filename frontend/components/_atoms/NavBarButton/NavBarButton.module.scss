@@ -1,7 +1,8 @@
-$color-border: #575757;
-$color-background: #3a3a3a;
-$color-hover-icon: #6b8f71;
-$color-text: #dadada;
+$color-border: #2e2e32;
+$color-background: #26262a;
+$color-hover-icon: #48484e;
+$color-active-icon: #e29c23;
+$color-text: #cacaca;
 $padding-horizontal: 10px;
 $transition-duration: 0.4s;
 $transition-ease: ease;
@@ -35,15 +36,24 @@ $transition-ease: ease;
 .active {
   border: 1px solid $color-border;
   background-color: $color-background;
+
+  .icon {
+    color: $color-active-icon;
+    transition: none;
+  }
+
+  &:hover .icon {
+    color: $color-active-icon;
+  }
 }
 
 .icon {
   margin: 3px 8px 0 9px;
-  color: #4b5c51;
+  color: $color-hover-icon;
   font-size: 16px;
   transition: color $transition-duration $transition-ease;
 
-  .navbar_button:hover & {
+  .navbar_button:not(.active):hover & {
     color: $color-hover-icon;
   }
 }
@@ -55,6 +65,6 @@ $transition-ease: ease;
   transition: color $transition-duration $transition-ease;
 
   .navbar_button:hover & {
-    color: #ffffff;
+    color: #dadada;
   }
 }
