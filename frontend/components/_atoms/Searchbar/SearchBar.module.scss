@@ -1,8 +1,8 @@
-$border-color: #828282;
-$bg-color: #292929;
+$border-color: #2e2e32;
+$bg-color: #26262a;
 $text-color: #dadada;
-$icon-color: #828282;
-$focus-border-color: #a1a1a1;
+$icon-color: #48484e;
+$focus-border-color: #2e2e32;
 $box-shadow-color: rgba(154, 154, 154, 0.25);
 
 .searchbar_container {
@@ -17,7 +17,7 @@ $box-shadow-color: rgba(154, 154, 154, 0.25);
   border: 0.5px solid $border-color;
   border-radius: 4px;
   gap: 5px;
-  box-shadow: 1px 1px 1.1px $box-shadow-color;
+
   transition:
     border-color 0.3s ease,
     box-shadow 0.3s ease;
@@ -25,13 +25,13 @@ $box-shadow-color: rgba(154, 154, 154, 0.25);
   &:hover,
   &:focus-within {
     border-color: $focus-border-color;
-    box-shadow: 0px 0px 8px rgba(161, 161, 161, 0.5);
+    box-shadow: 0px 0px 4px rgba(161, 161, 161, 0.5);
     cursor: text;
   }
 
   .icon {
     color: $icon-color;
-    font-size: 14px;
+    font-size: 16px;
     transition: color 0.3s ease;
   }
 

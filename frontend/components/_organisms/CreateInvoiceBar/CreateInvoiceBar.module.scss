@@ -45,15 +45,14 @@
 }
 
 .close_icon {
-  color: #c73838;
+  color: #48484e;
   font-size: 14px;
   transition:
     color 0.3s ease,
     transform 0.3s ease;
 
   &:hover {
-    color: #ff4f4f;
-    transform: scale(1.2);
+    color: #e29c23;
     cursor: pointer;
   }
 }

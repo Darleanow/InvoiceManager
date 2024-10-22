@@ -2,7 +2,6 @@ $logo_gradient: linear-gradient(to right, #69c06c, #e29c23);
 
 .logo {
   display: inline-block;
-
   font-weight: 600;
   font-size: 24px;
 
@@ -10,4 +9,13 @@ $logo_gradient: linear-gradient(to right, #69c06c, #e29c23);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
 }

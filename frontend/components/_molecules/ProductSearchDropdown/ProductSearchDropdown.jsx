@@ -5,7 +5,7 @@ import CreateProductEntryButton from '../../_atoms/CreateProductEntryButton/Crea
 import { AiOutlineClose } from 'react-icons/ai';
 import { BiCartAdd } from 'react-icons/bi';
 import styles from './ProductSearchDropdown.module.scss';
-
+import Dropdown from '@/components/_atoms/Dropdown/Dropdown';
 export default function ProductSearchDropdown({ products }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -99,19 +99,13 @@ export default function ProductSearchDropdown({ products }) {
             <div key={id} className={styles.product_preview}>
               <ProductEntry product={product} variant="selected" />
               <div className={styles.actions}>
-                <select
-                  className={styles.quantity_selector}
+                <Dropdown
+                  options={[...Array(10).keys()].map((i) => i + 1)}
                   value={quantity}
-                  onChange={(e) =>
-                    handleQuantityChange(id, Number(e.target.value))
+                  onChange={(newQuantity) =>
+                    handleQuantityChange(id, newQuantity)
                   }
-                >
-                  {[...Array(10).keys()].map((i) => (
-                    <option key={i + 1} value={i + 1}>
-                      {i + 1}
-                    </option>
-                  ))}
-                </select>
+                />
                 <button
                   className={styles.reset_button}
                   onClick={() => handleProductRemove(id)}

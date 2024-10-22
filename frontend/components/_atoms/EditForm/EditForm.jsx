@@ -66,10 +66,10 @@ export default function EditForm({
       />
       <div className={styles.action_buttons}>
         <button className={styles.cancel_button} onClick={handleCancelClick}>
-          <AiOutlineClose /> Cancel
+          <AiOutlineClose className={styles.icons} /> Cancel
         </button>
         <button className={styles.save_button} onClick={handleSaveClick}>
-          <AiOutlineSave /> Save
+          <AiOutlineSave className={styles.icons} /> Save
         </button>
       </div>
     </div>

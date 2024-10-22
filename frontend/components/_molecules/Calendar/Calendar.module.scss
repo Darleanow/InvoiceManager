@@ -15,14 +15,16 @@
 .nav_button {
   background-color: transparent;
   border: none;
-  color: #e29c23;
+  color: #48484e;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 18px;
   transition: transform 0.3s ease;
-}
 
-.nav_button:hover {
-  transform: scale(1.1);
+  &:hover,
+  &:focus {
+    outline: none;
+    color: #e29c23;
+  }
 }
 
 .month_year {
@@ -33,7 +35,6 @@
 
 .calendar_days_container {
   position: relative;
-  width: 100%;
   overflow: hidden;
 }
 
@@ -74,9 +75,9 @@
 }
 
 .calendar_day {
-  background-color: #1a1a1a;
+  background-color: #26262a;
   color: #fff;
-  border: 1px solid #828282;
+  border: 0.5px solid #2e2e32;
   border-radius: 2px;
   padding: 6px;
   cursor: pointer;
@@ -85,9 +86,11 @@
   transition:
     background-color 0.3s ease,
     transform 0.3s ease;
-}
 
-.calendar_day:hover {
-  background-color: #e29c23;
-  transform: scale(1.05);
+  &:hover,
+  &:focus {
+    border: 0.5px solid #e29c23;
+    border-radius: 2px;
+    outline: none;
+  }
 }
