@@ -4,7 +4,10 @@
  * @description Handles invoice-related operations including CRUD and state management
  */
 
+const { getEntityById, updateEntity } = require('../utils/utils');
 const pool = require('../../config/database');
+
+const TABLE_NAME = 'Invoice';
 
 /**
  * Creates a new invoice
@@ -34,10 +37,9 @@ async function createInvoice(req, res) {
 
     const [result] = await pool.execute(
       `INSERT INTO Invoice (
-                invoice_number, client_id, user_id, template_id, 
-                expiration_date, currency, notes, 
-                invoice_subject
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        invoice_number, client_id, user_id, template_id, 
+        expiration_date, currency, notes, invoice_subject
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         invoice_number,
         client_id,
@@ -73,58 +75,58 @@ async function getInvoiceById(req, res) {
 
     const [invoice] = await pool.execute(
       `SELECT 
-                i.*,
-                JSON_OBJECT(
-                    'id', c.id,
-                    'email', c.email,
-                    'phone', c.phone,
-                    'type', c.type,
-                    'address', c.address,
-                    'details', CASE 
-                        WHEN c.type = 'individual' THEN 
-                            (SELECT JSON_OBJECT('first_name', ci.first_name, 'last_name', ci.last_name)
-                             FROM Client_Individual ci WHERE ci.client_id = c.id)
-                        ELSE 
-                            (SELECT JSON_OBJECT('company_name', cc.company_name)
-                             FROM Client_Company cc WHERE cc.client_id = c.id)
-                    END
-                ) as client,
-                (SELECT JSON_ARRAYAGG(
-                    JSON_OBJECT(
-                        'id', il.id,
-                        'item_id', il.item_id,
-                        'quantity', il.quantity,
-                        'price', il.price,
-                        'description', il.description,
-                        'item_details', (SELECT JSON_OBJECT(
-                            'name', i.name,
-                            'description', i.description,
-                            'type', i.type
-                        ) FROM Item i WHERE i.id = il.item_id)
-                    )
-                ) FROM Invoice_Line il WHERE il.invoice_id = i.id) as line_items,
-                (SELECT JSON_ARRAYAGG(
-                    JSON_OBJECT(
-                        'id', t.id,
-                        'name', t.name,
-                        'rate', t.rate
-                    )
-                ) FROM Tax t 
-                JOIN Invoice_Tax it ON t.id = it.tax_id 
-                WHERE it.invoice_id = i.id) as taxes,
-                (SELECT JSON_ARRAYAGG(
-                    JSON_OBJECT(
-                        'id', d.id,
-                        'name', d.name,
-                        'type', d.type,
-                        'value', d.value
-                    )
-                ) FROM Discount d 
-                JOIN Invoice_Discount id ON d.id = id.discount_id 
-                WHERE id.invoice_id = i.id) as discounts
-            FROM Invoice i
-            JOIN Client c ON i.client_id = c.id
-            WHERE i.id = ?`,
+        i.*,
+        JSON_OBJECT(
+          'id', c.id,
+          'email', c.email,
+          'phone', c.phone,
+          'type', c.type,
+          'address', c.address,
+          'details', CASE 
+            WHEN c.type = 'individual' THEN 
+              (SELECT JSON_OBJECT('first_name', ci.first_name, 'last_name', ci.last_name)
+               FROM Client_Individual ci WHERE ci.client_id = c.id)
+            ELSE 
+              (SELECT JSON_OBJECT('company_name', cc.company_name)
+               FROM Client_Company cc WHERE cc.client_id = c.id)
+          END
+        ) as client,
+        (SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'id', il.id,
+            'item_id', il.item_id,
+            'quantity', il.quantity,
+            'price', il.price,
+            'description', il.description,
+            'item_details', (SELECT JSON_OBJECT(
+              'name', i.name,
+              'description', i.description,
+              'type', i.type
+            ) FROM Item i WHERE i.id = il.item_id)
+          )
+        ) FROM Invoice_Line il WHERE il.invoice_id = i.id) as line_items,
+        (SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'id', t.id,
+            'name', t.name,
+            'rate', t.rate
+          )
+        ) FROM Tax t 
+        JOIN Invoice_Tax it ON t.id = it.tax_id 
+        WHERE it.invoice_id = i.id) as taxes,
+        (SELECT JSON_ARRAYAGG(
+          JSON_OBJECT(
+            'id', d.id,
+            'name', d.name,
+            'type', d.type,
+            'value', d.value
+          )
+        ) FROM Discount d 
+        JOIN Invoice_Discount id ON d.id = id.discount_id 
+        WHERE id.invoice_id = i.id) as discounts
+      FROM Invoice i
+      JOIN Client c ON i.client_id = c.id
+      WHERE i.id = ?`,
       [id]
     );
 
@@ -146,60 +148,13 @@ async function getInvoiceById(req, res) {
  * @param {Object} res - Response object
  */
 async function updateInvoice(req, res) {
-  try {
-    const { id } = req.params;
-    const { expiration_date, currency, notes, invoice_subject } = req.body;
-
-    const connection = await pool.getConnection();
-    try {
-      await connection.beginTransaction();
-
-      let updateQuery = `UPDATE Invoice SET `;
-      const updateParams = [];
-
-      if (expiration_date !== undefined) {
-        updateQuery += `expiration_date = ?, `;
-        updateParams.push(expiration_date);
-      }
-      if (currency !== undefined) {
-        updateQuery += `currency = ?, `;
-        updateParams.push(currency);
-      }
-      if (notes !== undefined) {
-        updateQuery += `notes = ?, `;
-        updateParams.push(notes);
-      }
-      if (invoice_subject !== undefined) {
-        updateQuery += `invoice_subject = ?, `;
-        updateParams.push(invoice_subject);
-      }
-
-      updateQuery = updateQuery.slice(0, -2);
-      updateQuery += ` WHERE id = ?`;
-      updateParams.push(id);
-
-      if (updateParams.length > 1) {
-        const [result] = await connection.execute(updateQuery, updateParams);
-
-        if (result.affectedRows === 0) {
-          await connection.rollback();
-          return res.status(404).json({ message: 'Invoice not found' });
-        }
-      }
-
-      await connection.commit();
-      res.json({ message: 'Invoice updated successfully' });
-    } catch (error) {
-      await connection.rollback();
-      console.error('Error updating invoice:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    } finally {
-      connection.release();
-    }
-  } catch (error) {
-    console.error('Error updating invoice:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { expiration_date, currency, notes, invoice_subject } = req.body;
+  await updateEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    data: { expiration_date, currency, notes, invoice_subject },
+    res,
+  });
 }
 
 /**
@@ -242,16 +197,16 @@ async function listInvoices(req, res) {
     const { state, client_id, from_date, to_date, search } = req.query;
 
     let baseQuery = `
-          SELECT 
-              i.*,
-              COALESCE(CONCAT(ci.first_name, ' ', ci.last_name), cc.company_name, '') AS client_name
-          FROM Invoice i
-          LEFT JOIN Client c ON i.client_id = c.id
-          LEFT JOIN Client_Individual ci ON c.id = ci.client_id
-          LEFT JOIN Client_Company cc ON c.id = cc.client_id
-          WHERE 1=1
-      `;
-    let params = [];
+      SELECT 
+        i.*,
+        COALESCE(CONCAT(ci.first_name, ' ', ci.last_name), cc.company_name, '') AS client_name
+      FROM Invoice i
+      LEFT JOIN Client c ON i.client_id = c.id
+      LEFT JOIN Client_Individual ci ON c.id = ci.client_id
+      LEFT JOIN Client_Company cc ON c.id = cc.client_id
+      WHERE 1=1
+    `;
+    const params = [];
 
     if (state) {
       baseQuery += ' AND i.state = ?';
@@ -275,12 +230,12 @@ async function listInvoices(req, res) {
 
     if (search) {
       baseQuery += ` AND (
-              i.invoice_number LIKE ? OR 
-              CONCAT(COALESCE(ci.first_name, ''), ' ', COALESCE(ci.last_name, '')) LIKE ? OR
-              cc.company_name LIKE ?
-          )`;
+        i.invoice_number LIKE ? OR 
+        CONCAT(COALESCE(ci.first_name, ''), ' ', COALESCE(ci.last_name, '')) LIKE ? OR
+        cc.company_name LIKE ?
+      )`;
       const searchParam = `%${search}%`;
-      params.push(searchParam, searchParam, searchParam, searchParam);
+      params.push(searchParam, searchParam, searchParam);
     }
 
     baseQuery += ' ORDER BY i.creation_date DESC';

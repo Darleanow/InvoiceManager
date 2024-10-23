@@ -4,7 +4,10 @@
  * @description Handles client-related operations including CRUD
  */
 
+const { deleteEntity } = require('../utils/utils');
 const pool = require('../../config/database');
+
+const TABLE_NAME = 'Client';
 
 /**
  * Creates a new client
@@ -25,38 +28,35 @@ async function createClient(req, res) {
       company_name,
     } = req.body;
 
-    const clientEmail = email || null;
-    const clientPhone = phone || null;
-    const clientType = type || null;
-    const clientAddress = address || null;
-    const clientImage = image || null;
-    const clientFirstName = first_name || null;
-    const clientLastName = last_name || null;
-    const clientCompanyName = company_name || null;
-
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
 
       const [clientResult] = await connection.execute(
         `INSERT INTO Client (email, phone, type, address, image)
-           VALUES (?, ?, ?, ?, ?)`,
-        [clientEmail, clientPhone, clientType, clientAddress, clientImage]
+         VALUES (?, ?, ?, ?, ?)`,
+        [
+          email || null,
+          phone || null,
+          type || null,
+          address || null,
+          image || null,
+        ]
       );
 
       const client_id = clientResult.insertId;
 
-      if (clientType === 'individual') {
+      if (type === 'individual') {
         await connection.execute(
           `INSERT INTO Client_Individual (client_id, first_name, last_name)
-             VALUES (?, ?, ?)`,
-          [client_id, clientFirstName, clientLastName]
+           VALUES (?, ?, ?)`,
+          [client_id, first_name || null, last_name || null]
         );
-      } else if (clientType === 'company') {
+      } else if (type === 'company') {
         await connection.execute(
           `INSERT INTO Client_Company (client_id, company_name)
-             VALUES (?, ?)`,
-          [client_id, clientCompanyName]
+           VALUES (?, ?)`,
+          [client_id, company_name || null]
         );
       } else {
         throw new Error('Invalid client type');
@@ -69,8 +69,7 @@ async function createClient(req, res) {
       });
     } catch (error) {
       await connection.rollback();
-      console.error('Error creating client:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      throw error;
     } finally {
       connection.release();
     }
@@ -96,21 +95,21 @@ async function getClientById(req, res) {
 
     const [clients] = await pool.execute(
       `SELECT 
-          c.*,
-          CASE 
-            WHEN c.type = 'individual' THEN JSON_OBJECT(
-              'first_name', ci.first_name,
-              'last_name', ci.last_name
-            )
-            WHEN c.type = 'company' THEN JSON_OBJECT(
-              'company_name', cc.company_name
-            )
-            ELSE NULL
-          END as details
-       FROM Client c
-       LEFT JOIN Client_Individual ci ON c.id = ci.client_id
-       LEFT JOIN Client_Company cc ON c.id = cc.client_id
-       WHERE c.id = ?`,
+        c.*,
+        CASE 
+          WHEN c.type = 'individual' THEN JSON_OBJECT(
+            'first_name', ci.first_name,
+            'last_name', ci.last_name
+          )
+          WHEN c.type = 'company' THEN JSON_OBJECT(
+            'company_name', cc.company_name
+          )
+          ELSE NULL
+        END as details
+      FROM Client c
+      LEFT JOIN Client_Individual ci ON c.id = ci.client_id
+      LEFT JOIN Client_Company cc ON c.id = cc.client_id
+      WHERE c.id = ?`,
       [id]
     );
 
@@ -149,40 +148,33 @@ async function updateClient(req, res) {
     try {
       await connection.beginTransaction();
 
+      const mainClientData = {
+        email,
+        phone,
+        address,
+        image,
+        is_active,
+      };
+
       let updateQuery = `UPDATE Client SET `;
       const updateParams = [];
 
-      if (email !== undefined) {
-        updateQuery += `email = ?, `;
-        updateParams.push(email);
-      }
-      if (phone !== undefined) {
-        updateQuery += `phone = ?, `;
-        updateParams.push(phone);
-      }
-      if (address !== undefined) {
-        updateQuery += `address = ?, `;
-        updateParams.push(address);
-      }
-      if (image !== undefined) {
-        updateQuery += `image = ?, `;
-        updateParams.push(image);
-      }
-      if (is_active !== undefined) {
-        updateQuery += `is_active = ?, `;
-        updateParams.push(is_active);
-      }
+      Object.entries(mainClientData).forEach(([key, value]) => {
+        if (value !== undefined) {
+          updateQuery += `${key} = ?, `;
+          updateParams.push(value);
+        }
+      });
 
-      updateQuery = updateQuery.slice(0, -2);
-      updateQuery += ` WHERE id = ?`;
-      updateParams.push(id);
+      if (updateParams.length > 0) {
+        updateQuery = updateQuery.slice(0, -2);
+        updateQuery += ` WHERE id = ?`;
+        updateParams.push(id);
 
-      if (updateParams.length > 1) {
         const [clientResult] = await connection.execute(
           updateQuery,
           updateParams
         );
-
         if (clientResult.affectedRows === 0) {
           await connection.rollback();
           return res.status(404).json({ message: 'Client not found' });
@@ -234,8 +226,7 @@ async function updateClient(req, res) {
       res.json({ message: 'Client updated successfully' });
     } catch (error) {
       await connection.rollback();
-      console.error('Error updating client:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      throw error;
     } finally {
       connection.release();
     }
@@ -252,26 +243,14 @@ async function updateClient(req, res) {
  * @param {Object} res - Response object
  */
 async function deleteClient(req, res) {
-  try {
-    const { id } = req.params;
-
-    if (id === undefined) {
-      return res.status(400).json({ error: 'Client ID is required' });
-    }
-
-    const [result] = await pool.execute(`DELETE FROM Client WHERE id = ?`, [
-      id,
-    ]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Client not found' });
-    }
-
-    res.json({ message: 'Client deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting client:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  if (!req.params.id) {
+    return res.status(400).json({ error: 'Client ID is required' });
   }
+  await deleteEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -286,35 +265,30 @@ async function listClients(req, res) {
 
     let baseQuery = `
       SELECT 
-          c.*,
-          CASE 
-            WHEN c.type = 'individual' THEN CONCAT(ci.first_name, ' ', ci.last_name)
-            WHEN c.type = 'company' THEN cc.company_name
-            ELSE NULL
-          END as client_name
+        c.*,
+        CASE 
+          WHEN c.type = 'individual' THEN CONCAT(ci.first_name, ' ', ci.last_name)
+          WHEN c.type = 'company' THEN cc.company_name
+          ELSE NULL
+        END as client_name
       FROM Client c
       LEFT JOIN Client_Individual ci ON c.id = ci.client_id
       LEFT JOIN Client_Company cc ON c.id = cc.client_id
       WHERE 1=1
     `;
-
     const params = [];
 
-    const clientType = type || null;
-    const clientIsActive = is_active !== undefined ? is_active : null;
-    const clientSearch = search || null;
-
-    if (clientType) {
+    if (type) {
       baseQuery += ' AND c.type = ?';
-      params.push(clientType);
+      params.push(type);
     }
 
-    if (clientIsActive !== null) {
+    if (is_active !== undefined) {
       baseQuery += ' AND c.is_active = ?';
-      params.push(clientIsActive);
+      params.push(is_active);
     }
 
-    if (clientSearch) {
+    if (search) {
       baseQuery += ` AND (
         c.email LIKE ? OR 
         c.phone LIKE ? OR
@@ -323,7 +297,7 @@ async function listClients(req, res) {
         ci.last_name LIKE ? OR
         cc.company_name LIKE ?
       )`;
-      const searchParam = `%${clientSearch}%`;
+      const searchParam = `%${search}%`;
       params.push(
         searchParam,
         searchParam,

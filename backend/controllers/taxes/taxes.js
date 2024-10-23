@@ -4,7 +4,15 @@
  * @description Handles tax-related operations including CRUD
  */
 
-const pool = require('../../config/database');
+const {
+  createEntity,
+  getEntityById,
+  updateEntity,
+  deleteEntity,
+  listEntities,
+} = require('../utils/utils');
+
+const TABLE_NAME = 'Tax';
 
 /**
  * Creates a new tax
@@ -13,22 +21,12 @@ const pool = require('../../config/database');
  * @param {Object} res - Response object
  */
 async function createTax(req, res) {
-  try {
-    const { name, rate, apply_by_default } = req.body;
-
-    const [result] = await pool.execute(
-      `INSERT INTO Tax (name, rate, apply_by_default) VALUES (?, ?, ?)`,
-      [name, rate, apply_by_default]
-    );
-
-    res.status(201).json({
-      id: result.insertId,
-      message: 'Tax created successfully',
-    });
-  } catch (error) {
-    console.error('Error creating tax:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { name, rate, apply_by_default } = req.body;
+  await createEntity({
+    tableName: TABLE_NAME,
+    data: { name, rate, apply_by_default },
+    res,
+  });
 }
 
 /**
@@ -38,20 +36,11 @@ async function createTax(req, res) {
  * @param {Object} res - Response object
  */
 async function getTaxById(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [taxes] = await pool.execute(`SELECT * FROM Tax WHERE id = ?`, [id]);
-
-    if (taxes.length === 0) {
-      return res.status(404).json({ message: 'Tax not found' });
-    }
-
-    res.json(taxes[0]);
-  } catch (error) {
-    console.error('Error retrieving tax:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await getEntityById({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -61,56 +50,13 @@ async function getTaxById(req, res) {
  * @param {Object} res - Response object
  */
 async function updateTax(req, res) {
-  try {
-    const { id } = req.params;
-    const { name, rate, apply_by_default } = req.body;
-
-    const connection = await pool.getConnection();
-    try {
-      await connection.beginTransaction();
-
-      let updateQuery = `UPDATE Tax SET `;
-      const updateParams = [];
-
-      if (name !== undefined) {
-        updateQuery += `name = ?, `;
-        updateParams.push(name);
-      }
-      if (rate !== undefined) {
-        updateQuery += `rate = ?, `;
-        updateParams.push(rate);
-      }
-      if (apply_by_default !== undefined) {
-        updateQuery += `apply_by_default = ?, `;
-        updateParams.push(apply_by_default);
-      }
-
-      updateQuery = updateQuery.slice(0, -2);
-      updateQuery += ` WHERE id = ?`;
-      updateParams.push(id);
-
-      if (updateParams.length > 1) {
-        const [result] = await connection.execute(updateQuery, updateParams);
-
-        if (result.affectedRows === 0) {
-          await connection.rollback();
-          return res.status(404).json({ message: 'Tax not found' });
-        }
-      }
-
-      await connection.commit();
-      res.json({ message: 'Tax updated successfully' });
-    } catch (error) {
-      await connection.rollback();
-      console.error('Error updating tax:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    } finally {
-      connection.release();
-    }
-  } catch (error) {
-    console.error('Error updating tax:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { name, rate, apply_by_default } = req.body;
+  await updateEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    data: { name, rate, apply_by_default },
+    res,
+  });
 }
 
 /**
@@ -120,20 +66,11 @@ async function updateTax(req, res) {
  * @param {Object} res - Response object
  */
 async function deleteTax(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [result] = await pool.execute(`DELETE FROM Tax WHERE id = ?`, [id]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Tax not found' });
-    }
-
-    res.json({ message: 'Tax deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting tax:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await deleteEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -143,18 +80,10 @@ async function deleteTax(req, res) {
  * @param {Object} res - Response object
  */
 async function listTaxes(req, res) {
-  try {
-    const [taxes] = await pool.execute(
-      `SELECT * FROM Tax ORDER BY created_at DESC`
-    );
-
-    res.json({
-      data: taxes,
-    });
-  } catch (error) {
-    console.error('Error listing taxes:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await listEntities({
+    tableName: TABLE_NAME,
+    res,
+  });
 }
 
 module.exports = {

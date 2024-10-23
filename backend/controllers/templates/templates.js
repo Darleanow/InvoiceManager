@@ -1,8 +1,18 @@
 /**
- * @file controllers/invoices.js
+ * @file controllers/templates/templates.js
  * @module templateController
  * @description Handles template-related operations including CRUD
-const pool = require('../../config/database');
+ */
+
+const {
+  createEntity,
+  getEntityById,
+  updateEntity,
+  deleteEntity,
+  listEntities,
+} = require('../utils/utils');
+
+const TABLE_NAME = 'Template';
 
 /**
  * Creates a new template
@@ -11,22 +21,12 @@ const pool = require('../../config/database');
  * @param {Object} res - Response object
  */
 async function createTemplate(req, res) {
-  try {
-    const { template_name } = req.body;
-
-    const [result] = await pool.execute(
-      `INSERT INTO Template (template_name) VALUES (?)`,
-      [template_name]
-    );
-
-    res.status(201).json({
-      id: result.insertId,
-      message: 'Template created successfully',
-    });
-  } catch (error) {
-    console.error('Error creating template:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { template_name } = req.body;
+  await createEntity({
+    tableName: TABLE_NAME,
+    data: { template_name },
+    res,
+  });
 }
 
 /**
@@ -36,23 +36,11 @@ async function createTemplate(req, res) {
  * @param {Object} res - Response object
  */
 async function getTemplateById(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [templates] = await pool.execute(
-      `SELECT * FROM Template WHERE id = ?`,
-      [id]
-    );
-
-    if (templates.length === 0) {
-      return res.status(404).json({ message: 'Template not found' });
-    }
-
-    res.json(templates[0]);
-  } catch (error) {
-    console.error('Error retrieving template:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await getEntityById({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -62,24 +50,13 @@ async function getTemplateById(req, res) {
  * @param {Object} res - Response object
  */
 async function updateTemplate(req, res) {
-  try {
-    const { id } = req.params;
-    const { template_name } = req.body;
-
-    const [result] = await pool.execute(
-      `UPDATE Template SET template_name = ? WHERE id = ?`,
-      [template_name, id]
-    );
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Template not found' });
-    }
-
-    res.json({ message: 'Template updated successfully' });
-  } catch (error) {
-    console.error('Error updating template:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { template_name } = req.body;
+  await updateEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    data: { template_name },
+    res,
+  });
 }
 
 /**
@@ -89,22 +66,11 @@ async function updateTemplate(req, res) {
  * @param {Object} res - Response object
  */
 async function deleteTemplate(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [result] = await pool.execute(`DELETE FROM Template WHERE id = ?`, [
-      id,
-    ]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Template not found' });
-    }
-
-    res.json({ message: 'Template deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting template:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await deleteEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -114,18 +80,10 @@ async function deleteTemplate(req, res) {
  * @param {Object} res - Response object
  */
 async function listTemplates(req, res) {
-  try {
-    const [templates] = await pool.execute(
-      `SELECT * FROM Template ORDER BY created_at DESC`
-    );
-
-    res.json({
-      data: templates,
-    });
-  } catch (error) {
-    console.error('Error listing templates:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await listEntities({
+    tableName: TABLE_NAME,
+    res,
+  });
 }
 
 module.exports = {

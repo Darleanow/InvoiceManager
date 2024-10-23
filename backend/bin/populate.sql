@@ -3,10 +3,10 @@ USE Invoice_Manager;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- Insert Users
-INSERT INTO `User` (first_name, last_name, username, email, password, role) VALUES
-('John', 'Admin', 'jadmin', 'john.admin@example.com', 'hashed_password_1', 'admin'),
-('Sarah', 'Manager', 'smanager', 'sarah.manager@example.com', 'hashed_password_2', 'manager'),
-('Mike', 'Handler', 'mhandler', 'mike.handler@example.com', 'hashed_password_3', 'manager');
+INSERT INTO `User` (clerk_user_id, first_name, last_name, username, email, role) VALUES
+('user_2aX9NB1', 'John', 'Admin', 'jadmin', 'john.admin@example.com', 'admin'),
+('user_7bY3MC2', 'Sarah', 'Manager', 'smanager', 'sarah.manager@example.com', 'manager'),
+('user_4cZ8LD3', 'Mike', 'Handler', 'mhandler', 'mike.handler@example.com', 'manager');
 
 -- Insert Clients
 INSERT INTO `Client` (email, phone, type, address) VALUES
@@ -54,14 +54,23 @@ INSERT INTO `Discount` (name, type, value) VALUES
 INSERT INTO `Invoice` (
     invoice_number, client_id, user_id, template_id, 
     creation_date, expiration_date, state, 
-    currency, invoice_name, invoice_subject, 
+    currency, notes, invoice_subject,
     total_amount, subtotal
 ) VALUES
-('INV-2024-001', 1, 1, 1, '2024-01-01', '2024-02-01', 'sent', 'USD', 'January Services', 'Web Development Services', 1500.00, 1500.00),
-('INV-2024-002', 2, 2, 1, '2024-01-15', '2024-02-15', 'paid', 'USD', 'Consultation', 'Expert Consultation Services', 200.00, 200.00),
-('INV-2024-003', 3, 1, 2, '2024-02-01', '2024-03-01', 'draft', 'USD', 'Hardware Purchase', 'Server Hardware', 1999.99, 1999.99);
+('INV-2024-001', 1, 1, 1, 
+ CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), 'sent', 
+ 'USD', 'Standard payment terms apply', 'Web Development Services', 
+ 1500.00, 1500.00),
+('INV-2024-002', 2, 2, 1, 
+ CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), 'paid', 
+ 'USD', 'Paid in full', 'Expert Consultation Services', 
+ 200.00, 200.00),
+('INV-2024-003', 3, 1, 2, 
+ CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), 'draft', 
+ 'USD', 'Hardware purchase order', 'Server Hardware', 
+ 1999.99, 1999.99);
 
--- Then insert invoice lines
+-- Insert Invoice Lines
 INSERT INTO `Invoice_Line` (invoice_id, item_id, quantity, price, description) VALUES
 (1, 1, 10, 150.00, 'Web Development - 10 hours'),
 (2, 2, 1, 200.00, 'Consultation Session'),
@@ -78,16 +87,26 @@ INSERT INTO `Invoice_Discount` (invoice_id, discount_id) VALUES
 (1, 1),
 (2, 3);
 
--- Insert some history records
-INSERT INTO `Invoice_History` (invoice_id, previous_state, new_state, changed_by_user_id) VALUES
+-- Insert Invoice History
+INSERT INTO `Invoice_History` (
+    invoice_id, 
+    previous_state, 
+    new_state, 
+    changed_by_user_id
+) VALUES
 (1, 'draft', 'sent', 1),
 (2, 'draft', 'sent', 2),
 (2, 'sent', 'paid', 2);
 
--- Insert some attachments (without actual file data for this example)
-INSERT INTO `Attachment` (invoice_id, file_name, file_data, extension) VALUES
-(1, 'invoice-details', '', 'pdf'),
-(2, 'receipt', '', 'pdf');
+-- Insert attachments with placeholder file data
+INSERT INTO `Attachment` (
+    invoice_id, 
+    file_name, 
+    file_data, 
+    extension
+) VALUES
+(1, 'invoice-001-details', UNHEX('89504E470D0A1A0A'), 'pdf'),
+(2, 'receipt-002', UNHEX('89504E470D0A1A0A'), 'pdf');
 
 SET FOREIGN_KEY_CHECKS = 1;
 

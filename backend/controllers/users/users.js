@@ -4,7 +4,15 @@
  * @description Handles user-related operations including CRUD, integrating with Clerk.
  */
 
+const {
+  getEntityById,
+  updateEntity,
+  deleteEntity,
+  listEntities,
+} = require('../utils/utils');
 const pool = require('../../config/database');
+
+const TABLE_NAME = 'User';
 
 /**
  * Synchronizes a user from Clerk into the local database
@@ -82,8 +90,7 @@ async function syncUser(req, res) {
         }
       }
 
-      console.error('Error synchronizing user:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      throw error;
     } finally {
       connection.release();
     }
@@ -100,24 +107,14 @@ async function syncUser(req, res) {
  * @param {Object} res - Response object
  */
 async function getUserById(req, res) {
-  try {
-    const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({ error: 'User ID is required' });
-    }
-
-    const [users] = await pool.execute(`SELECT * FROM User WHERE id = ?`, [id]);
-
-    if (users.length === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json(users[0]);
-  } catch (error) {
-    console.error('Error retrieving user:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  if (!req.params.id) {
+    return res.status(400).json({ error: 'User ID is required' });
   }
+  await getEntityById({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -127,67 +124,13 @@ async function getUserById(req, res) {
  * @param {Object} res - Response object
  */
 async function updateUser(req, res) {
-  try {
-    const { id } = req.params;
-    const { email, first_name, last_name, username, role, is_active } =
-      req.body;
-
-    const connection = await pool.getConnection();
-    try {
-      await connection.beginTransaction();
-
-      let updateQuery = `UPDATE User SET `;
-      const updateParams = [];
-
-      if (email !== undefined) {
-        updateQuery += `email = ?, `;
-        updateParams.push(email);
-      }
-      if (first_name !== undefined) {
-        updateQuery += `first_name = ?, `;
-        updateParams.push(first_name);
-      }
-      if (last_name !== undefined) {
-        updateQuery += `last_name = ?, `;
-        updateParams.push(last_name);
-      }
-      if (username !== undefined) {
-        updateQuery += `username = ?, `;
-        updateParams.push(username);
-      }
-      if (role !== undefined) {
-        updateQuery += `role = ?, `;
-        updateParams.push(role);
-      }
-      if (is_active !== undefined) {
-        updateQuery += `is_active = ?, `;
-        updateParams.push(is_active);
-      }
-
-      updateQuery = updateQuery.slice(0, -2);
-      updateQuery += ` WHERE id = ?`;
-      updateParams.push(id);
-
-      const [userResult] = await connection.execute(updateQuery, updateParams);
-
-      if (userResult.affectedRows === 0) {
-        await connection.rollback();
-        return res.status(404).json({ message: 'User not found' });
-      }
-
-      await connection.commit();
-      res.json({ message: 'User updated successfully' });
-    } catch (error) {
-      await connection.rollback();
-      console.error('Error updating user:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    } finally {
-      connection.release();
-    }
-  } catch (error) {
-    console.error('Error updating user:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { email, first_name, last_name, username, role, is_active } = req.body;
+  await updateEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    data: { email, first_name, last_name, username, role, is_active },
+    res,
+  });
 }
 
 /**
@@ -197,24 +140,14 @@ async function updateUser(req, res) {
  * @param {Object} res - Response object
  */
 async function deleteUser(req, res) {
-  try {
-    const { id } = req.params;
-
-    if (!id) {
-      return res.status(400).json({ error: 'User ID is required' });
-    }
-
-    const [result] = await pool.execute(`DELETE FROM User WHERE id = ?`, [id]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    res.json({ message: 'User deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting user:', error);
-    res.status(500).json({ error: 'Internal server error' });
+  if (!req.params.id) {
+    return res.status(400).json({ error: 'User ID is required' });
   }
+  await deleteEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -224,33 +157,13 @@ async function deleteUser(req, res) {
  * @param {Object} res - Response object
  */
 async function listUsers(req, res) {
-  try {
-    const { role, is_active } = req.query;
-
-    let baseQuery = `SELECT * FROM User WHERE 1=1`;
-    const params = [];
-
-    if (role) {
-      baseQuery += ` AND role = ?`;
-      params.push(role);
-    }
-
-    if (is_active !== undefined) {
-      baseQuery += ` AND is_active = ?`;
-      params.push(is_active);
-    }
-
-    baseQuery += ` ORDER BY created_at DESC`;
-
-    const [users] = await pool.execute(baseQuery, params);
-
-    res.json({
-      data: users,
-    });
-  } catch (error) {
-    console.error('Error listing users:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { role, is_active } = req.query;
+  await listEntities({
+    tableName: TABLE_NAME,
+    filters: { role, is_active },
+    orderBy: 'created_at DESC',
+    res,
+  });
 }
 
 module.exports = {

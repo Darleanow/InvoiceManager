@@ -4,7 +4,10 @@
  * @description Handles attachment-related operations including CRUD
  */
 
+const { createEntity, getEntityById, deleteEntity } = require('../utils/utils');
 const pool = require('../../config/database');
+
+const TABLE_NAME = 'Attachment';
 
 /**
  * Creates a new attachment
@@ -13,22 +16,12 @@ const pool = require('../../config/database');
  * @param {Object} res - Response object
  */
 async function createAttachment(req, res) {
-  try {
-    const { invoice_id, file_name, file_data, extension } = req.body;
-
-    const [result] = await pool.execute(
-      `INSERT INTO Attachment (invoice_id, file_name, file_data, extension) VALUES (?, ?, ?, ?)`,
-      [invoice_id, file_name, file_data, extension]
-    );
-
-    res.status(201).json({
-      id: result.insertId,
-      message: 'Attachment created successfully',
-    });
-  } catch (error) {
-    console.error('Error creating attachment:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { invoice_id, file_name, file_data, extension } = req.body;
+  await createEntity({
+    tableName: TABLE_NAME,
+    data: { invoice_id, file_name, file_data, extension },
+    res,
+  });
 }
 
 /**
@@ -38,23 +31,11 @@ async function createAttachment(req, res) {
  * @param {Object} res - Response object
  */
 async function getAttachmentById(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [attachments] = await pool.execute(
-      `SELECT * FROM Attachment WHERE id = ?`,
-      [id]
-    );
-
-    if (attachments.length === 0) {
-      return res.status(404).json({ message: 'Attachment not found' });
-    }
-
-    res.json(attachments[0]);
-  } catch (error) {
-    console.error('Error retrieving attachment:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await getEntityById({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -64,22 +45,11 @@ async function getAttachmentById(req, res) {
  * @param {Object} res - Response object
  */
 async function deleteAttachment(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [result] = await pool.execute(`DELETE FROM Attachment WHERE id = ?`, [
-      id,
-    ]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Attachment not found' });
-    }
-
-    res.json({ message: 'Attachment deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting attachment:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await deleteEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**

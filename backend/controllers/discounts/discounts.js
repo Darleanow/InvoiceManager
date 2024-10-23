@@ -4,7 +4,15 @@
  * @description Handles discount-related operations including CRUD
  */
 
-const pool = require('../../config/database');
+const {
+  createEntity,
+  getEntityById,
+  updateEntity,
+  deleteEntity,
+  listEntities,
+} = require('../utils/utils');
+
+const TABLE_NAME = 'Discount';
 
 /**
  * Creates a new discount
@@ -13,22 +21,12 @@ const pool = require('../../config/database');
  * @param {Object} res - Response object
  */
 async function createDiscount(req, res) {
-  try {
-    const { name, type, value, is_active } = req.body;
-
-    const [result] = await pool.execute(
-      `INSERT INTO Discount (name, type, value, is_active) VALUES (?, ?, ?, ?)`,
-      [name, type, value, is_active]
-    );
-
-    res.status(201).json({
-      id: result.insertId,
-      message: 'Discount created successfully',
-    });
-  } catch (error) {
-    console.error('Error creating discount:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { name, type, value, is_active } = req.body;
+  await createEntity({
+    tableName: TABLE_NAME,
+    data: { name, type, value, is_active },
+    res,
+  });
 }
 
 /**
@@ -38,23 +36,11 @@ async function createDiscount(req, res) {
  * @param {Object} res - Response object
  */
 async function getDiscountById(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [discounts] = await pool.execute(
-      `SELECT * FROM Discount WHERE id = ?`,
-      [id]
-    );
-
-    if (discounts.length === 0) {
-      return res.status(404).json({ message: 'Discount not found' });
-    }
-
-    res.json(discounts[0]);
-  } catch (error) {
-    console.error('Error retrieving discount:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await getEntityById({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -64,60 +50,13 @@ async function getDiscountById(req, res) {
  * @param {Object} res - Response object
  */
 async function updateDiscount(req, res) {
-  try {
-    const { id } = req.params;
-    const { name, type, value, is_active } = req.body;
-
-    const connection = await pool.getConnection();
-    try {
-      await connection.beginTransaction();
-
-      let updateQuery = `UPDATE Discount SET `;
-      const updateParams = [];
-
-      if (name !== undefined) {
-        updateQuery += `name = ?, `;
-        updateParams.push(name);
-      }
-      if (type !== undefined) {
-        updateQuery += `type = ?, `;
-        updateParams.push(type);
-      }
-      if (value !== undefined) {
-        updateQuery += `value = ?, `;
-        updateParams.push(value);
-      }
-      if (is_active !== undefined) {
-        updateQuery += `is_active = ?, `;
-        updateParams.push(is_active);
-      }
-
-      updateQuery = updateQuery.slice(0, -2);
-      updateQuery += ` WHERE id = ?`;
-      updateParams.push(id);
-
-      if (updateParams.length > 1) {
-        const [result] = await connection.execute(updateQuery, updateParams);
-
-        if (result.affectedRows === 0) {
-          await connection.rollback();
-          return res.status(404).json({ message: 'Discount not found' });
-        }
-      }
-
-      await connection.commit();
-      res.json({ message: 'Discount updated successfully' });
-    } catch (error) {
-      await connection.rollback();
-      console.error('Error updating discount:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    } finally {
-      connection.release();
-    }
-  } catch (error) {
-    console.error('Error updating discount:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  const { name, type, value, is_active } = req.body;
+  await updateEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    data: { name, type, value, is_active },
+    res,
+  });
 }
 
 /**
@@ -127,22 +66,11 @@ async function updateDiscount(req, res) {
  * @param {Object} res - Response object
  */
 async function deleteDiscount(req, res) {
-  try {
-    const { id } = req.params;
-
-    const [result] = await pool.execute(`DELETE FROM Discount WHERE id = ?`, [
-      id,
-    ]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: 'Discount not found' });
-    }
-
-    res.json({ message: 'Discount deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting discount:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await deleteEntity({
+    tableName: TABLE_NAME,
+    id: req.params.id,
+    res,
+  });
 }
 
 /**
@@ -152,18 +80,10 @@ async function deleteDiscount(req, res) {
  * @param {Object} res - Response object
  */
 async function listDiscounts(req, res) {
-  try {
-    const [discounts] = await pool.execute(
-      `SELECT * FROM Discount ORDER BY created_at DESC`
-    );
-
-    res.json({
-      data: discounts,
-    });
-  } catch (error) {
-    console.error('Error listing discounts:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
+  await listEntities({
+    tableName: TABLE_NAME,
+    res,
+  });
 }
 
 module.exports = {
