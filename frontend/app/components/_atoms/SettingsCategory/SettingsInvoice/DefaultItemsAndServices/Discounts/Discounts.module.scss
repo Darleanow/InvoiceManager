@@ -28,7 +28,7 @@ $accent: #e29c23;
   .discountDetails {
     margin-top: 10px;
     padding: 10px;
-    background-color: #f0f8ff;
+    background-color: $primary-color;
     border-left: 4px solid #2ecc71; /* Couleur pour indiquer un avantage */
     border-radius: 4px;
     width: 20%;
