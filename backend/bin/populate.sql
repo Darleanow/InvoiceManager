@@ -9,7 +9,7 @@ INSERT INTO `User` (clerk_user_id, first_name, last_name, username, email, role)
 ('user_5dW9KE4', 'Lisa', 'Controller', 'lcontrol', 'lisa.control@example.com', 'manager'),
 ('user_6eV2JF5', 'David', 'Supervisor', 'dsuper', 'david.super@example.com', 'manager');
 
--- Insert Clients with user ownership
+-- Insert Clients
 INSERT INTO `Client` (created_by_user_id, email, phone, type, address, is_active) VALUES
 -- John's clients (User 1)
 (1, 'acme.corp@example.com', '555-0100', 'company', '123 Business Ave, Suite 100', true),
