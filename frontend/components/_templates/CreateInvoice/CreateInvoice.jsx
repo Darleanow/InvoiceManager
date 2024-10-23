@@ -11,13 +11,15 @@ import CurrencySelector from '../../_molecules/CurrencySelector/CurrencySelector
 import ProductSearchDropdown from '../../_molecules/ProductSearchDropdown/ProductSearchDropdown';
 import { useRouter } from 'next/navigation';
 import InvoiceTemplate from '../Invoices/InvoiceTemplate';
+import Loader from '../../_atoms/Loader/Loader';
+import { useTransition } from 'react';
 
 export default function CreateInvoice() {
   const router = useRouter();
-
   const [selectedFormat, setSelectedFormat] = useState('pdf');
-
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [client, setClient] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [subject, setSubject] = useState('');
@@ -95,11 +97,20 @@ export default function CreateInvoice() {
   };
 
   const handleGoBack = () => {
-    router.push('/');
+    setIsLoading(true);
+
+    startTransition(() => {
+      router.push('/');
+    });
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 10000);
   };
 
   return (
     <div className={styles.page_container}>
+      {isLoading && <Loader />} {/* Show loader while loading */}
       <CreateInvoiceBar handleGoBack={handleGoBack} />
       <div
         className={`${styles.main_content} ${isVisible ? styles.appear : ''}`}
