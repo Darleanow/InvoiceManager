@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useTransition } from 'react';
 import CreateInvoiceBar from '../../_organisms/CreateInvoiceBar/CreateInvoiceBar';
 import styles from './CreateInvoice.module.scss';
 import HorizontalSeparatorLine from '../../_atoms/HoriontalSeparatorLine/HorizontalSeparatorLine';
@@ -12,14 +12,13 @@ import ProductSearchDropdown from '../../_molecules/ProductSearchDropdown/Produc
 import { useRouter } from 'next/navigation';
 import InvoiceTemplate from '../Invoices/InvoiceTemplate';
 import Loader from '../../_atoms/Loader/Loader';
-import { useTransition } from 'react';
 
 export default function CreateInvoice() {
   const router = useRouter();
   const [selectedFormat, setSelectedFormat] = useState('pdf');
   const [isVisible, setIsVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [startTransition] = useTransition();
   const [client, setClient] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [subject, setSubject] = useState('');
