@@ -48,7 +48,7 @@ app.use(express.json());
  * @function
  */
 if (process.env.NODE_ENV === 'development') {
-  app.use('/api', devAuthMiddleware);
+  app.use('/api', devAuthMiddleware, limiter);
 }
 
 /**
@@ -94,7 +94,7 @@ const limiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   trustProxy: true,
-  skip: (request) => {
+  skip: (_request) => {
     return process.env.NODE_ENV === 'development';
   },
   keyGenerator: (request) => {
