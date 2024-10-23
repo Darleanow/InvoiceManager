@@ -6,8 +6,8 @@ import { useUser } from '@clerk/clerk-react';
 const ClientsPage = () => {
   const { user, isLoaded, isSignedIn } = useUser();
   const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true); // For loading state
-  const [error, setError] = useState(null); // For error handling
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchClients = async () => {
