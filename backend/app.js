@@ -12,6 +12,41 @@ const rateLimit = require('express-rate-limit');
 
 const app = express();
 
+/**
+ * Rate limiting middleware to restrict excessive requests from a single IP.
+ * @const {Object} limiter
+ * @memberof module:routes
+ */
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 2000,
+  message: {
+    status: 429,
+    message:
+      'Too many requests from this IP, please try again after 15 minutes',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  trustProxy: true,
+  skip: (_request) => {
+    return process.env.NODE_ENV === 'development';
+  },
+  keyGenerator: (request) => {
+    const realIp = request.headers['x-real-ip'];
+    const forwardedFor = request.headers['x-forwarded-for'];
+
+    if (realIp) {
+      return realIp;
+    }
+
+    if (forwardedFor) {
+      return forwardedFor.split(',')[0].trim();
+    }
+
+    return request.ip;
+  },
+});
+
 app.set('trust proxy', (ip) => {
   return ip === '127.0.0.1' || ip === '::1' || ip.startsWith('localhost');
 });
@@ -76,41 +111,6 @@ app.use((err, _req, res, _next) => {
     error: 'Internal server error',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined,
   });
-});
-
-/**
- * Rate limiting middleware to restrict excessive requests from a single IP.
- * @const {Object} limiter
- * @memberof module:routes
- */
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 2000,
-  message: {
-    status: 429,
-    message:
-      'Too many requests from this IP, please try again after 15 minutes',
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-  trustProxy: true,
-  skip: (_request) => {
-    return process.env.NODE_ENV === 'development';
-  },
-  keyGenerator: (request) => {
-    const realIp = request.headers['x-real-ip'];
-    const forwardedFor = request.headers['x-forwarded-for'];
-
-    if (realIp) {
-      return realIp;
-    }
-
-    if (forwardedFor) {
-      return forwardedFor.split(',')[0].trim();
-    }
-
-    return request.ip;
-  },
 });
 
 app.use(limiter);
