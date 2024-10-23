@@ -8,6 +8,7 @@ const express = require('express');
 const cors = require('cors');
 const routes = require('./routes/index');
 const devAuthMiddleware = require('./middleware/devAuth');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 
@@ -76,5 +77,42 @@ app.use((err, _req, res, _next) => {
     message: process.env.NODE_ENV === 'development' ? err.message : undefined,
   });
 });
+
+/**
+ * Rate limiting middleware to restrict excessive requests from a single IP.
+ * @const {Object} limiter
+ * @memberof module:routes
+ */
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 2000,
+  message: {
+    status: 429,
+    message:
+      'Too many requests from this IP, please try again after 15 minutes',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  trustProxy: true,
+  skip: (request) => {
+    return process.env.NODE_ENV === 'development';
+  },
+  keyGenerator: (request) => {
+    const realIp = request.headers['x-real-ip'];
+    const forwardedFor = request.headers['x-forwarded-for'];
+
+    if (realIp) {
+      return realIp;
+    }
+
+    if (forwardedFor) {
+      return forwardedFor.split(',')[0].trim();
+    }
+
+    return request.ip;
+  },
+});
+
+app.use(limiter);
 
 module.exports = app;
