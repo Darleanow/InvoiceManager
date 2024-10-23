@@ -1,7 +1,7 @@
 /**
  * @file routes/index.js
  * @module routes
- * @description Defines the API routes for invoices and clients.
+ * @description Defines the API routes for invoices, clients, users, and more.
  * @see {@link TODO} Swagger Documentation
  */
 
@@ -9,6 +9,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const router = express.Router();
 
+const usersController = require('../controllers/users/users');
 const invoicesController = require('../controllers/invoices/invoices');
 const clientsController = require('../controllers/clients/clients');
 const itemsController = require('../controllers/items/items');
@@ -25,10 +26,186 @@ const attachmentsController = require('../controllers/attachments/attachments');
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 2000,
-  message: 'Too many requests from this IP, please try again after 15 minutes',
+  message: {
+    status: 429,
+    message:
+      'Too many requests from this IP, please try again after 15 minutes',
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+  trustProxy: true,
+  skip: (request) => {
+    return process.env.NODE_ENV === 'development';
+  },
+  keyGenerator: (request) => {
+    const realIp = request.headers['x-real-ip'];
+    const forwardedFor = request.headers['x-forwarded-for'];
+
+    if (realIp) {
+      return realIp;
+    }
+
+    if (forwardedFor) {
+      return forwardedFor.split(',')[0].trim();
+    }
+
+    return request.ip;
+  },
 });
 
 router.use(limiter);
+
+/** ------------------------ Users Routes ------------------------ **/
+
+/**
+ * @swagger
+ * /users/sync:
+ *   post:
+ *     summary: Synchronize a user from Clerk into the local database
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               clerk_user_id:
+ *                 type: string
+ *                 description: The unique Clerk user ID.
+ *               email:
+ *                 type: string
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User synchronized successfully
+ *       500:
+ *         description: Internal server error
+ */
+router.post('/users/sync', usersController.syncUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   get:
+ *     summary: Retrieve a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the user
+ *     responses:
+ *       200:
+ *         description: User details
+ *       404:
+ *         description: User not found
+ */
+router.get('/users/:id', usersController.getUserById);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Update a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the user to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               username:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *                 enum: [manager, admin]
+ *               is_active:
+ *                 type: boolean
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ */
+router.put('/users/:id', usersController.updateUser);
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: The ID of the user to delete
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ */
+router.delete('/users/:id', usersController.deleteUser);
+
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Retrieve all users with optional filtering
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: role
+ *         schema:
+ *           type: string
+ *           enum: [manager, admin]
+ *         description: Filter users by role.
+ *       - in: query
+ *         name: is_active
+ *         schema:
+ *           type: boolean
+ *         description: Filter users by active status.
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       500:
+ *         description: Internal server error
+ */
+router.get('/users', usersController.listUsers);
 
 /**
  * @swagger
@@ -75,9 +252,7 @@ router.use(limiter);
  *                 format: date
  *               currency:
  *                 type: string
- *               private_notes:
- *                 type: string
- *               invoice_name:
+ *               notes:
  *                 type: string
  *               invoice_subject:
  *                 type: string
@@ -195,9 +370,7 @@ router.get('/invoices/:id', invoicesController.getInvoiceById);
  *                 format: date
  *               currency:
  *                 type: string
- *               private_notes:
- *                 type: string
- *               invoice_name:
+ *               notes:
  *                 type: string
  *               invoice_subject:
  *                 type: string

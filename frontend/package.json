@@ -21,6 +21,7 @@
     "@clerk/themes": "^2.1.37",
     "chart.js": "^4.4.4",
     "chartjs-plugin-datalabels": "^2.2.0",
+    "country-flag-icons": "^1.5.13",
     "next": "14.2.13",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",

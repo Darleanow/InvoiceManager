@@ -4,11 +4,11 @@ USE Invoice_Manager;
 
 CREATE TABLE `User` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `clerk_user_id` VARCHAR(255) NOT NULL UNIQUE,
     `first_name` VARCHAR(255) NOT NULL,
     `last_name` VARCHAR(255) NOT NULL,
     `username` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
-    `password` VARCHAR(255) NOT NULL,
     `role` ENUM('manager', 'admin') NOT NULL DEFAULT 'manager',
     `is_active` BOOLEAN DEFAULT TRUE,
     `last_login` TIMESTAMP NULL,
@@ -62,8 +62,7 @@ CREATE TABLE `Invoice` (
     `state` ENUM('draft', 'sent', 'paid', 'overdue', 'cancelled') NOT NULL DEFAULT 'draft',
     `total_amount` DECIMAL(10, 2) NOT NULL DEFAULT 0,
     `currency` VARCHAR(3) NOT NULL,
-    `private_notes` TEXT NULL,
-    `invoice_name` VARCHAR(255) NOT NULL,
+    `notes` TEXT NULL,
     `invoice_subject` VARCHAR(255) NOT NULL,
     `subtotal` DECIMAL(10, 2) NOT NULL DEFAULT 0,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

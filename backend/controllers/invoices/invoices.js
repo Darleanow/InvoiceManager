@@ -20,8 +20,7 @@ async function createInvoice(req, res) {
       template_id,
       expiration_date,
       currency,
-      private_notes,
-      invoice_name,
+      notes,
       invoice_subject,
     } = req.body;
 
@@ -36,8 +35,8 @@ async function createInvoice(req, res) {
     const [result] = await pool.execute(
       `INSERT INTO Invoice (
                 invoice_number, client_id, user_id, template_id, 
-                expiration_date, currency, private_notes, 
-                invoice_name, invoice_subject
+                expiration_date, currency, notes, 
+                invoice_subject
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         invoice_number,
@@ -46,8 +45,7 @@ async function createInvoice(req, res) {
         template_id,
         expiration_date,
         currency,
-        private_notes,
-        invoice_name,
+        notes,
         invoice_subject,
       ]
     );
@@ -150,13 +148,7 @@ async function getInvoiceById(req, res) {
 async function updateInvoice(req, res) {
   try {
     const { id } = req.params;
-    const {
-      expiration_date,
-      currency,
-      private_notes,
-      invoice_name,
-      invoice_subject,
-    } = req.body;
+    const { expiration_date, currency, notes, invoice_subject } = req.body;
 
     const connection = await pool.getConnection();
     try {
@@ -173,13 +165,9 @@ async function updateInvoice(req, res) {
         updateQuery += `currency = ?, `;
         updateParams.push(currency);
       }
-      if (private_notes !== undefined) {
-        updateQuery += `private_notes = ?, `;
-        updateParams.push(private_notes);
-      }
-      if (invoice_name !== undefined) {
-        updateQuery += `invoice_name = ?, `;
-        updateParams.push(invoice_name);
+      if (notes !== undefined) {
+        updateQuery += `notes = ?, `;
+        updateParams.push(notes);
       }
       if (invoice_subject !== undefined) {
         updateQuery += `invoice_subject = ?, `;
@@ -288,7 +276,6 @@ async function listInvoices(req, res) {
     if (search) {
       baseQuery += ` AND (
               i.invoice_number LIKE ? OR 
-              i.invoice_name LIKE ? OR
               CONCAT(COALESCE(ci.first_name, ''), ' ', COALESCE(ci.last_name, '')) LIKE ? OR
               cc.company_name LIKE ?
           )`;
