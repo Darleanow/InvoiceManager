@@ -10,7 +10,7 @@ function increaseFontSizesBy(css, increment) {
 }
 
 export async function POST(req) {
-  const { html, format, data } = await req.json();
+  const { html, format } = await req.json();
 
   const invoiceStyles = getInvoiceStyles();
   const updatedSCSS = increaseFontSizesBy(invoiceStyles, 4);

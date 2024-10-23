@@ -5,6 +5,7 @@ import FormInput from '../../_atoms/FormInput/FormInput';
 import FormDropdown from '../../_atoms/FormDropdown/FormDropdown';
 import ClientWidget from '../ClientWidget/ClientWidget';
 import styles from './ClientFormInput.module.scss';
+import PropTypes from 'prop-types';
 
 export default function ClientFormInput({ onChange }) {
   const [inputValue, setInputValue] = useState('');
@@ -86,7 +87,7 @@ export default function ClientFormInput({ onChange }) {
     onChange(editableClient);
     setIsEditing(true);
   };
-  
+
   const handleEditChange = (e) => {
     setEditableClient({
       ...editableClient,
@@ -141,3 +142,7 @@ export default function ClientFormInput({ onChange }) {
     </div>
   );
 }
+
+ClientFormInput.propTypes = {
+  onChange: PropTypes.func.isRequired,
+};

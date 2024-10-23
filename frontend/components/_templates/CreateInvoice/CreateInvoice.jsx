@@ -45,15 +45,6 @@ export default function CreateInvoice() {
     },
   ];
 
-  const mockSelectedProducts = [
-    {
-      name: 'Service Charge',
-      price: 100,
-      quantity: 1,
-      category: 'Service',
-    },
-  ];
-
   const handleDateChange = (newDate) => {
     setDueDate(newDate);
   };
@@ -83,7 +74,6 @@ export default function CreateInvoice() {
         body: JSON.stringify({
           html: templateContent,
           format: format,
-          data: displayData,
         }),
       });
 
