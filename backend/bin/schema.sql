@@ -2,78 +2,6 @@ DROP DATABASE IF EXISTS Invoice_Manager;
 CREATE DATABASE Invoice_Manager;
 USE Invoice_Manager;
 
--- Create Constants table first
-CREATE TABLE `Constants` (
-    `key` VARCHAR(50) PRIMARY KEY,
-    `value` VARCHAR(50) NOT NULL
-);
-
--- Insert all constants
-INSERT INTO `Constants` (`key`, `value`) VALUES
-    -- User Roles
-    ('USER_ROLE_MANAGER', 'manager'),
-    ('USER_ROLE_ADMIN', 'admin'),
-
-    -- Client Types
-    ('CLIENT_TYPE_INDIVIDUAL', 'individual'),
-    ('CLIENT_TYPE_COMPANY', 'company'),
-
-    -- Item Types
-    ('ITEM_TYPE_PRODUCT', 'product'),
-    ('ITEM_TYPE_SERVICE', 'service'),
-
-    -- Invoice States
-    ('INVOICE_STATE_DRAFT', 'draft'),
-    ('INVOICE_STATE_SENT', 'sent'),
-    ('INVOICE_STATE_PAID', 'paid'),
-    ('INVOICE_STATE_OVERDUE', 'overdue'),
-    ('INVOICE_STATE_CANCELLED', 'cancelled'),
-
-    -- Discount Types
-    ('DISCOUNT_TYPE_PERCENTAGE', 'percentage'),
-    ('DISCOUNT_TYPE_FIXED', 'fixed'),
-
-    -- Modification Types
-    ('MOD_TYPE_CREATE', 'create'),
-    ('MOD_TYPE_UPDATE', 'update'),
-    ('MOD_TYPE_DELETE', 'delete'),
-
-    -- File Extensions
-    ('FILE_EXT_PDF', 'pdf'),
-    ('FILE_EXT_JPG', 'jpg'),
-    ('FILE_EXT_PNG', 'png'),
-    ('FILE_EXT_DOCX', 'docx'),
-    ('FILE_EXT_TXT', 'txt');
-
--- Helper function to get ENUM string
-DELIMITER //
-
-CREATE FUNCTION get_enum_string(enum_type VARCHAR(50)) RETURNS TEXT
-DETERMINISTIC
-BEGIN
-    DECLARE result TEXT;
-    SET result = (
-        SELECT GROUP_CONCAT(CONCAT("'", value, "'"))
-        FROM Constants 
-        WHERE `key` LIKE CONCAT(enum_type, '%')
-        ORDER BY `key`
-    );
-    RETURN result;
-END //
-
-DELIMITER ;
-
--- Prepare ENUM strings
-SET @user_roles = (SELECT get_enum_string('USER_ROLE'));
-SET @client_types = (SELECT get_enum_string('CLIENT_TYPE'));
-SET @item_types = (SELECT get_enum_string('ITEM_TYPE'));
-SET @invoice_states = (SELECT get_enum_string('INVOICE_STATE'));
-SET @discount_types = (SELECT get_enum_string('DISCOUNT_TYPE'));
-SET @mod_types = (SELECT get_enum_string('MOD_TYPE'));
-SET @file_extensions = (SELECT get_enum_string('FILE_EXT'));
-
--- Create User table
-SET @create_user_table = CONCAT('
 CREATE TABLE `User` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `clerk_user_id` VARCHAR(255) NOT NULL UNIQUE,
@@ -81,37 +9,28 @@ CREATE TABLE `User` (
     `last_name` VARCHAR(255) NOT NULL,
     `username` VARCHAR(255) NOT NULL,
     `email` VARCHAR(255) NOT NULL,
-    `role` ENUM(', @user_roles, ') NOT NULL DEFAULT ''manager'',
+    `role` ENUM('manager', 'admin') NOT NULL DEFAULT 'manager',
     `is_active` BOOLEAN DEFAULT TRUE,
     `last_login` TIMESTAMP NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT unique_user_email UNIQUE (email),
     CONSTRAINT unique_username UNIQUE (username)
-)');
-PREPARE stmt FROM @create_user_table;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+);
 
--- Create Client table
-SET @create_client_table = CONCAT('
 CREATE TABLE `Client` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `email` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(255) NOT NULL,
-    `type` ENUM(', @client_types, ') NOT NULL,
+    `type` ENUM('individual', 'company') NOT NULL,
     `address` VARCHAR(255) NOT NULL,
     `image` MEDIUMBLOB NULL,
     `is_active` BOOLEAN DEFAULT TRUE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT unique_client_email UNIQUE (email)
-)');
-PREPARE stmt FROM @create_client_table;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+);
 
--- Create Client_Individual table
 CREATE TABLE `Client_Individual` (
     `client_id` INT UNSIGNED NOT NULL PRIMARY KEY,
     `last_name` VARCHAR(255) NOT NULL,
@@ -119,14 +38,12 @@ CREATE TABLE `Client_Individual` (
     FOREIGN KEY (`client_id`) REFERENCES `Client`(`id`) ON DELETE CASCADE
 );
 
--- Create Client_Company table
 CREATE TABLE `Client_Company` (
     `client_id` INT UNSIGNED NOT NULL PRIMARY KEY,
     `company_name` VARCHAR(255) NOT NULL,
     FOREIGN KEY (`client_id`) REFERENCES `Client`(`id`) ON DELETE CASCADE
 );
 
--- Create Template table
 CREATE TABLE `Template` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `template_name` VARCHAR(255) NOT NULL,
@@ -134,8 +51,6 @@ CREATE TABLE `Template` (
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Create Invoice table
-SET @create_invoice_table = CONCAT('
 CREATE TABLE `Invoice` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `invoice_number` VARCHAR(50) NOT NULL,
@@ -144,7 +59,7 @@ CREATE TABLE `Invoice` (
     `template_id` INT UNSIGNED NOT NULL,
     `creation_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expiration_date` TIMESTAMP NOT NULL,
-    `state` ENUM(', @invoice_states, ') NOT NULL DEFAULT ''draft'',
+    `state` ENUM('draft', 'sent', 'paid', 'overdue', 'cancelled') NOT NULL DEFAULT 'draft',
     `total_amount` DECIMAL(10, 2) NOT NULL DEFAULT 0,
     `currency` VARCHAR(3) NOT NULL,
     `notes` TEXT NULL,
@@ -156,30 +71,21 @@ CREATE TABLE `Invoice` (
     FOREIGN KEY (`client_id`) REFERENCES `Client`(`id`),
     FOREIGN KEY (`user_id`) REFERENCES `User`(`id`),
     FOREIGN KEY (`template_id`) REFERENCES `Template`(`id`)
-)');
-PREPARE stmt FROM @create_invoice_table;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+);
 
--- Create Item table
-SET @create_item_table = CONCAT('
 CREATE TABLE `Item` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
     `default_price` DECIMAL(10, 2) NOT NULL,
-    `type` ENUM(', @item_types, ') NOT NULL,
+    `type` ENUM('product', 'service') NOT NULL,
     `image` MEDIUMBLOB NULL,
     `is_active` BOOLEAN DEFAULT TRUE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT check_positive_default_price CHECK (default_price >= 0)
-)');
-PREPARE stmt FROM @create_item_table;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+);
 
--- Create Invoice_Line table
 CREATE TABLE `Invoice_Line` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `invoice_id` INT UNSIGNED NOT NULL,
@@ -194,7 +100,6 @@ CREATE TABLE `Invoice_Line` (
     CONSTRAINT check_positive_price CHECK (price >= 0)
 );
 
--- Create Tax table
 CREATE TABLE `Tax` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
@@ -205,26 +110,20 @@ CREATE TABLE `Tax` (
     CONSTRAINT check_valid_tax_rate CHECK (rate >= 0 AND rate <= 100)
 );
 
--- Create Discount table
-SET @create_discount_table = CONCAT('
 CREATE TABLE `Discount` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `name` VARCHAR(255) NOT NULL,
-    `type` ENUM(', @discount_types, ') NOT NULL,
+    `type` ENUM('percentage', 'fixed') NOT NULL,
     `value` DECIMAL(10, 2) NOT NULL,
     `is_active` BOOLEAN DEFAULT TRUE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT check_valid_discount CHECK (
-        (type = ''percentage'' AND value >= 0 AND value <= 100) OR
-        (type = ''fixed'' AND value >= 0)
+        (type = 'percentage' AND value >= 0 AND value <= 100) OR
+        (type = 'fixed' AND value >= 0)
     )
-)');
-PREPARE stmt FROM @create_discount_table;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+);
 
--- Create Invoice_Tax table
 CREATE TABLE `Invoice_Tax` (
     `invoice_id` INT UNSIGNED NOT NULL,
     `tax_id` INT UNSIGNED NOT NULL,
@@ -233,7 +132,6 @@ CREATE TABLE `Invoice_Tax` (
     FOREIGN KEY (`tax_id`) REFERENCES `Tax`(`id`) ON DELETE CASCADE
 );
 
--- Create Invoice_Discount table
 CREATE TABLE `Invoice_Discount` (
     `invoice_id` INT UNSIGNED NOT NULL,
     `discount_id` INT UNSIGNED NOT NULL,
@@ -242,28 +140,21 @@ CREATE TABLE `Invoice_Discount` (
     FOREIGN KEY (`discount_id`) REFERENCES `Discount`(`id`) ON DELETE CASCADE
 );
 
--- Create Invoice_History table
-SET @create_invoice_history_table = CONCAT('
 CREATE TABLE `Invoice_History` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `invoice_id` INT UNSIGNED NOT NULL,
-    `previous_state` ENUM(', @invoice_states, ') NOT NULL,
-    `new_state` ENUM(', @invoice_states, ') NOT NULL,
+    `previous_state` ENUM('draft', 'sent', 'paid', 'overdue', 'cancelled') NOT NULL,
+    `new_state` ENUM('draft', 'sent', 'paid', 'overdue', 'cancelled') NOT NULL,
     `state_change_timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `changed_by_user_id` INT UNSIGNED NULL,
     FOREIGN KEY (`invoice_id`) REFERENCES `Invoice`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`changed_by_user_id`) REFERENCES `User`(`id`) ON DELETE SET NULL
-)');
-PREPARE stmt FROM @create_invoice_history_table;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+);
 
--- Create Invoice_Log table
-SET @create_invoice_log_table = CONCAT('
 CREATE TABLE `Invoice_Log` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `invoice_id` INT UNSIGNED NOT NULL,
-    `modification_type` ENUM(', @mod_types, ') NOT NULL,
+    `modification_type` ENUM('create', 'update', 'delete') NOT NULL,
     `old_value` TEXT NULL,
     `new_value` TEXT NULL,
     `modification_timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
@@ -271,27 +162,19 @@ CREATE TABLE `Invoice_Log` (
     `details` TEXT NULL,
     FOREIGN KEY (`invoice_id`) REFERENCES `Invoice`(`id`),
     FOREIGN KEY (`changed_by_user_id`) REFERENCES `User`(`id`) ON DELETE SET NULL
-)');
-PREPARE stmt FROM @create_invoice_log_table;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+);
 
--- Create Attachment table
-SET @create_attachment_table = CONCAT('
 CREATE TABLE `Attachment` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `invoice_id` INT UNSIGNED NOT NULL,
     `file_name` VARCHAR(255) NOT NULL,
     `file_data` MEDIUMBLOB NOT NULL,
-    `extension` ENUM(', @file_extensions, ') NOT NULL,
+    `extension` ENUM('pdf', 'jpg', 'png', 'docx', 'txt') NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`invoice_id`) REFERENCES `Invoice`(`id`) ON DELETE CASCADE
-)');
-PREPARE stmt FROM @create_attachment_table;
-EXECUTE stmt;
-DEALLOCATE PREPARE stmt;
+);
 
--- Create Indexes
+-- Indexes
 CREATE INDEX idx_invoice_state ON Invoice(state);
 CREATE INDEX idx_invoice_creation_date ON Invoice(creation_date);
 CREATE INDEX idx_invoice_expiration_date ON Invoice(expiration_date);
