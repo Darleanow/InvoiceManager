@@ -8,6 +8,7 @@
  * @function Home
  * @returns {JSX.Element} The rendered Home component.
  */
+
 import HomePage from '../components/_templates/HomePage/HomePage';
 import { useUser } from '@clerk/clerk-react';
 import { useEffect } from 'react';

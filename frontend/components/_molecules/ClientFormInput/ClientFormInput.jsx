@@ -8,7 +8,9 @@ import styles from './ClientFormInput.module.scss';
 
 export default function ClientFormInput() {
   const [inputValue, setInputValue] = useState('');
+  
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const [selectedClient, setSelectedClient] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableClient, setEditableClient] = useState(null);
@@ -81,6 +83,7 @@ export default function ClientFormInput() {
     setEditableClient({ ...selectedClient });
     setIsEditing(true);
   };
+
 
   const handleEditChange = (e) => {
     setEditableClient({
