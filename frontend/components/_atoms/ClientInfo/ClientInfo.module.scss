@@ -10,12 +10,14 @@
 .details {
   display: flex;
   flex-direction: column;
+  gap: 5px;
 }
 
 .name {
   font-weight: bold;
   color: #fff;
   transition: color 0.3s ease;
+  font-size: 13px;
 
   &:hover {
     color: #e29c23;
@@ -23,6 +25,6 @@
 }
 
 .email {
-  font-size: 0.9em;
+  font-size: 12px;
   color: #dadada;
 }

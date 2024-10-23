@@ -2,7 +2,11 @@ import PropTypes from 'prop-types';
 import styles from './ProductEntry.module.scss';
 import Image from 'next/image';
 
-export default function ProductEntry({ product, variant = 'default' }) {
+export default function ProductEntry({
+  product,
+  currencySymbol,
+  variant = 'default',
+}) {
   return (
     <div
       className={`${styles.product_entry} ${variant !== 'default' ? styles[variant] : ''}`}
@@ -49,7 +53,7 @@ export default function ProductEntry({ product, variant = 'default' }) {
           <div
             className={`${styles.product_price} ${variant !== 'default' ? styles[variant] : ''}`}
           >
-            {product.price} {product.currencySymbol}
+            {product.price} {currencySymbol}
           </div>
         </div>
       </div>
@@ -62,8 +66,8 @@ ProductEntry.propTypes = {
     icon: PropTypes.string,
     category: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
-    currencySymbol: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
   variant: PropTypes.string,
+  currencySymbol: PropTypes.string.isRequired,
 };

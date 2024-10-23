@@ -5,12 +5,11 @@ import FormInput from '../../_atoms/FormInput/FormInput';
 import FormDropdown from '../../_atoms/FormDropdown/FormDropdown';
 import ClientWidget from '../ClientWidget/ClientWidget';
 import styles from './ClientFormInput.module.scss';
+import PropTypes from 'prop-types';
 
-export default function ClientFormInput() {
+export default function ClientFormInput({ onChange }) {
   const [inputValue, setInputValue] = useState('');
-  
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const [selectedClient, setSelectedClient] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableClient, setEditableClient] = useState(null);
@@ -69,6 +68,8 @@ export default function ClientFormInput() {
 
   const handleClientSelect = (client) => {
     setSelectedClient(client);
+    setEditableClient(client);
+    onChange(client);
     setIsDropdownOpen(false);
     setInputValue('');
     setIsEditing(false);
@@ -76,14 +77,16 @@ export default function ClientFormInput() {
 
   const handleResetClient = () => {
     setSelectedClient(null);
+    setEditableClient(null);
+    onChange(null);
     setInputValue('');
   };
 
   const handleEditClient = () => {
     setEditableClient({ ...selectedClient });
+    onChange(editableClient);
     setIsEditing(true);
   };
-
 
   const handleEditChange = (e) => {
     setEditableClient({
@@ -94,6 +97,7 @@ export default function ClientFormInput() {
 
   const handleSaveEdit = () => {
     setSelectedClient(editableClient);
+    onChange(editableClient);
     setIsEditing(false);
   };
 
@@ -138,3 +142,7 @@ export default function ClientFormInput() {
     </div>
   );
 }
+
+ClientFormInput.propTypes = {
+  onChange: PropTypes.func.isRequired,
+};
