@@ -2,6 +2,10 @@ const pool = require('../config/database');
 
 const devAuthMiddleware = async (req, res, next) => {
   try {
+    if (req.path === '/users/sync') {
+      return next();
+    }
+
     const clerkUserId = req.headers['user-id'];
 
     if (!clerkUserId) {
