@@ -9,9 +9,12 @@ import ClientFormInput from '../../_molecules/ClientFormInput/ClientFormInput';
 import DateFormSelector from '../../_molecules/DateFormSelector/DateFormSelector';
 import CurrencySelector from '../../_molecules/CurrencySelector/CurrencySelector';
 import ProductSearchDropdown from '../../_molecules/ProductSearchDropdown/ProductSearchDropdown';
+import { useRouter } from 'next/navigation';
 import InvoiceTemplate from '../Invoices/InvoiceTemplate';
 
 export default function CreateInvoice() {
+  const router = useRouter();
+
   const [selectedFormat, setSelectedFormat] = useState('pdf');
 
   const [isVisible, setIsVisible] = useState(false);
@@ -91,9 +94,13 @@ export default function CreateInvoice() {
     }
   };
 
+  const handleGoBack = () => {
+    router.push('/');
+  };
+
   return (
     <div className={styles.page_container}>
-      <CreateInvoiceBar />
+      <CreateInvoiceBar handleGoBack={handleGoBack} />
       <div
         className={`${styles.main_content} ${isVisible ? styles.appear : ''}`}
       >
@@ -128,7 +135,9 @@ export default function CreateInvoice() {
           <div className={styles.footer}>
             <p>Last saved: today 4:20pm</p>
             <div className={styles.buttons}>
-              <button className={styles.cancel_button}>Cancel</button>
+              <button className={styles.cancel_button} onClick={handleGoBack}>
+                Cancel
+              </button>
               <button
                 className={styles.download_button}
                 onClick={() => handleDownload(selectedFormat)}
