@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import CreateInvoiceBar from '../../_organisms/CreateInvoiceBar/CreateInvoiceBar';
 import styles from './CreateInvoice.module.scss';
 import HorizontalSeparatorLine from '../../_atoms/HoriontalSeparatorLine/HorizontalSeparatorLine';
@@ -16,7 +16,11 @@ export default function CreateInvoice() {
   const [client, setClient] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [subject, setSubject] = useState('');
-  const [currency, setCurrency] = useState('');
+  const [currency, setCurrency] = useState({
+    code: 'USD',
+    symbol: '$',
+    name: 'United States Dollar',
+  });
   const [selectedProducts, setSelectedProducts] = useState([]);
 
   useEffect(() => {
@@ -24,35 +28,75 @@ export default function CreateInvoice() {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  const products = [
+  const defaultProducts = [
     {
-      icon: 'https://via.placeholder.com/40',
-      category: 'Category',
+      name: 'Service Charge',
       price: 100,
-      currency: 'USD',
-      currencySymbol: '$',
-      name: 'Product Name',
+      quantity: 1,
     },
     {
-      icon: 'https://via.placeholder.com/40',
-      category: 'Category2',
-      price: 100,
-      currency: 'USD',
-      currencySymbol: '$',
-      name: 'Product Name2',
+      name: 'Additional Service',
+      price: 150,
+      quantity: 2,
     },
+  ];
+
+  const mockSelectedProducts = [
     {
-      icon: 'https://via.placeholder.com/40',
-      category: 'Category',
+      name: 'Service Charge',
       price: 100,
-      currency: 'USD',
-      currencySymbol: '$',
-      name: 'Product Name',
+      quantity: 1,
     },
   ];
 
   const handleDateChange = (newDate) => {
     setDueDate(newDate);
+  };
+
+  const displayData = {
+    client: {
+      email: client.email || 'client@example.com',
+      address: client.address || '1234 Client St, City, Country',
+    },
+    subject: subject || 'Invoice Subject',
+    dueDate: dueDate || '2024-12-31',
+    currency: currency || {
+      code: 'USD',
+      symbol: '$',
+      name: 'United States Dollar',
+    },
+    products: selectedProducts.length ? selectedProducts : mockSelectedProducts,
+  };
+
+  const handleDownload = async (format) => {
+    const templateContent =
+      document.getElementById('invoice-template').innerHTML;
+
+    try {
+      const response = await fetch('/api/generate-document', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          html: templateContent,
+          format: format,
+          data: displayData,
+        }),
+      });
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `invoice-${Date.now()}.${format}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error generating document:', error);
+    }
   };
 
   return (
@@ -80,9 +124,10 @@ export default function CreateInvoice() {
             <h3>Product</h3>
             <p>Item</p>
             <ProductSearchDropdown
-              products={products}
+              products={defaultProducts}
               selectedProducts={selectedProducts}
               onSelect={setSelectedProducts}
+              currencySymbol={currency.symbol}
             />
             <HorizontalSeparatorLine width="calc(100% + 18px)" />
           </div>
@@ -90,10 +135,9 @@ export default function CreateInvoice() {
             <p>Last saved: today 4:20pm</p>
             <div className={styles.buttons}>
               <button className={styles.cancel_button}>Cancel</button>
-
               <button
                 className={styles.download_button}
-                onClick={() => handleDownload('docx')}
+                onClick={() => handleDownload('pdf')}
               >
                 Download
               </button>
@@ -101,15 +145,7 @@ export default function CreateInvoice() {
           </div>
         </div>
         <div className={styles.right_panel}>
-          <InvoiceTemplate
-            formData={{
-              client,
-              subject,
-              dueDate,
-              currency,
-              selectedProducts,
-            }}
-          />
+          <InvoiceTemplate displayData={displayData} />
         </div>
       </div>
     </div>

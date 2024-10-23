@@ -67,6 +67,7 @@ export default function ClientFormInput({ onChange }) {
 
   const handleClientSelect = (client) => {
     setSelectedClient(client);
+    setEditableClient(client);
     onChange(client);
     setIsDropdownOpen(false);
     setInputValue('');
@@ -75,13 +76,14 @@ export default function ClientFormInput({ onChange }) {
 
   const handleResetClient = () => {
     setSelectedClient(null);
+    setEditableClient(null);
     onChange(null);
     setInputValue('');
   };
 
   const handleEditClient = () => {
     setEditableClient({ ...selectedClient });
-    onChange(client);
+    onChange(editableClient);
     setIsEditing(true);
   };
 
@@ -94,7 +96,7 @@ export default function ClientFormInput({ onChange }) {
 
   const handleSaveEdit = () => {
     setSelectedClient(editableClient);
-    onChange(client);
+    onChange(editableClient);
     setIsEditing(false);
   };
 

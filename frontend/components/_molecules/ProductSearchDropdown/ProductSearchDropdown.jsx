@@ -11,6 +11,7 @@ export default function ProductSearchDropdown({
   products,
   selectedProducts,
   onSelect,
+  currencySymbol = '$',
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -36,15 +37,13 @@ export default function ProductSearchDropdown({
   const filteredProducts = products.filter(
     (product) =>
       product.name.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      !selectedProducts.some(
-        (selected) => selected.product.name === product.name
-      )
+      !selectedProducts.some((selected) => selected.name === product.name)
   );
 
   const handleProductSelect = (product) => {
     const updatedSelectedProducts = [
       ...selectedProducts,
-      { product, quantity: 1, id: Date.now() },
+      { ...product, quantity: 1, id: Date.now() },
     ];
     onSelect(updatedSelectedProducts);
     closeDropdown();
@@ -100,26 +99,32 @@ export default function ProductSearchDropdown({
     <div className={styles.product_search_dropdown} ref={dropdownRef}>
       {selectedProducts.length > 0 && (
         <div className={styles.selected_products}>
-          {selectedProducts.map(({ product, quantity, id }) => (
-            <div key={id} className={styles.product_preview}>
-              <ProductEntry product={product} variant="selected" />
-              <div className={styles.actions}>
-                <Dropdown
-                  options={[...Array(10).keys()].map((i) => i + 1)}
-                  value={quantity}
-                  onChange={(newQuantity) =>
-                    handleQuantityChange(id, newQuantity)
-                  }
+          {selectedProducts.map(
+            ({ name, category = 'Category', price, quantity, id }) => (
+              <div key={id} className={styles.product_preview}>
+                <ProductEntry
+                  product={{ name, category, price }}
+                  currencySymbol={currencySymbol}
+                  variant="selected"
                 />
-                <button
-                  className={styles.reset_button}
-                  onClick={() => handleProductRemove(id)}
-                >
-                  <AiOutlineClose />
-                </button>
+                <div className={styles.actions}>
+                  <Dropdown
+                    options={[...Array(10).keys()].map((i) => i + 1)}
+                    value={quantity}
+                    onChange={(newQuantity) =>
+                      handleQuantityChange(id, newQuantity)
+                    }
+                  />
+                  <button
+                    className={styles.reset_button}
+                    onClick={() => handleProductRemove(id)}
+                  >
+                    <AiOutlineClose />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          )}
         </div>
       )}
 
@@ -147,7 +152,13 @@ export default function ProductSearchDropdown({
                     className={styles.product_item}
                     onClick={() => handleProductSelect(product)}
                   >
-                    <ProductEntry product={product} />
+                    <ProductEntry
+                      product={{
+                        ...product,
+                        category: product.category || 'Category',
+                      }}
+                      currencySymbol={currencySymbol}
+                    />
                   </button>
                 ))
               ) : (
@@ -174,9 +185,17 @@ ProductSearchDropdown.propTypes = {
       icon: PropTypes.string,
       category: PropTypes.string.isRequired,
       price: PropTypes.number.isRequired,
-      currencySymbol: PropTypes.string.isRequired,
+      currencySymbol: PropTypes.string,
     })
   ).isRequired,
-  selectedProducts: PropTypes.array.isRequired,
+  selectedProducts: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      icon: PropTypes.string,
+      category: PropTypes.string.isRequired,
+      price: PropTypes.number.isRequired,
+    })
+  ).isRequired,
   onSelect: PropTypes.func.isRequired,
+  currencySymbol: PropTypes.string,
 };

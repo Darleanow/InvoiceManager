@@ -1,16 +1,31 @@
 import { NextResponse } from 'next/server';
 import puppeteer from 'puppeteer';
 import HTMLtoDOCX from 'html-to-docx';
-import { getInvoiceStyles } from '@/styles/InvoiceStyles';
+import { getInvoiceStyles } from '@/styles/_templates/getInvoiceStyles';
+
 export async function POST(req) {
   const { html, format, data } = await req.json();
 
+  const invoiceStyles = getInvoiceStyles();
+
+  console.log('html:', html);
   const styledHTML = `
     <!DOCTYPE html>
     <html>
       <head>
         <style>
-          ${getInvoiceStyles()}
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+        body {
+          font-family: Arial, sans-serif;
+          background-color: #1f1f23;
+          color: #fff;
+          padding: 20px;
+        }
+          ${invoiceStyles}
         </style>
       </head>
       <body>
@@ -52,7 +67,6 @@ export async function POST(req) {
         },
       });
     } else if (format === 'docx') {
-      // For DOCX, we need to modify some styles to ensure compatibility
       const docxStyles = styledHTML
         .replace(/<style>/, '<style type="text/css">')
         .replace(

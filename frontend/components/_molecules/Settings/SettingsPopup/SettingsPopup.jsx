@@ -53,12 +53,11 @@ export default function SettingsPopup({ onClose }) {
   ];
 
   const handleCategoryChange = (name) => {
-    // Trigger fade-out effect
     setFadeOutContent(true);
     setTimeout(() => {
       setSelectedCategory(name);
       setFadeOutContent(false);
-    }, 300); // Duration matches the CSS transition time
+    }, 300);
   };
 
   const renderContent = () => {
