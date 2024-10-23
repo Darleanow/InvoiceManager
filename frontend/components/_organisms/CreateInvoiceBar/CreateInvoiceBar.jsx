@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import PropTypes from 'prop-types';
 import Logo from '../../_atoms/Logo/Logo';
 import SeparatorLine from '../../_atoms/SeparatorLine/SeparatorLine';
 import ImportExistingInvoices from '../../_atoms/ImportExistingInvoices/ImportExistingInvoices';
@@ -9,13 +9,8 @@ import styles from './CreateInvoiceBar.module.scss';
 import { AiOutlineClose } from 'react-icons/ai';
 import HorizontalSeparatorLine from '../../_atoms/HoriontalSeparatorLine/HorizontalSeparatorLine';
 
-export default function CreateInvoiceBar() {
+export default function CreateInvoiceBar({ handleGoBack }) {
   const [isVisible, setIsVisible] = useState(false);
-  const router = useRouter();
-
-  const handleCloseClick = () => {
-    router.back();
-  };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => setIsVisible(true), 100);
@@ -38,7 +33,7 @@ export default function CreateInvoiceBar() {
         <div className={styles.right_container}>
           <AiOutlineClose
             className={styles.close_icon}
-            onClick={handleCloseClick}
+            onClick={handleGoBack}
           />
         </div>
       </div>
@@ -46,3 +41,7 @@ export default function CreateInvoiceBar() {
     </div>
   );
 }
+
+CreateInvoiceBar.propTypes = {
+  handleGoBack: PropTypes.func,
+};

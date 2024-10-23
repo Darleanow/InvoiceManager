@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useTransition } from 'react';
 import CreateInvoiceBar from '../../_organisms/CreateInvoiceBar/CreateInvoiceBar';
 import styles from './CreateInvoice.module.scss';
 import HorizontalSeparatorLine from '../../_atoms/HoriontalSeparatorLine/HorizontalSeparatorLine';
@@ -9,12 +9,16 @@ import ClientFormInput from '../../_molecules/ClientFormInput/ClientFormInput';
 import DateFormSelector from '../../_molecules/DateFormSelector/DateFormSelector';
 import CurrencySelector from '../../_molecules/CurrencySelector/CurrencySelector';
 import ProductSearchDropdown from '../../_molecules/ProductSearchDropdown/ProductSearchDropdown';
+import { useRouter } from 'next/navigation';
 import InvoiceTemplate from '../Invoices/InvoiceTemplate';
+import Loader from '../../_atoms/Loader/Loader';
 
 export default function CreateInvoice() {
+  const router = useRouter();
   const [selectedFormat, setSelectedFormat] = useState('pdf');
-
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [startTransition] = useTransition();
   const [client, setClient] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [subject, setSubject] = useState('');
@@ -91,42 +95,59 @@ export default function CreateInvoice() {
     }
   };
 
+  const handleGoBack = () => {
+    setIsLoading(true);
+
+    startTransition(() => {
+      router.push('/');
+    });
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 10000);
+  };
+
   return (
     <div className={styles.page_container}>
-      <CreateInvoiceBar />
+      {isLoading && <Loader />} {/* Show loader while loading */}
+      <CreateInvoiceBar handleGoBack={handleGoBack} />
       <div
         className={`${styles.main_content} ${isVisible ? styles.appear : ''}`}
       >
         <div className={styles.left_panel}>
-          <h3 className={styles.create_invoice_title}>Create Invoice</h3>
-          <div className={styles.form}>
-            <p>Client</p>
-            <ClientFormInput value={client} onChange={setClient} />
-            <p>Subject</p>
-            <FormInput
-              placeholder="Invoice Subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            />
-            <p>Due date</p>
-            <DateFormSelector onDateChange={handleDateChange} />
-            <p>Currency</p>
-            <CurrencySelector value={currency} onChange={setCurrency} />
-            <HorizontalSeparatorLine width="calc(100% + 18px)" />
-            <h3>Product</h3>
-            <p>Item</p>
-            <ProductSearchDropdown
-              products={defaultProducts}
-              selectedProducts={selectedProducts}
-              onSelect={setSelectedProducts}
-              currencySymbol={currency.symbol}
-            />
-            <HorizontalSeparatorLine width="calc(100% + 18px)" />
+          <div className={styles.form_container}>
+            <h3 className={styles.create_invoice_title}>Create Invoice</h3>
+            <div className={styles.form}>
+              <p>Client</p>
+              <ClientFormInput value={client} onChange={setClient} />
+              <p>Subject</p>
+              <FormInput
+                placeholder="Invoice Subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              />
+              <p>Due date</p>
+              <DateFormSelector onDateChange={handleDateChange} />
+              <p>Currency</p>
+              <CurrencySelector value={currency} onChange={setCurrency} />
+              <HorizontalSeparatorLine width="calc(100% + 18px)" />
+              <h3>Product</h3>
+              <p>Item</p>
+              <ProductSearchDropdown
+                products={defaultProducts}
+                selectedProducts={selectedProducts}
+                onSelect={setSelectedProducts}
+                currencySymbol={currency.symbol}
+              />
+              <HorizontalSeparatorLine width="calc(100% + 18px)" />
+            </div>
           </div>
           <div className={styles.footer}>
             <p>Last saved: today 4:20pm</p>
             <div className={styles.buttons}>
-              <button className={styles.cancel_button}>Cancel</button>
+              <button className={styles.cancel_button} onClick={handleGoBack}>
+                Cancel
+              </button>
               <button
                 className={styles.download_button}
                 onClick={() => handleDownload(selectedFormat)}
