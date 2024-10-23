@@ -29,7 +29,6 @@ async function createEntity({
   }
 
   try {
-    // Add user ID to data
     const dataWithUser = {
       ...data,
       [userIdField]: user.id,
@@ -126,7 +125,6 @@ async function updateEntity({
   try {
     await connection.beginTransaction();
 
-    // First check if the entity belongs to the user
     const [checkRow] = await connection.execute(
       `SELECT id FROM ${tableName} WHERE id = ? AND ${userIdField} = ?`,
       [id, user.id]
