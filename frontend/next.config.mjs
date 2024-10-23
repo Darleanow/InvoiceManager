@@ -26,7 +26,6 @@ const nextConfig = {
 
   async rewrites() {
     const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3001';
-
     return {
       beforeFiles: [
         {
@@ -37,9 +36,14 @@ const nextConfig = {
             {
               type: 'header',
               key: 'x-bypass-serverless',
-              value: 'false',
+              value: 'true',
             },
           ],
+        },
+        {
+          source: '/api/:path*',
+          destination: `${API_BASE_URL}/api/:path*`,
+          basePath: false,
         },
       ],
     };
