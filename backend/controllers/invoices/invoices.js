@@ -16,16 +16,28 @@ const TABLE_NAME = 'Invoice';
  * @param {Object} res - Response object
  */
 async function createInvoice(req, res) {
+  if (!req.user?.id) {
+    return res.status(401).json({ error: 'User authentication required' });
+  }
+
   try {
     const {
       client_id,
-      user_id,
       template_id,
       expiration_date,
       currency,
       notes,
       invoice_subject,
     } = req.body;
+
+    const [clientCheck] = await pool.execute(
+      'SELECT id FROM Client WHERE id = ? AND created_by_user_id = ?',
+      [client_id, req.user.id]
+    );
+
+    if (clientCheck.length === 0) {
+      return res.status(404).json({ message: 'Client not found' });
+    }
 
     const [lastInvoice] = await pool.execute(
       'SELECT MAX(CAST(SUBSTRING(invoice_number, 4) AS UNSIGNED)) as last_num FROM Invoice WHERE invoice_number LIKE ?',
@@ -37,13 +49,13 @@ async function createInvoice(req, res) {
 
     const [result] = await pool.execute(
       `INSERT INTO Invoice (
-        invoice_number, client_id, user_id, template_id, 
+        invoice_number, client_id, created_by_user_id, template_id, 
         expiration_date, currency, notes, invoice_subject
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         invoice_number,
         client_id,
-        user_id,
+        req.user.id,
         template_id,
         expiration_date,
         currency,
@@ -70,6 +82,10 @@ async function createInvoice(req, res) {
  * @param {Object} res - Response object
  */
 async function getInvoiceById(req, res) {
+  if (!req.user?.id) {
+    return res.status(401).json({ error: 'User authentication required' });
+  }
+
   try {
     const { id } = req.params;
 
@@ -126,8 +142,8 @@ async function getInvoiceById(req, res) {
         WHERE id.invoice_id = i.id) as discounts
       FROM Invoice i
       JOIN Client c ON i.client_id = c.id
-      WHERE i.id = ?`,
-      [id]
+      WHERE i.id = ? AND i.created_by_user_id = ?`,
+      [id, req.user.id]
     );
 
     if (!invoice[0]) {
@@ -148,12 +164,13 @@ async function getInvoiceById(req, res) {
  * @param {Object} res - Response object
  */
 async function updateInvoice(req, res) {
-  const { expiration_date, currency, notes, invoice_subject } = req.body;
   await updateEntity({
     tableName: TABLE_NAME,
     id: req.params.id,
-    data: { expiration_date, currency, notes, invoice_subject },
+    data: req.body,
     res,
+    user: req.user,
+    userIdField: 'created_by_user_id',
   });
 }
 
@@ -164,21 +181,24 @@ async function updateInvoice(req, res) {
  * @param {Object} res - Response object
  */
 async function updateInvoiceState(req, res) {
+  if (!req.user?.id) {
+    return res.status(401).json({ error: 'User authentication required' });
+  }
+
   try {
     const { id } = req.params;
     const { state } = req.body;
 
-    await pool.execute('SET @current_user_id = ?', [req.user.id]);
-
     const [result] = await pool.execute(
-      'UPDATE Invoice SET state = ? WHERE id = ?',
-      [state, id]
+      'UPDATE Invoice SET state = ? WHERE id = ? AND created_by_user_id = ?',
+      [state, id, req.user.id]
     );
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ message: 'Invoice not found' });
     }
 
+    await pool.execute('SET @current_user_id = ?', [req.user.id]);
     res.json({ message: 'Invoice state updated successfully' });
   } catch (error) {
     console.error('Error updating invoice state:', error);
@@ -193,6 +213,10 @@ async function updateInvoiceState(req, res) {
  * @param {Object} res - Response object
  */
 async function listInvoices(req, res) {
+  if (!req.user?.id) {
+    return res.status(401).json({ error: 'User authentication required' });
+  }
+
   try {
     const { state, client_id, from_date, to_date, search } = req.query;
 
@@ -204,9 +228,9 @@ async function listInvoices(req, res) {
       LEFT JOIN Client c ON i.client_id = c.id
       LEFT JOIN Client_Individual ci ON c.id = ci.client_id
       LEFT JOIN Client_Company cc ON c.id = cc.client_id
-      WHERE 1=1
+      WHERE i.created_by_user_id = ?
     `;
-    const params = [];
+    const params = [req.user.id];
 
     if (state) {
       baseQuery += ' AND i.state = ?';

@@ -10,7 +10,7 @@ const pool = require('../../config/database');
 const TABLE_NAME = 'Client';
 
 /**
- * Creates a new client
+ * Creates a new client with user association
  * @async
  * @param {Object} req - Request object containing client data
  * @param {Object} res - Response object
@@ -28,20 +28,18 @@ async function createClient(req, res) {
       company_name,
     } = req.body;
 
+    if (!req.user?.id) {
+      return res.status(401).json({ error: 'User authentication required' });
+    }
+
     const connection = await pool.getConnection();
     try {
       await connection.beginTransaction();
 
       const [clientResult] = await connection.execute(
-        `INSERT INTO Client (email, phone, type, address, image)
-         VALUES (?, ?, ?, ?, ?)`,
-        [
-          email || null,
-          phone || null,
-          type || null,
-          address || null,
-          image || null,
-        ]
+        `INSERT INTO Client (email, phone, type, address, image, created_by_user_id)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [email, phone, type, address, image, req.user.id]
       );
 
       const client_id = clientResult.insertId;
@@ -50,13 +48,13 @@ async function createClient(req, res) {
         await connection.execute(
           `INSERT INTO Client_Individual (client_id, first_name, last_name)
            VALUES (?, ?, ?)`,
-          [client_id, first_name || null, last_name || null]
+          [client_id, first_name, last_name]
         );
       } else if (type === 'company') {
         await connection.execute(
           `INSERT INTO Client_Company (client_id, company_name)
            VALUES (?, ?)`,
-          [client_id, company_name || null]
+          [client_id, company_name]
         );
       } else {
         throw new Error('Invalid client type');
@@ -80,7 +78,7 @@ async function createClient(req, res) {
 }
 
 /**
- * Retrieves a client by ID with all related information
+ * Retrieves a client by ID with user access check
  * @async
  * @param {Object} req - Request object containing client ID
  * @param {Object} res - Response object
@@ -89,7 +87,11 @@ async function getClientById(req, res) {
   try {
     const { id } = req.params;
 
-    if (id === undefined) {
+    if (!req.user?.id) {
+      return res.status(401).json({ error: 'User authentication required' });
+    }
+
+    if (!id) {
       return res.status(400).json({ error: 'Client ID is required' });
     }
 
@@ -109,8 +111,8 @@ async function getClientById(req, res) {
       FROM Client c
       LEFT JOIN Client_Individual ci ON c.id = ci.client_id
       LEFT JOIN Client_Company cc ON c.id = cc.client_id
-      WHERE c.id = ?`,
-      [id]
+      WHERE c.id = ? AND c.created_by_user_id = ?`,
+      [id, req.user.id]
     );
 
     if (clients.length === 0) {
@@ -125,44 +127,14 @@ async function getClientById(req, res) {
 }
 
 /**
- * Updates main client data in the database
- * @async
- * @param {Object} connection - Database connection object
- * @param {string|number} id - Client ID
- * @param {Object} mainClientData - Object containing client data fields
- * @param {string} [mainClientData.email] - Client's email
- * @param {string} [mainClientData.phone] - Client's phone number
- * @param {string} [mainClientData.address] - Client's address
- * @param {string} [mainClientData.image] - Client's image URL
- * @param {boolean} [mainClientData.is_active] - Client's active status
- * @returns {Promise<boolean>} Returns true if update successful, false if client not found
- */
-async function updateMainClientData(connection, id, mainClientData) {
-  const { updateQuery, updateParams } = buildUpdateQuery(
-    'Client',
-    mainClientData,
-    id
-  );
-
-  if (updateParams.length > 0) {
-    const [clientResult] = await connection.execute(updateQuery, updateParams);
-    if (clientResult.affectedRows === 0) {
-      return false;
-    }
-  }
-  return true;
-}
-
-/**
  * Builds a parameterized UPDATE query for the specified table
  * @param {string} table - Name of the table to update
  * @param {Object} data - Object containing field-value pairs to update
  * @param {string|number} id - ID of the record to update
+ * @param {number} userId - ID of the authenticated user
  * @returns {Object} Object containing the query string and parameters array
- * @property {string} updateQuery - The prepared UPDATE query string
- * @property {Array} updateParams - Array of parameters for the query
  */
-function buildUpdateQuery(table, data, id) {
+function buildUpdateQuery(table, data, id, userId) {
   let updateQuery = `UPDATE ${table} SET `;
   const updateParams = [];
 
@@ -175,59 +147,28 @@ function buildUpdateQuery(table, data, id) {
 
   if (updateParams.length > 0) {
     updateQuery = updateQuery.slice(0, -2);
-    updateQuery += ` WHERE ${table === 'Client' ? 'id' : 'client_id'} = ?`;
-    updateParams.push(id);
+    if (table === 'Client') {
+      updateQuery += ' WHERE id = ? AND created_by_user_id = ?';
+      updateParams.push(id, userId);
+    } else {
+      updateQuery += ' WHERE client_id = ?';
+      updateParams.push(id);
+    }
   }
 
   return { updateQuery, updateParams };
 }
-
 /**
- * Updates individual client specific data
+ * Updates a client with user access check
  * @async
- * @param {Object} connection - Database connection object
- * @param {string|number} id - Client ID
- * @param {Object} data - Individual client data
- * @param {string} [data.first_name] - Individual's first name
- * @param {string} [data.last_name] - Individual's last name
- * @returns {Promise<void>}
- */
-async function updateIndividualClient(
-  connection,
-  id,
-  { first_name, last_name }
-) {
-  const individualData = { first_name, last_name };
-  const { updateQuery, updateParams } = buildUpdateQuery(
-    'Client_Individual',
-    individualData,
-    id
-  );
-
-  if (updateParams.length > 1) {
-    await connection.execute(updateQuery, updateParams);
-  }
-}
-
-/**
- * Updates a client's information in the database
- * @async
- * @param {Object} req - Express request object
- * @param {Object} req.params - Request parameters
- * @param {string|number} req.params.id - Client ID
- * @param {Object} req.body - Request body containing client data
- * @param {string} [req.body.email] - Client's email
- * @param {string} [req.body.phone] - Client's phone number
- * @param {string} [req.body.address] - Client's address
- * @param {string} [req.body.image] - Client's image URL
- * @param {boolean} [req.body.is_active] - Client's active status
- * @param {string} [req.body.first_name] - Individual client's first name
- * @param {string} [req.body.last_name] - Individual client's last name
- * @param {string} [req.body.company_name] - Company client's name
- * @param {Object} res - Express response object
- * @returns {Promise<void>}
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
  */
 async function updateClient(req, res) {
+  if (!req.user?.id) {
+    return res.status(401).json({ error: 'User authentication required' });
+  }
+
   const connection = await pool.getConnection();
 
   try {
@@ -245,39 +186,53 @@ async function updateClient(req, res) {
 
     await connection.beginTransaction();
 
-    const mainClientData = { email, phone, address, image, is_active };
-    const clientUpdated = await updateMainClientData(
-      connection,
-      id,
-      mainClientData
+    const [clientCheck] = await connection.execute(
+      'SELECT type FROM Client WHERE id = ? AND created_by_user_id = ?',
+      [id, req.user.id]
     );
 
-    if (!clientUpdated) {
+    if (clientCheck.length === 0) {
       await connection.rollback();
       return res.status(404).json({ message: 'Client not found' });
     }
 
-    const [clientTypeResult] = await connection.execute(
-      'SELECT type FROM Client WHERE id = ?',
-      [id]
+    const clientType = clientCheck[0].type;
+
+    const mainClientData = { email, phone, address, image, is_active };
+    const { updateQuery, updateParams } = buildUpdateQuery(
+      'Client',
+      mainClientData,
+      id,
+      req.user.id
     );
 
-    const clientType = clientTypeResult[0]?.type;
-    if (!clientType) {
-      await connection.rollback();
-      return res.status(404).json({ message: 'Client type not found' });
+    if (updateParams.length > 0) {
+      const [result] = await connection.execute(updateQuery, updateParams);
+      if (result.affectedRows === 0) {
+        await connection.rollback();
+        return res.status(404).json({ message: 'Failed to update client' });
+      }
     }
 
     if (
       clientType === 'individual' &&
       (first_name !== undefined || last_name !== undefined)
     ) {
-      await updateIndividualClient(connection, id, { first_name, last_name });
+      const individualData = { first_name, last_name };
+      const { updateQuery: individualQuery, updateParams: individualParams } =
+        buildUpdateQuery('Client_Individual', individualData, id);
+
+      if (individualParams.length > 0) {
+        await connection.execute(individualQuery, individualParams);
+      }
     } else if (clientType === 'company' && company_name !== undefined) {
-      await connection.execute(
-        'UPDATE Client_Company SET company_name = ? WHERE client_id = ?',
-        [company_name, id]
-      );
+      const companyData = { company_name };
+      const { updateQuery: companyQuery, updateParams: companyParams } =
+        buildUpdateQuery('Client_Company', companyData, id);
+
+      if (companyParams.length > 0) {
+        await connection.execute(companyQuery, companyParams);
+      }
     }
 
     await connection.commit();
@@ -290,32 +245,58 @@ async function updateClient(req, res) {
     connection.release();
   }
 }
-
 /**
- * Deletes a client by ID
+ * Deletes a client by ID with user access check
  * @async
  * @param {Object} req - Request object containing client ID
  * @param {Object} res - Response object
  */
 async function deleteClient(req, res) {
+  if (!req.user?.id) {
+    return res.status(401).json({ error: 'User authentication required' });
+  }
+
   if (!req.params.id) {
     return res.status(400).json({ error: 'Client ID is required' });
   }
-  await deleteEntity({
-    tableName: TABLE_NAME,
-    id: req.params.id,
-    res,
-  });
+
+  const connection = await pool.getConnection();
+  try {
+    const [clientCheck] = await connection.execute(
+      'SELECT id FROM Client WHERE id = ? AND created_by_user_id = ?',
+      [req.params.id, req.user.id]
+    );
+
+    if (clientCheck.length === 0) {
+      return res.status(404).json({ message: 'Client not found' });
+    }
+
+    await connection.execute(
+      'DELETE FROM Client WHERE id = ? AND created_by_user_id = ?',
+      [req.params.id, req.user.id]
+    );
+
+    res.json({ message: 'Client deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting client:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  } finally {
+    connection.release();
+  }
 }
 
 /**
- * Lists all clients with filtering and pagination
+ * Lists all clients with filtering and pagination for a specific user
  * @async
  * @param {Object} req - Request object containing filter parameters
  * @param {Object} res - Response object
  */
 async function listClients(req, res) {
   try {
+    if (!req.user?.id) {
+      return res.status(401).json({ error: 'User authentication required' });
+    }
+
     const { type, is_active, search } = req.query;
 
     let baseQuery = `
@@ -329,9 +310,9 @@ async function listClients(req, res) {
       FROM Client c
       LEFT JOIN Client_Individual ci ON c.id = ci.client_id
       LEFT JOIN Client_Company cc ON c.id = cc.client_id
-      WHERE 1=1
+      WHERE c.created_by_user_id = ?
     `;
-    const params = [];
+    const params = [req.user.id];
 
     if (type) {
       baseQuery += ' AND c.type = ?';

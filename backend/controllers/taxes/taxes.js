@@ -26,6 +26,7 @@ async function createTax(req, res) {
     tableName: TABLE_NAME,
     data: { name, rate, apply_by_default },
     res,
+    user: req.user,
   });
 }
 
@@ -40,9 +41,9 @@ async function getTaxById(req, res) {
     tableName: TABLE_NAME,
     id: req.params.id,
     res,
+    user: req.user,
   });
 }
-
 /**
  * Updates a tax's details
  * @async
@@ -56,9 +57,9 @@ async function updateTax(req, res) {
     id: req.params.id,
     data: { name, rate, apply_by_default },
     res,
+    user: req.user,
   });
 }
-
 /**
  * Deletes a tax by ID
  * @async
@@ -70,6 +71,7 @@ async function deleteTax(req, res) {
     tableName: TABLE_NAME,
     id: req.params.id,
     res,
+    user: req.user,
   });
 }
 
@@ -83,6 +85,8 @@ async function listTaxes(req, res) {
   await listEntities({
     tableName: TABLE_NAME,
     res,
+    user: req.user,
+    filters: req.query,
   });
 }
 

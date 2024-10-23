@@ -7,6 +7,7 @@
 const express = require('express');
 const cors = require('cors');
 const routes = require('./routes/index');
+const devAuthMiddleware = require('./middleware/devAuth');
 
 const app = express();
 
@@ -39,6 +40,17 @@ app.use(
 app.use(express.json());
 
 /**
+ * Adds development authentication middleware.
+ * This middleware verifies the user-id header and attaches user information to the request.
+ * Only active in development environment.
+ *
+ * @function
+ */
+if (process.env.NODE_ENV === 'development') {
+  app.use('/api', devAuthMiddleware);
+}
+
+/**
  * Sets up the main API routes under the `/api` path.
  *
  * @function
@@ -46,5 +58,23 @@ app.use(express.json());
  * @description All routes are defined in the `routes/index.js` file, and are mounted on the `/api` path for the application.
  */
 app.use('/api', routes);
+
+/**
+ * Global error handler
+ *
+ * @function
+ * @param {Error} err - Error object
+ * @param {Request} _req - Express request object (unused)
+ * @param {Response} res - Express response object
+ * @param {NextFunction} _next - Express next function (unused)
+ * @description Catches any errors that weren't handled in the routes
+ */
+app.use((err, _req, res, _next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? err.message : undefined,
+  });
+});
 
 module.exports = app;
