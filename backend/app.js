@@ -83,7 +83,7 @@ app.use(express.json());
  * @function
  */
 if (process.env.NODE_ENV === 'development') {
-  app.use('/api', devAuthMiddleware, limiter);
+  app.use('/api', limiter, devAuthMiddleware);
 }
 
 /**
