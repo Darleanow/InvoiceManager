@@ -50,6 +50,6 @@ const port = 3001;
      * @param {Error} error - The error object that contains the message explaining why the connection failed.
      */
     console.error('Error connecting to the database:', error.message);
-    process.exit(1); // Exits the process with failure code.
+    process.exit(1);
   }
 })();

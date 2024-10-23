@@ -1,26 +1,23 @@
-const { MySqlContainer } = require("@testcontainers/mysql");
-const mysql = require("mysql2/promise");
-const path = require("path");
-const fs = require("fs");
-require("dotenv").config({ path: path.resolve(__dirname, "../../.env.test") });
+const { MySqlContainer } = require('@testcontainers/mysql');
+const mysql = require('mysql2/promise');
+const path = require('path');
+const fs = require('fs');
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env.test') });
 
 let container;
 let pool;
 
 async function initDatabase() {
   try {
-    // Start MySQL container with root user and test user, using environment variables
     await startMySQLContainer();
 
-    // Setup the schema, populate data, and grant privileges
     await setupDatabase();
 
-    // Import the pool after setting environment variables
-    pool = require("../../config/database");
+    pool = require('../../config/database');
 
     return { pool, container };
   } catch (error) {
-    console.error("Error during database initialization:", error);
+    console.error('Error during database initialization:', error);
     throw error;
   }
 }
@@ -34,7 +31,6 @@ async function startMySQLContainer() {
     .withDatabase(databaseName)
     .start();
 
-  // Set environment variables for MySQL pool connection
   process.env.TEST_DB_HOST = container.getHost();
   process.env.TEST_DB_PORT = container.getPort();
 }
@@ -44,7 +40,6 @@ async function setupDatabase() {
   const rootPassword = process.env.TEST_DB_ROOT_PASSWORD;
   const databaseName = process.env.TEST_DB_NAME;
 
-  // Create a temporary connection as root
   const tempConnection = await createConnection({
     user: rootUser,
     password: rootPassword,
@@ -69,8 +64,8 @@ async function createConnection({ user, password, database }) {
 }
 
 async function executeSqlScripts(connection) {
-  const schemaSql = loadSqlFile("../../bin/schema.sql");
-  const populateSql = loadSqlFile("../../bin/populate.sql");
+  const schemaSql = loadSqlFile('../../bin/schema.sql');
+  const populateSql = loadSqlFile('../../bin/populate.sql');
 
   await connection.query(schemaSql);
   await connection.query(populateSql);
@@ -78,7 +73,7 @@ async function executeSqlScripts(connection) {
 
 function loadSqlFile(relativeFilePath) {
   const filePath = path.resolve(__dirname, relativeFilePath);
-  return fs.readFileSync(filePath, "utf8");
+  return fs.readFileSync(filePath, 'utf8');
 }
 
 async function createTestUser(connection) {
@@ -104,7 +99,7 @@ async function teardownDatabase() {
       await container.stop();
     }
   } catch (error) {
-    console.error("Error during database teardown:", error);
+    console.error('Error during database teardown:', error);
     throw error;
   }
 }

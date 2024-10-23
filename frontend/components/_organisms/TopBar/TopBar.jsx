@@ -1,5 +1,5 @@
 import styles from './TopBar.module.scss';
-import { useRouter } from 'next/navigation'; // Import useRouter for App Router
+import { useRouter } from 'next/navigation';
 
 import Logo from '../../_atoms/Logo/Logo';
 import SeparatorLine from '../../_atoms/SeparatorLine/SeparatorLine';
