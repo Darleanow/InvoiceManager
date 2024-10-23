@@ -6,9 +6,9 @@ import FormDropdown from '../../_atoms/FormDropdown/FormDropdown';
 import ClientWidget from '../ClientWidget/ClientWidget';
 import styles from './ClientFormInput.module.scss';
 
-export default function ClientFormInput() {
+export default function ClientFormInput({ onChange }) {
   const [inputValue, setInputValue] = useState('');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Controls dropdown state
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableClient, setEditableClient] = useState(null);
@@ -41,27 +41,23 @@ export default function ClientFormInput() {
     },
   ];
 
-  // Update input value and open dropdown when user types
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
-    setIsDropdownOpen(e.target.value !== ''); // Open dropdown when input is not empty
+    setIsDropdownOpen(e.target.value !== '');
   };
 
-  // Handle focus on input to open dropdown
   const handleInputFocus = () => {
     if (inputValue) {
-      setIsDropdownOpen(true); // Open dropdown if there's a value in the input
+      setIsDropdownOpen(true);
     }
   };
 
-  // Handle clicking outside dropdown to close it
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setIsDropdownOpen(false); // Close dropdown when clicking outside
+      setIsDropdownOpen(false);
     }
   };
 
-  // Setup click listener for outside clicks
   useEffect(() => {
     document.addEventListener('click', handleClickOutside);
     return () => {
@@ -69,27 +65,26 @@ export default function ClientFormInput() {
     };
   }, []);
 
-  // Handle client selection from dropdown
   const handleClientSelect = (client) => {
     setSelectedClient(client);
-    setIsDropdownOpen(false); // Close dropdown when client is selected
-    setInputValue(''); // Clear input
+    onChange(client);
+    setIsDropdownOpen(false);
+    setInputValue('');
     setIsEditing(false);
   };
 
-  // Reset selected client
   const handleResetClient = () => {
     setSelectedClient(null);
-    setInputValue(''); // Clear input when resetting client
+    onChange(null);
+    setInputValue('');
   };
 
-  // Handle editing client details
   const handleEditClient = () => {
     setEditableClient({ ...selectedClient });
-    setIsEditing(true); // Start editing mode
+    onChange(client);
+    setIsEditing(true);
   };
 
-  // Update client details while editing
   const handleEditChange = (e) => {
     setEditableClient({
       ...editableClient,
@@ -97,18 +92,16 @@ export default function ClientFormInput() {
     });
   };
 
-  // Save edited client details
   const handleSaveEdit = () => {
-    setSelectedClient(editableClient); // Save edited client
-    setIsEditing(false); // End editing mode
+    setSelectedClient(editableClient);
+    onChange(client);
+    setIsEditing(false);
   };
 
-  // Cancel editing mode
   const handleCancelEdit = () => {
     setIsEditing(false);
   };
 
-  // Filter clients based on input value
   const filteredClients = clients.filter((client) =>
     client.name.toLowerCase().includes(inputValue.toLowerCase())
   );

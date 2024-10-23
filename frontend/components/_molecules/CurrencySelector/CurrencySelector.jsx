@@ -15,7 +15,7 @@ const currencies = [
   { code: 'INR', name: 'Indian Rupee', countryCode: 'IN' },
 ];
 
-export default function CurrencySelector() {
+export default function CurrencySelector({ onChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState(currencies[0]);
 
@@ -25,6 +25,7 @@ export default function CurrencySelector() {
 
   const handleCurrencyChange = (currency) => {
     setSelectedCurrency(currency);
+    onChange(currency);
     setIsOpen(false);
   };
 

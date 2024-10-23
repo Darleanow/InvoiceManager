@@ -1,54 +1,86 @@
-// app/api/generate-document/route.js
-import PizZip from 'pizzip';
-import Docxtemplater from 'docxtemplater';
-import fs from 'fs';
-import path from 'path';
 import { NextResponse } from 'next/server';
+import puppeteer from 'puppeteer';
+import HTMLtoDOCX from 'html-to-docx';
+import { getInvoiceStyles } from '@/styles/InvoiceStyles';
+export async function POST(req) {
+  const { html, format, data } = await req.json();
 
-export async function POST(request) {
+  const styledHTML = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          ${getInvoiceStyles()}
+        </style>
+      </head>
+      <body>
+        ${html}
+      </body>
+    </html>
+  `;
+
   try {
-    const formData = await request.json();
+    if (format === 'pdf') {
+      const browser = await puppeteer.launch({
+        headless: 'new',
+      });
+      const page = await browser.newPage();
 
-    // Load the docx file as binary content
-    const templatePath = path.join(
-      process.cwd(),
-      'templates',
-      'invoice_template_1.docx'
-    );
-    const content = fs.readFileSync(templatePath, 'binary');
+      await page.setViewport({ width: 900, height: 1200 });
+      await page.setContent(styledHTML, {
+        waitUntil: 'networkidle0',
+      });
 
-    const zip = new PizZip(content);
-    const doc = new Docxtemplater(zip, {
-      paragraphLoop: true,
-      linebreaks: true,
-    });
+      const pdf = await page.pdf({
+        format: 'A4',
+        printBackground: true,
+        margin: {
+          top: '0',
+          right: '0',
+          bottom: '0',
+          left: '0',
+        },
+        preferCSSPageSize: true,
+      });
 
-    doc.setData(formData);
+      await browser.close();
 
-    try {
-      // Render the document
-      doc.render();
-    } catch (error) {
-      console.error(error);
-      return NextResponse.json(
-        { error: 'Error generating document' },
-        { status: 500 }
-      );
+      return new NextResponse(pdf, {
+        headers: {
+          'Content-Type': 'application/pdf',
+          'Content-Disposition': `attachment; filename=invoice-${Date.now()}.pdf`,
+        },
+      });
+    } else if (format === 'docx') {
+      // For DOCX, we need to modify some styles to ensure compatibility
+      const docxStyles = styledHTML
+        .replace(/<style>/, '<style type="text/css">')
+        .replace(
+          'background-color: #1f1f23;',
+          'background-color: #1f1f23 !important;'
+        );
+
+      const docx = await HTMLtoDOCX(docxStyles, null, {
+        table: { row: { cantSplit: true } },
+        footer: true,
+        pageNumber: true,
+        margins: { top: 0, right: 0, bottom: 0, left: 0 },
+        font: 'Arial',
+      });
+
+      return new NextResponse(docx, {
+        headers: {
+          'Content-Type':
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'Content-Disposition': `attachment; filename=invoice-${Date.now()}.docx`,
+        },
+      });
     }
-
-    const buffer = doc.getZip().generate({ type: 'nodebuffer' });
-
-    // Return the .docx file
-    return new NextResponse(buffer, {
-      status: 200,
-      headers: {
-        'Content-Type':
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-        'Content-Disposition': 'attachment; filename=document.docx',
-      },
-    });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+    console.error('Error generating document:', error);
+    return NextResponse.json(
+      { error: 'Failed to generate document' },
+      { status: 500 }
+    );
   }
 }

@@ -6,9 +6,13 @@ import { AiOutlineClose } from 'react-icons/ai';
 import { BiCartAdd } from 'react-icons/bi';
 import styles from './ProductSearchDropdown.module.scss';
 import Dropdown from '@/components/_atoms/Dropdown/Dropdown';
-export default function ProductSearchDropdown({ products }) {
+
+export default function ProductSearchDropdown({
+  products,
+  selectedProducts,
+  onSelect,
+}) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedProducts, setSelectedProducts] = useState([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [animationState, setAnimationState] = useState('idle');
   const [isSearchVisible, setIsSearchVisible] = useState(true);
@@ -38,29 +42,30 @@ export default function ProductSearchDropdown({ products }) {
   );
 
   const handleProductSelect = (product) => {
-    setSelectedProducts((prevSelectedProducts) => [
-      ...prevSelectedProducts,
+    const updatedSelectedProducts = [
+      ...selectedProducts,
       { product, quantity: 1, id: Date.now() },
-    ]);
+    ];
+    onSelect(updatedSelectedProducts);
     closeDropdown();
     setSearchQuery('');
     setIsSearchVisible(false);
   };
 
   const handleProductRemove = (productId) => {
-    setSelectedProducts((prevSelectedProducts) =>
-      prevSelectedProducts.filter((product) => product.id !== productId)
+    const updatedSelectedProducts = selectedProducts.filter(
+      (product) => product.id !== productId
     );
+    onSelect(updatedSelectedProducts);
   };
 
   const handleQuantityChange = (productId, newQuantity) => {
-    setSelectedProducts((prevSelectedProducts) =>
-      prevSelectedProducts.map((selectedProduct) =>
-        selectedProduct.id === productId
-          ? { ...selectedProduct, quantity: newQuantity }
-          : selectedProduct
-      )
+    const updatedSelectedProducts = selectedProducts.map((selectedProduct) =>
+      selectedProduct.id === productId
+        ? { ...selectedProduct, quantity: newQuantity }
+        : selectedProduct
     );
+    onSelect(updatedSelectedProducts);
   };
 
   const closeDropdown = () => {
@@ -172,4 +177,6 @@ ProductSearchDropdown.propTypes = {
       currencySymbol: PropTypes.string.isRequired,
     })
   ).isRequired,
+  selectedProducts: PropTypes.array.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };

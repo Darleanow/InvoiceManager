@@ -10,5 +10,6 @@
 import HomePage from '../components/_templates/HomePage/HomePage';
 
 export default function Home() {
+  //
   return <HomePage />;
 }
