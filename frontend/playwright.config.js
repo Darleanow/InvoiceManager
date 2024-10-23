@@ -4,13 +4,13 @@ export default defineConfig({
   testDir: './end_to_end',
   timeout: 30000,
   retries: 1,
-  reporter: [['html', { open: 'never' }]], // HTML reporter for better visualization
+  reporter: [['html', { open: 'never' }]],
   use: {
     headless: true,
     viewport: { width: 1512, height: 982 },
     actionTimeout: 2000,
-    ignoreHTTPSErrors: true, // Ignore HTTPS errors
-    video: 'on-first-retry', // Record video on first retry
+    ignoreHTTPSErrors: true,
+    video: 'on-first-retry',
   },
   projects: [
     { name: 'Chromium', use: { browserName: 'chromium' } },

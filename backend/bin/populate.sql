@@ -1,72 +1,111 @@
-USE invoice_manager;
+USE Invoice_Manager;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
--- Insert benefits
-INSERT INTO invoice_manager.benefit (object, unit, price_per_unit) VALUES 
-('Health Insurance', 12, 100),
-('Gym Membership', 1, 50),
-('Life Insurance', 12, 200),
-('Dental Care', 6, 75),
-('Car Insurance', 12, 120),
-('Home Insurance', 12, 150),
-('Travel Insurance', 1, 60),
-('Pet Insurance', 12, 80),
-('Vision Care', 6, 40),
-('Disability Insurance', 12, 180),
-('Income Protection', 12, 170),
-('Legal Insurance', 12, 90),
-('Critical Illness', 12, 250),
-('Accident Insurance', 1, 30),
-('Retirement Plan', 12, 300),
-('Student Loan Repayment', 12, 130),
-('Tuition Reimbursement', 12, 110),
-('Adoption Assistance', 12, 90),
-('Wellness Program', 12, 40),
-('Meal Subsidy', 1, 20);
+-- Insert Users
+INSERT INTO `User` (clerk_user_id, first_name, last_name, username, email, role) VALUES
+('user_2aX9NB1', 'John', 'Admin', 'jadmin', 'john.admin@example.com', 'admin'),
+('user_7bY3MC2', 'Sarah', 'Manager', 'smanager', 'sarah.manager@example.com', 'manager'),
+('user_4cZ8LD3', 'Mike', 'Handler', 'mhandler', 'mike.handler@example.com', 'manager');
 
--- Insert customers
-INSERT INTO invoice_manager.customer (name, email, postal_address) VALUES 
-('John Doe', 'johndoe@example.com', '123 Main St, Springfield, IL'),
-('Jane Smith', 'janesmith@example.com', '456 Oak St, Springfield, IL'),
-('Michael Brown', 'michaelbrown@example.com', '789 Pine St, Springfield, IL'),
-('Emily Johnson', 'emilyjohnson@example.com', '321 Cedar St, Springfield, IL'),
-('Chris Davis', 'chrisdavis@example.com', '654 Birch St, Springfield, IL');
+-- Insert Clients
+INSERT INTO `Client` (email, phone, type, address) VALUES
+('acme.corp@example.com', '555-0100', 'company', '123 Business Ave, Suite 100'),
+('john.doe@example.com', '555-0101', 'individual', '456 Residential St'),
+('tech.solutions@example.com', '555-0102', 'company', '789 Innovation Park'),
+('jane.smith@example.com', '555-0103', 'individual', '321 Home Lane');
 
--- Insert invoices and associate with customer and benefits in one go
--- Customer 1: John Doe
-INSERT INTO invoice_manager.invoice (name, date) 
-VALUES ('Invoice for John Doe - Health Package', '2024-01-15');
-SET @invoice_id = LAST_INSERT_ID();
-INSERT INTO invoice_manager.customer_invoice (customer_id, invoice_id) VALUES (1, @invoice_id);
-INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (@invoice_id, 1), (@invoice_id, 2);
+-- Insert Client Companies
+INSERT INTO `Client_Company` (client_id, company_name) VALUES
+(1, 'Acme Corporation'),
+(3, 'Tech Solutions Inc.');
 
--- Customer 2: Jane Smith
-INSERT INTO invoice_manager.invoice (name, date) 
-VALUES ('Invoice for Jane Smith - Travel Package', '2024-01-10');
-SET @invoice_id = LAST_INSERT_ID();
-INSERT INTO invoice_manager.customer_invoice (customer_id, invoice_id) VALUES (2, @invoice_id);
-INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (@invoice_id, 7), (@invoice_id, 15);
+-- Insert Client Individuals
+INSERT INTO `Client_Individual` (client_id, first_name, last_name) VALUES
+(2, 'John', 'Doe'),
+(4, 'Jane', 'Smith');
 
--- Customer 3: Michael Brown
-INSERT INTO invoice_manager.invoice (name, date) 
-VALUES ('Invoice for Michael Brown - Retirement Plan', '2024-02-10');
-SET @invoice_id = LAST_INSERT_ID();
-INSERT INTO invoice_manager.customer_invoice (customer_id, invoice_id) VALUES (3, @invoice_id);
-INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (@invoice_id, 11);
+-- Insert Templates
+INSERT INTO `Template` (template_name) VALUES
+('Standard Invoice'),
+('Professional Services'),
+('Detailed Receipt');
 
--- Customer 4: Emily Johnson
-INSERT INTO invoice_manager.invoice (name, date) 
-VALUES ('Invoice for Emily Johnson - Tuition Reimbursement', '2024-01-30');
-SET @invoice_id = LAST_INSERT_ID();
-INSERT INTO invoice_manager.customer_invoice (customer_id, invoice_id) VALUES (4, @invoice_id);
-INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (@invoice_id, 17);
+-- Insert Items
+INSERT INTO `Item` (name, description, default_price, type) VALUES
+('Web Development', 'Professional web development services', 150.00, 'service'),
+('Consultation', 'Expert consultation session', 200.00, 'service'),
+('Server Hardware', 'High-performance server', 1999.99, 'product'),
+('Software License', 'Annual software license', 499.99, 'product');
 
--- Customer 5: Chris Davis
-INSERT INTO invoice_manager.invoice (name, date) 
-VALUES ('Invoice for Chris Davis - Critical Illness Plan', '2024-04-15');
-SET @invoice_id = LAST_INSERT_ID();
-INSERT INTO invoice_manager.customer_invoice (customer_id, invoice_id) VALUES (5, @invoice_id);
-INSERT INTO invoice_manager.invoice_benefit (invoice_id, benefit_id) VALUES (@invoice_id, 13);
+-- Insert Taxes
+INSERT INTO `Tax` (name, rate, apply_by_default) VALUES
+('Standard VAT', 20.00, true),
+('Reduced Rate', 10.00, false),
+('Zero Rate', 0.00, false);
+
+-- Insert Discounts
+INSERT INTO `Discount` (name, type, value) VALUES
+('Early Payment', 'percentage', 5.00),
+('Bulk Purchase', 'fixed', 100.00),
+('Loyalty Discount', 'percentage', 10.00);
+
+-- Insert Invoices
+INSERT INTO `Invoice` (
+    invoice_number, client_id, user_id, template_id, 
+    creation_date, expiration_date, state, 
+    currency, notes, invoice_subject,
+    total_amount, subtotal
+) VALUES
+('INV-2024-001', 1, 1, 1, 
+ CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), 'sent', 
+ 'USD', 'Standard payment terms apply', 'Web Development Services', 
+ 1500.00, 1500.00),
+('INV-2024-002', 2, 2, 1, 
+ CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), 'paid', 
+ 'USD', 'Paid in full', 'Expert Consultation Services', 
+ 200.00, 200.00),
+('INV-2024-003', 3, 1, 2, 
+ CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), 'draft', 
+ 'USD', 'Hardware purchase order', 'Server Hardware', 
+ 1999.99, 1999.99);
+
+-- Insert Invoice Lines
+INSERT INTO `Invoice_Line` (invoice_id, item_id, quantity, price, description) VALUES
+(1, 1, 10, 150.00, 'Web Development - 10 hours'),
+(2, 2, 1, 200.00, 'Consultation Session'),
+(3, 3, 1, 1999.99, 'Server Hardware Purchase');
+
+-- Insert Invoice Taxes
+INSERT INTO `Invoice_Tax` (invoice_id, tax_id) VALUES
+(1, 1),
+(2, 1),
+(3, 1);
+
+-- Insert Invoice Discounts
+INSERT INTO `Invoice_Discount` (invoice_id, discount_id) VALUES
+(1, 1),
+(2, 3);
+
+-- Insert Invoice History
+INSERT INTO `Invoice_History` (
+    invoice_id, 
+    previous_state, 
+    new_state, 
+    changed_by_user_id
+) VALUES
+(1, 'draft', 'sent', 1),
+(2, 'draft', 'sent', 2),
+(2, 'sent', 'paid', 2);
+
+-- Insert attachments with placeholder file data
+INSERT INTO `Attachment` (
+    invoice_id, 
+    file_name, 
+    file_data, 
+    extension
+) VALUES
+(1, 'invoice-001-details', UNHEX('89504E470D0A1A0A'), 'pdf'),
+(2, 'receipt-002', UNHEX('89504E470D0A1A0A'), 'pdf');
 
 SET FOREIGN_KEY_CHECKS = 1;

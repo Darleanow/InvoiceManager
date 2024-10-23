@@ -86,7 +86,7 @@ export default function ClientFormInput({ onChange }) {
     onChange(editableClient);
     setIsEditing(true);
   };
-
+  
   const handleEditChange = (e) => {
     setEditableClient({
       ...editableClient,

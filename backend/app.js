@@ -10,13 +10,25 @@ const routes = require('./routes/index');
 
 const app = express();
 
+app.set('trust proxy', (ip) => {
+  return ip === '127.0.0.1' || ip === '::1' || ip.startsWith('localhost');
+});
+
 /**
  * Enables Cross-Origin Resource Sharing (CORS) for the Express application.
  * This allows the server to handle requests from different origins.
  *
  * @function
  */
-app.use(cors());
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'development'
+        ? 'http://localhost:3000'
+        : 'my-production-domain.com',
+    credentials: true,
+  })
+);
 
 /**
  * Adds middleware to parse incoming requests with JSON payloads.

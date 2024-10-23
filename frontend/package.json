@@ -23,7 +23,7 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "docxtemplater": "^3.51.1",
     "html-to-docx": "^1.8.0",
-    "lucide-react": "^0.453.0",
+    "country-flag-icons": "^1.5.13",
     "next": "14.2.13",
     "pdfkit": "^0.15.0",
     "pizzip": "^3.1.7",
