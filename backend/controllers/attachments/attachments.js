@@ -23,7 +23,6 @@ async function createAttachment(req, res) {
   try {
     const { invoice_id, file_name, file_data, extension } = req.body;
 
-    // Verify the invoice belongs to the user
     const [invoiceCheck] = await connection.execute(
       'SELECT id FROM Invoice WHERE id = ? AND user_id = ?',
       [invoice_id, req.user.id]
@@ -99,7 +98,6 @@ async function deleteAttachment(req, res) {
 
   const connection = await pool.getConnection();
   try {
-    // First verify the attachment belongs to an invoice owned by the user
     const [attachmentCheck] = await connection.execute(
       `SELECT a.id 
        FROM ${TABLE_NAME} a
