@@ -98,30 +98,32 @@ export default function CreateInvoice() {
         className={`${styles.main_content} ${isVisible ? styles.appear : ''}`}
       >
         <div className={styles.left_panel}>
-          <h3 className={styles.create_invoice_title}>Create Invoice</h3>
-          <div className={styles.form}>
-            <p>Client</p>
-            <ClientFormInput value={client} onChange={setClient} />
-            <p>Subject</p>
-            <FormInput
-              placeholder="Invoice Subject"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            />
-            <p>Due date</p>
-            <DateFormSelector onDateChange={handleDateChange} />
-            <p>Currency</p>
-            <CurrencySelector value={currency} onChange={setCurrency} />
-            <HorizontalSeparatorLine width="calc(100% + 18px)" />
-            <h3>Product</h3>
-            <p>Item</p>
-            <ProductSearchDropdown
-              products={defaultProducts}
-              selectedProducts={selectedProducts}
-              onSelect={setSelectedProducts}
-              currencySymbol={currency.symbol}
-            />
-            <HorizontalSeparatorLine width="calc(100% + 18px)" />
+          <div className={styles.form_container}>
+            <h3 className={styles.create_invoice_title}>Create Invoice</h3>
+            <div className={styles.form}>
+              <p>Client</p>
+              <ClientFormInput value={client} onChange={setClient} />
+              <p>Subject</p>
+              <FormInput
+                placeholder="Invoice Subject"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              />
+              <p>Due date</p>
+              <DateFormSelector onDateChange={handleDateChange} />
+              <p>Currency</p>
+              <CurrencySelector value={currency} onChange={setCurrency} />
+              <HorizontalSeparatorLine width="calc(100% + 18px)" />
+              <h3>Product</h3>
+              <p>Item</p>
+              <ProductSearchDropdown
+                products={defaultProducts}
+                selectedProducts={selectedProducts}
+                onSelect={setSelectedProducts}
+                currencySymbol={currency.symbol}
+              />
+              <HorizontalSeparatorLine width="calc(100% + 18px)" />
+            </div>
           </div>
           <div className={styles.footer}>
             <p>Last saved: today 4:20pm</p>
