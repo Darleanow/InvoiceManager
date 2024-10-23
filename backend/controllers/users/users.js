@@ -58,10 +58,10 @@ async function syncUser(req, res) {
           isNewUser: true,
         });
       } else {
-        [result] = await connection.execute(
+        await connection.execute(
           `UPDATE User 
-           SET last_login = CURRENT_TIMESTAMP 
-           WHERE clerk_user_id = ?`,
+            SET last_login = CURRENT_TIMESTAMP 
+            WHERE clerk_user_id = ?`,
           [clerk_user_id]
         );
 
