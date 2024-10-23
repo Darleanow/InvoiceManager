@@ -1,7 +1,15 @@
+$primary-color: #1F1F23;
+$secondary-color: #26262A;
+$color: #dadada;
+$color-sd: #cacaca;
+$border: #2e2e32;
+$icon: #48484e;
+$accent: #e29c23;
+
 .title {
     font-size: 20px;
     font-weight: 600;
-    color: white;
+    color: $color;
     margin-bottom: 20px;
     text-decoration: underline;
     padding-left: 20px;
@@ -17,6 +25,8 @@
     grid-row: 2;
     padding-left: 20px;
     width: 100%;
+    background-color: $primary-color;
+    
 }
 
 .localization_container {
@@ -26,6 +36,7 @@
     grid-column: 2;
     grid-row: 2;
     width: 100%;
+    background-color: $primary-color;
 }
 
 .currency_container {
@@ -35,6 +46,7 @@
     grid-column: 1;
     grid-row: 3;
     width: 100%;
+    background-color: $primary-color;
 }
 
 .notifications_container {
@@ -44,6 +56,7 @@
     grid-column: 2;
     grid-row: 3;
     width: 100%;
+    background-color: $primary-color;
 }
 
 .wrapper {
@@ -72,4 +85,5 @@
     gap: 20px;
     padding-bottom: 20px;
     width: 100%;
+    background-color: $secondary-color;
 }
