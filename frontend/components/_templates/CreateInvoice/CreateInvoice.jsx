@@ -12,6 +12,8 @@ import ProductSearchDropdown from '../../_molecules/ProductSearchDropdown/Produc
 import InvoiceTemplate from '../Invoices/InvoiceTemplate';
 
 export default function CreateInvoice() {
+  const [selectedFormat, setSelectedFormat] = useState('pdf');
+
   const [isVisible, setIsVisible] = useState(false);
   const [client, setClient] = useState('');
   const [dueDate, setDueDate] = useState('');
@@ -33,11 +35,13 @@ export default function CreateInvoice() {
       name: 'Service Charge',
       price: 100,
       quantity: 1,
+      category: 'Service',
     },
     {
       name: 'Additional Service',
       price: 150,
       quantity: 2,
+      category: 'Service',
     },
   ];
 
@@ -46,6 +50,7 @@ export default function CreateInvoice() {
       name: 'Service Charge',
       price: 100,
       quantity: 1,
+      category: 'Service',
     },
   ];
 
@@ -55,17 +60,14 @@ export default function CreateInvoice() {
 
   const displayData = {
     client: {
-      email: client.email || 'client@example.com',
-      address: client.address || '1234 Client St, City, Country',
+      name: client?.name || null,
+      email: client?.email || null,
+      address: client?.address || null,
     },
-    subject: subject || 'Invoice Subject',
-    dueDate: dueDate || '2024-12-31',
-    currency: currency || {
-      code: 'USD',
-      symbol: '$',
-      name: 'United States Dollar',
-    },
-    products: selectedProducts.length ? selectedProducts : mockSelectedProducts,
+    subject: subject || null,
+    dueDate: dueDate || null,
+    currency: currency || null,
+    products: selectedProducts.length ? selectedProducts : null,
   };
 
   const handleDownload = async (format) => {
@@ -137,7 +139,7 @@ export default function CreateInvoice() {
               <button className={styles.cancel_button}>Cancel</button>
               <button
                 className={styles.download_button}
-                onClick={() => handleDownload('pdf')}
+                onClick={() => handleDownload(selectedFormat)}
               >
                 Download
               </button>
@@ -145,7 +147,11 @@ export default function CreateInvoice() {
           </div>
         </div>
         <div className={styles.right_panel}>
-          <InvoiceTemplate displayData={displayData} />
+          <InvoiceTemplate
+            displayData={displayData}
+            selectedFormat={selectedFormat}
+            setSelectedFormat={setSelectedFormat}
+          />
         </div>
       </div>
     </div>

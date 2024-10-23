@@ -42,12 +42,13 @@
 
 .format_button {
   display: flex;
+  align-items: center;
   gap: 10px;
   border-radius: 1000px;
   border: 1px solid transparent;
   background-color: transparent;
   color: #dadada;
-  padding: 5px 10px;
+  padding: 5px 15px;
 
   .icon {
     font-size: 16px;
@@ -56,7 +57,14 @@
 
   &:hover {
     cursor: pointer;
+    background-color: #2e2e32;
+    border-color: #2e2e32;
   }
+}
+
+.format_button.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .format_button.active {
@@ -83,4 +91,39 @@
 
 .icon {
   font-size: 1rem;
+}
+
+.placeholder {
+  background-color: #2a2a2e;
+  border-radius: 4px;
+  animation: loading 1.5s infinite ease-in-out;
+  display: inline-block;
+  width: 100%;
+}
+
+.placeholder.integer {
+  height: 16px;
+  width: 30px;
+}
+
+.placeholder.small {
+  height: 16px;
+  width: 70%;
+}
+
+.placeholder.large {
+  height: 24px;
+  width: 150px;
+}
+
+@keyframes loading {
+  0% {
+    background-color: #2a2a2e;
+  }
+  50% {
+    background-color: #3b3b3f;
+  }
+  100% {
+    background-color: #2a2a2e;
+  }
 }

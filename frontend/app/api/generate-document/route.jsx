@@ -3,29 +3,30 @@ import puppeteer from 'puppeteer';
 import HTMLtoDOCX from 'html-to-docx';
 import { getInvoiceStyles } from '@/styles/_templates/getInvoiceStyles';
 
+function increaseFontSizesBy(css, increment) {
+  return css.replace(/font-size:\s*(\d+)px;/g, (_, size) => {
+    return `font-size: ${parseInt(size) + increment}px;`;
+  });
+}
+
 export async function POST(req) {
   const { html, format, data } = await req.json();
 
   const invoiceStyles = getInvoiceStyles();
+  const updatedSCSS = increaseFontSizesBy(invoiceStyles, 4);
 
-  console.log('html:', html);
   const styledHTML = `
     <!DOCTYPE html>
     <html>
       <head>
         <style>
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-        }
         body {
-          font-family: Arial, sans-serif;
+          font-family: "SF Pro Display", sans-serif;
           background-color: #1f1f23;
           color: #fff;
           padding: 20px;
         }
-          ${invoiceStyles}
+          ${updatedSCSS}
         </style>
       </head>
       <body>
@@ -41,13 +42,13 @@ export async function POST(req) {
       });
       const page = await browser.newPage();
 
-      await page.setViewport({ width: 900, height: 1200 });
+      await page.setViewport({ width: 640, height: 480 });
       await page.setContent(styledHTML, {
         waitUntil: 'networkidle0',
       });
 
       const pdf = await page.pdf({
-        format: 'A4',
+        format: 'letter',
         printBackground: true,
         margin: {
           top: '0',
@@ -55,7 +56,6 @@ export async function POST(req) {
           bottom: '0',
           left: '0',
         },
-        preferCSSPageSize: true,
       });
 
       await browser.close();
@@ -67,14 +67,7 @@ export async function POST(req) {
         },
       });
     } else if (format === 'docx') {
-      const docxStyles = styledHTML
-        .replace(/<style>/, '<style type="text/css">')
-        .replace(
-          'background-color: #1f1f23;',
-          'background-color: #1f1f23 !important;'
-        );
-
-      const docx = await HTMLtoDOCX(docxStyles, null, {
+      const docx = await HTMLtoDOCX(styledHTML, null, {
         table: { row: { cantSplit: true } },
         footer: true,
         pageNumber: true,

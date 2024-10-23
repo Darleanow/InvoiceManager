@@ -1,3 +1,5 @@
+@import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+
 .invoice_template {
   background-color: #1f1f23;
   border-radius: 16px;
@@ -31,26 +33,27 @@
 .invoice_details {
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: space-between;
+  gap: 100px;
 }
 
 .invoice_line {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  width: 80%;
+  gap: 25px;
+  width: 100%;
 }
 
 .info_line {
   h3 {
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     color: #828282;
   }
 
   p {
     font-weight: 400;
-    font-size: 10px;
+    font-size: 12px;
     color: #dadada;
   }
 }
@@ -75,7 +78,7 @@
 
 .column {
   font-weight: 400;
-  font-size: 10px;
+  font-size: 12px;
   color: #828282;
 }
 
@@ -104,7 +107,7 @@
 
 tbody {
   tr {
-    font-size: 10px;
+    font-size: 11px;
     color: #ffffff;
   }
 
@@ -118,7 +121,7 @@ tbody {
 .totals {
   display: flex;
   width: 100%;
-  align-items: end;
+  align-items: flex-end;
   margin-top: 50px;
 }
 
@@ -126,7 +129,7 @@ tbody {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: flex-end;
   gap: 25px;
   align-items: center;
 }
@@ -137,17 +140,18 @@ tbody {
   flex-direction: column;
   text-align: right;
   color: #dadada;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 500;
   gap: 10px;
 }
 
 .subtotal_text {
   color: #828282;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .totals_row_values {
   color: #ffffff;
-  font-size: 9px;
+  font-size: 12px;
+  text-align: right;
 }
