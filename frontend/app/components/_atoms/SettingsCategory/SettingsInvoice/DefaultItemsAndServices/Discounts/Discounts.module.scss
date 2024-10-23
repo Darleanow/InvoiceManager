@@ -1,0 +1,40 @@
+$primary-color: #1F1F23;
+$secondary-color: #26262A;
+$color: #dadada;
+$color-sd: #cacaca;
+$border: #2e2e32;
+$icon: #48484e;
+$accent: #e29c23;
+
+
+.invoiceDiscountToggleContainer {
+    display: flex;
+    flex-direction: column;
+    margin: 20px 0;
+  }
+  
+  .checkboxLabel {
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    margin-bottom: 10px;
+  }
+  
+  .checkbox {
+    margin-right: 10px;
+    accent-color: #e29c23;
+  }
+  
+  .discountDetails {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f0f8ff;
+    border-left: 4px solid #2ecc71; /* Couleur pour indiquer un avantage */
+    border-radius: 4px;
+    width: 20%;
+  }
+  
+  .discountText {
+    font-size: 0.9rem;
+    color: #27ae60;
+  }

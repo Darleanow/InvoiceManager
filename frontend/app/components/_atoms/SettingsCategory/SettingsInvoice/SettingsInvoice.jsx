@@ -3,6 +3,7 @@ import React from 'react';
 import InvoiceNumbering from './InvoiceDefaults/InvoiceNumbering/InvoiceNumbering';
 import InvoicePrefixSuffix from './InvoiceDefaults/InvoicePrefixSufix/InvoicePrefixSuffix';
 import InvoiceLogoToggle from './InvoiceAppearance/AddLogoToInvoice/AddLogoToInvoice';
+import InvoiceDiscountToggle from './DefaultItemsAndServices/Discounts/Discounts';
 
 
 
@@ -31,6 +32,10 @@ export default function SettingsInvoice() {
             </div>
             <div className={styles.DefaultItemsAndServices_container}>
               <h3>Default Items and Services</h3>
+              <div className={styles.Discounts_container}>
+                <h3>Discounts</h3>
+                <InvoiceDiscountToggle />
+              </div>
             </div>
         </div>  
     </div>
