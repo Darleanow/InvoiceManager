@@ -69,7 +69,7 @@ INSERT INTO `Item` (created_by_user_id, name, description, default_price, type, 
 (2, 'Software License', 'Annual software license', 499.99, 'product', true),
 (2, 'Cloud Storage', 'Annual cloud storage subscription', 299.99, 'service', true),
 (2, 'Tech Support', '24/7 technical support', 150.00, 'service', true),
-(2, 'Web Development', 'Custom web development', 160.00, 'service', true), -- Note: Same name as John's item
+(2, 'Web Development', 'Custom web development', 160.00, 'service', true),
 (2, 'Hardware Maintenance', 'Monthly hardware maintenance', 250.00, 'service', false),
 -- Mike's items
 (3, 'Data Analysis', 'Professional data analysis service', 225.00, 'service', true),
