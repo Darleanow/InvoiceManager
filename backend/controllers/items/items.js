@@ -32,6 +32,7 @@ async function createItem(req, res) {
       image: image || null,
     },
     res,
+    user: req.user,
   });
 }
 
@@ -46,6 +47,7 @@ async function getItemById(req, res) {
     tableName: TABLE_NAME,
     id: req.params.id,
     res,
+    user: req.user,
   });
 }
 
@@ -62,6 +64,7 @@ async function updateItem(req, res) {
     id: req.params.id,
     data: { name, description, default_price, type, image, is_active },
     res,
+    user: req.user,
   });
 }
 
@@ -76,6 +79,7 @@ async function deleteItem(req, res) {
     tableName: TABLE_NAME,
     id: req.params.id,
     res,
+    user: req.user,
   });
 }
 
@@ -86,43 +90,46 @@ async function deleteItem(req, res) {
  * @param {Object} res - Response object
  */
 async function listItems(req, res) {
+  const { type, is_active, search } = req.query;
+  let filters = {};
+
+  if (type) filters.type = type;
+  if (is_active !== undefined) filters.is_active = is_active;
+
+  if (!search) {
+    await listEntities({
+      tableName: TABLE_NAME,
+      res,
+      user: req.user,
+      filters,
+    });
+    return;
+  }
+
   try {
-    const { type, is_active, search } = req.query;
+    if (!req.user?.id) {
+      return res.status(401).json({ error: 'User authentication required' });
+    }
 
     let baseQuery = `
       SELECT *
-      FROM Item
-      WHERE 1=1
+      FROM ${TABLE_NAME}
+      WHERE created_by_user_id = ?
+      ${type ? 'AND type = ?' : ''}
+      ${is_active !== undefined ? 'AND is_active = ?' : ''}
+      AND (name LIKE ? OR description LIKE ?)
+      ORDER BY created_at DESC
     `;
 
-    const params = [];
+    const params = [req.user.id];
+    if (type) params.push(type);
+    if (is_active !== undefined) params.push(is_active);
 
-    if (type) {
-      baseQuery += ' AND type = ?';
-      params.push(type);
-    }
-
-    if (is_active !== undefined) {
-      baseQuery += ' AND is_active = ?';
-      params.push(is_active);
-    }
-
-    if (search) {
-      baseQuery += ` AND (
-        name LIKE ? OR 
-        description LIKE ?
-      )`;
-      const searchParam = `%${search}%`;
-      params.push(searchParam, searchParam);
-    }
-
-    baseQuery += ' ORDER BY created_at DESC';
+    const searchParam = `%${search}%`;
+    params.push(searchParam, searchParam);
 
     const [items] = await pool.execute(baseQuery, params);
-
-    res.json({
-      data: items,
-    });
+    res.json({ data: items });
   } catch (error) {
     console.error('Error listing items:', error);
     res.status(500).json({ error: 'Internal server error' });

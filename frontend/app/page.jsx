@@ -49,6 +49,7 @@ export const useSyncUserWithBackend = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'x-bypass-serverless': 'true',
         },
         credentials: 'include',
         body: JSON.stringify({

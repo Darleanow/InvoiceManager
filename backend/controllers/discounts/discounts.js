@@ -26,6 +26,7 @@ async function createDiscount(req, res) {
     tableName: TABLE_NAME,
     data: { name, type, value, is_active },
     res,
+    user: req.user,
   });
 }
 
@@ -40,6 +41,7 @@ async function getDiscountById(req, res) {
     tableName: TABLE_NAME,
     id: req.params.id,
     res,
+    user: req.user,
   });
 }
 
@@ -56,6 +58,7 @@ async function updateDiscount(req, res) {
     id: req.params.id,
     data: { name, type, value, is_active },
     res,
+    user: req.user,
   });
 }
 
@@ -70,6 +73,7 @@ async function deleteDiscount(req, res) {
     tableName: TABLE_NAME,
     id: req.params.id,
     res,
+    user: req.user,
   });
 }
 
@@ -83,6 +87,8 @@ async function listDiscounts(req, res) {
   await listEntities({
     tableName: TABLE_NAME,
     res,
+    user: req.user,
+    filters: req.query,
   });
 }
 

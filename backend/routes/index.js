@@ -6,7 +6,6 @@
  */
 
 const express = require('express');
-const rateLimit = require('express-rate-limit');
 const router = express.Router();
 
 const usersController = require('../controllers/users/users');
@@ -17,43 +16,6 @@ const templatesController = require('../controllers/templates/templates');
 const taxesController = require('../controllers/taxes/taxes');
 const discountsController = require('../controllers/discounts/discounts');
 const attachmentsController = require('../controllers/attachments/attachments');
-
-/**
- * Rate limiting middleware to restrict excessive requests from a single IP.
- * @const {Object} limiter
- * @memberof module:routes
- */
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 2000,
-  message: {
-    status: 429,
-    message:
-      'Too many requests from this IP, please try again after 15 minutes',
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-  trustProxy: true,
-  skip: (request) => {
-    return process.env.NODE_ENV === 'development';
-  },
-  keyGenerator: (request) => {
-    const realIp = request.headers['x-real-ip'];
-    const forwardedFor = request.headers['x-forwarded-for'];
-
-    if (realIp) {
-      return realIp;
-    }
-
-    if (forwardedFor) {
-      return forwardedFor.split(',')[0].trim();
-    }
-
-    return request.ip;
-  },
-});
-
-router.use(limiter);
 
 /** ------------------------ Users Routes ------------------------ **/
 

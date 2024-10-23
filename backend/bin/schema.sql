@@ -20,6 +20,7 @@ CREATE TABLE `User` (
 
 CREATE TABLE `Client` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `created_by_user_id` INT UNSIGNED NOT NULL,
     `email` VARCHAR(255) NOT NULL,
     `phone` VARCHAR(255) NOT NULL,
     `type` ENUM('individual', 'company') NOT NULL,
@@ -28,7 +29,8 @@ CREATE TABLE `Client` (
     `is_active` BOOLEAN DEFAULT TRUE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT unique_client_email UNIQUE (email)
+    FOREIGN KEY (`created_by_user_id`) REFERENCES `User`(`id`),
+    CONSTRAINT unique_client_email_per_user UNIQUE (email, created_by_user_id)
 );
 
 CREATE TABLE `Client_Individual` (
@@ -55,7 +57,7 @@ CREATE TABLE `Invoice` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     `invoice_number` VARCHAR(50) NOT NULL,
     `client_id` INT UNSIGNED NOT NULL,
-    `user_id` INT UNSIGNED NOT NULL,
+    `created_by_user_id` INT UNSIGNED NOT NULL,
     `template_id` INT UNSIGNED NOT NULL,
     `creation_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `expiration_date` TIMESTAMP NOT NULL,
@@ -69,12 +71,13 @@ CREATE TABLE `Invoice` (
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     CONSTRAINT unique_invoice_number UNIQUE (invoice_number),
     FOREIGN KEY (`client_id`) REFERENCES `Client`(`id`),
-    FOREIGN KEY (`user_id`) REFERENCES `User`(`id`),
+    FOREIGN KEY (`created_by_user_id`) REFERENCES `User`(`id`),
     FOREIGN KEY (`template_id`) REFERENCES `Template`(`id`)
 );
 
 CREATE TABLE `Item` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `created_by_user_id` INT UNSIGNED NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `description` VARCHAR(255) NOT NULL,
     `default_price` DECIMAL(10, 2) NOT NULL,
@@ -83,7 +86,9 @@ CREATE TABLE `Item` (
     `is_active` BOOLEAN DEFAULT TRUE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT check_positive_default_price CHECK (default_price >= 0)
+    FOREIGN KEY (`created_by_user_id`) REFERENCES `User`(`id`),
+    CONSTRAINT check_positive_default_price CHECK (default_price >= 0),
+    CONSTRAINT unique_item_name_per_user UNIQUE (name, created_by_user_id)
 );
 
 CREATE TABLE `Invoice_Line` (
@@ -102,26 +107,32 @@ CREATE TABLE `Invoice_Line` (
 
 CREATE TABLE `Tax` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `created_by_user_id` INT UNSIGNED NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `rate` DECIMAL(8, 2) NOT NULL,
     `apply_by_default` BOOLEAN NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    CONSTRAINT check_valid_tax_rate CHECK (rate >= 0 AND rate <= 100)
+    FOREIGN KEY (`created_by_user_id`) REFERENCES `User`(`id`),
+    CONSTRAINT check_valid_tax_rate CHECK (rate >= 0 AND rate <= 100),
+    CONSTRAINT unique_tax_name_per_user UNIQUE (name, created_by_user_id)
 );
 
 CREATE TABLE `Discount` (
     `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `created_by_user_id` INT UNSIGNED NOT NULL,
     `name` VARCHAR(255) NOT NULL,
     `type` ENUM('percentage', 'fixed') NOT NULL,
     `value` DECIMAL(10, 2) NOT NULL,
     `is_active` BOOLEAN DEFAULT TRUE,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (`created_by_user_id`) REFERENCES `User`(`id`),
     CONSTRAINT check_valid_discount CHECK (
         (type = 'percentage' AND value >= 0 AND value <= 100) OR
         (type = 'fixed' AND value >= 0)
-    )
+    ),
+    CONSTRAINT unique_discount_name_per_user UNIQUE (name, created_by_user_id)
 );
 
 CREATE TABLE `Invoice_Tax` (
@@ -178,9 +189,14 @@ CREATE TABLE `Attachment` (
 CREATE INDEX idx_invoice_state ON Invoice(state);
 CREATE INDEX idx_invoice_creation_date ON Invoice(creation_date);
 CREATE INDEX idx_invoice_expiration_date ON Invoice(expiration_date);
+CREATE INDEX idx_client_user ON Client(created_by_user_id);
 CREATE INDEX idx_client_email ON Client(email);
-CREATE INDEX idx_item_name ON Item(name);
+CREATE INDEX idx_client_active_user ON Client(is_active, created_by_user_id);
 CREATE INDEX idx_invoice_number ON Invoice(invoice_number);
+CREATE INDEX idx_tax_user ON Tax(created_by_user_id);
+CREATE INDEX idx_discount_user ON Discount(created_by_user_id);
+CREATE INDEX idx_item_user ON Item(created_by_user_id);
+CREATE INDEX idx_item_name ON Item(name);
 
 -- Stored Procedures and Triggers
 DELIMITER //
