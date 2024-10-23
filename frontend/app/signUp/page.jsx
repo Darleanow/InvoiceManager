@@ -1,5 +1,3 @@
-//import clerk
-
 import { SignUp } from '@clerk/nextjs';
 import styles from './styles.module.scss';
 
