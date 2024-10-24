@@ -113,7 +113,7 @@ INSERT INTO `Discount` (created_by_user_id, name, type, value, is_active) VALUES
 
 -- Insert Invoices with more varied states and amounts
 INSERT INTO `Invoice` (
-    invoice_number, client_id, user_id, template_id, 
+    invoice_number, client_id, created_by_user_id, template_id, 
     creation_date, expiration_date, state, 
     currency, notes, invoice_subject,
     total_amount, subtotal
