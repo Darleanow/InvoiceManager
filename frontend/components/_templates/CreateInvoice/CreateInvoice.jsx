@@ -17,8 +17,7 @@ export default function CreateInvoice() {
   const router = useRouter();
   const [selectedFormat, setSelectedFormat] = useState('pdf');
   const [isVisible, setIsVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [startTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
   const [client, setClient] = useState('');
   const [dueDate, setDueDate] = useState('');
   const [subject, setSubject] = useState('');
@@ -96,20 +95,14 @@ export default function CreateInvoice() {
   };
 
   const handleGoBack = () => {
-    setIsLoading(true);
-
     startTransition(() => {
       router.push('/');
     });
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 10000);
   };
 
   return (
     <div className={styles.page_container}>
-      {isLoading && <Loader />} {/* Show loader while loading */}
+      {isPending && <Loader />}
       <CreateInvoiceBar handleGoBack={handleGoBack} />
       <div
         className={`${styles.main_content} ${isVisible ? styles.appear : ''}`}
