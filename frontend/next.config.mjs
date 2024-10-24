@@ -6,7 +6,6 @@ const nextConfig = {
   compiler: {
     styledComponents: true,
   },
-
   images: {
     remotePatterns: [
       {
@@ -23,30 +22,31 @@ const nextConfig = {
       },
     ],
   },
-
   async rewrites() {
     const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3001';
-    return {
-      beforeFiles: [
-        {
-          source: '/api/:path*',
-          destination: `${API_BASE_URL}/api/:path*`,
-          basePath: false,
-          has: [
-            {
-              type: 'header',
-              key: 'x-bypass-serverless',
-              value: 'true',
-            },
-          ],
-        },
-        {
-          source: '/api/:path*',
-          destination: `${API_BASE_URL}/api/:path*`,
-          basePath: false,
-        },
-      ],
-    };
+    return [
+      {
+        source: '/api/generate-document',
+        destination: '/api/generate-document',
+      },
+
+      {
+        source: '/api/:path*',
+        destination: `${API_BASE_URL}/api/:path*`,
+        has: [
+          {
+            type: 'header',
+            key: 'x-bypass-serverless',
+            value: 'true',
+          },
+        ],
+      },
+
+      {
+        source: '/api/:path*',
+        destination: `${API_BASE_URL}/api/:path*`,
+      },
+    ];
   },
 };
 
